@@ -238,15 +238,15 @@ class BookingConfirmationScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.info_outline_rounded,
                 color: AppTheme.infoBlue,
                 size: 24,
               ),
-              const SizedBox(width: 12),
-              const Text(
+              SizedBox(width: 12),
+              Text(
                 'What happens next?',
                 style: TextStyle(
                   fontSize: 16,
@@ -276,7 +276,7 @@ class BookingConfirmationScreen extends StatelessWidget {
         Container(
           width: 24,
           height: 24,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: AppTheme.infoBlue,
             shape: BoxShape.circle,
           ),

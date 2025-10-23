@@ -5,13 +5,13 @@ import 'package:ncl_mobile_app/services/auth_service.dart';
 
 void main() {
   test('JobStatus enum exists and works', () {
-    final status = JobStatus.inProgress;
+    const status = JobStatus.inProgress;
     expect(status.displayName, 'In Progress');
     expect(status.getColor(), isNotNull);
   });
 
   test('User class from models works', () {
-    final user = User(
+    const user = User(
       id: 'test1',
       name: 'Test User',
       isStaff: false,
@@ -21,7 +21,7 @@ void main() {
   });
 
   test('AuthResult works correctly', () {
-    final user = User(id: '1', name: 'Test', isStaff: false);
+    const user = User(id: '1', name: 'Test', isStaff: false);
     final success = AuthResult.success(user);
     expect(success.success, true);
     expect(success.user, isNotNull);
@@ -37,7 +37,7 @@ void main() {
       customerName: 'Customer',
       address: '123 Main St',
       startTime: DateTime.now(),
-      endTime: DateTime.now().add(Duration(hours: 2)),
+      endTime: DateTime.now().add(const Duration(hours: 2)),
       serviceType: 'Cleaning',
       status: JobStatus.scheduled,
     );

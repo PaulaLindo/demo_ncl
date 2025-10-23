@@ -260,7 +260,7 @@ class _SkeletonCardState extends State<SkeletonCard>
             gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [
+              colors: const [
                 AppTheme.containerBackground,
                 AppTheme.borderColor,
                 AppTheme.containerBackground,

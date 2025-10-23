@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../providers/timekeeping_provider.dart';
 // ADD THESE TWO IMPORTS:
-import '../../services/location_service.dart';
 import '../../widgets/location_check_dialog.dart';
 
 class TimerTab extends StatefulWidget {

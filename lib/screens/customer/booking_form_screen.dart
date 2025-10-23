@@ -266,7 +266,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
 
   Widget _buildTimeDropdown() {
     return DropdownButtonFormField<String>(
-      value: _preferredTime,
+      initialValue: _preferredTime,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -287,7 +287,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
 
   Widget _buildPropertySizeDropdown() {
     return DropdownButtonFormField<String>(
-      value: _propertySize,
+      initialValue: _propertySize,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -308,7 +308,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
 
   Widget _buildFrequencyDropdown() {
     return DropdownButtonFormField<String>(
-      value: _frequency,
+      initialValue: _frequency,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

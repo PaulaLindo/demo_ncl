@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: AppTheme.primaryPurple,
+        activeThumbColor: AppTheme.primaryPurple,
       ),
     );
   }

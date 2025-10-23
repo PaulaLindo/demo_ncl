@@ -149,7 +149,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   final events = provider.getShiftsForDate(day);
                   if (events.isEmpty) return null;
                   
-                  final shift = events.first as WorkShift;
+                  final shift = events.first;
                   Color bgColor;
                   
                   if (shift.isExternal) {
@@ -202,11 +202,11 @@ class _ScheduleTabState extends State<ScheduleTab> {
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          _LegendItem(color: Colors.orange, label: 'External Job (Hotel)'),
+          const _LegendItem(color: Colors.orange, label: 'External Job (Hotel)'),
           const SizedBox(height: 8),
           _LegendItem(color: primaryColor, label: 'NCL Platform Shift'),
           const SizedBox(height: 8),
-          _LegendItem(color: Colors.green, label: 'Available for Booking'),
+          const _LegendItem(color: Colors.green, label: 'Available for Booking'),
         ],
       ),
     );

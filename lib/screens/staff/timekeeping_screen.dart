@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../providers/timekeeping_provider.dart';
 import '../../providers/auth_provider.dart';
-import '../../models/job_service_models.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/customer_nav_bar.dart';
 import 'timer_tab.dart';

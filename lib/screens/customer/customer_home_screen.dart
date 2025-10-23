@@ -17,7 +17,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   String _currentRoute = 'home';
 
   // Mock next booking data
-  final Map<String, dynamic>? _nextBooking = {
+  final Map<String, dynamic> _nextBooking = {
     'id': 'B001',
     'title': 'Deep Cleaning',
     'date': 'Tomorrow at 10:00 AM',

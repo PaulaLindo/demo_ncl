@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../models/job_service_models.dart';
 import '../../providers/jobs_provider.dart';
@@ -101,70 +102,82 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> with SingleTickerProv
         color: AppTheme.cardBackground,
         boxShadow: AppTheme.cardShadow,
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppTheme.secondaryColor, AppTheme.secondaryColor.withOpacity(0.7)],
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.home_work_rounded, color: Colors.white, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Welcome, $userName',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textColor,
-                  ),
-                ),
-                Text(
-                  DateFormat('EEEE, MMM d').format(DateTime.now()),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppTheme.textGrey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Stack(
+          Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () => _showNotifications(context),
-                style: IconButton.styleFrom(
-                  backgroundColor: AppTheme.backgroundLight,
+              // Logo - Improved version
+              Container(
+                width: 50,
+                height: 50,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryPurple.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: SvgPicture.asset(
+                  'assets/images/comprehensive_home_services.svg',
+                  fit: BoxFit.contain,
+                  // Remove the colorFilter to preserve original colors
                 ),
               ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.redStatus,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                  child: const Text(
-                    '2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+              
+              const SizedBox(width: 16),
+              
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome, $userName',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textColor,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    Text(
+                      DateFormat('EEEE, MMM d').format(DateTime.now()),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textGrey,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_outlined),
+                    onPressed: () => _showNotifications(context),
+                    style: IconButton.styleFrom(
+                      backgroundColor: AppTheme.backgroundLight,
+                    ),
+                  ),
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: AppTheme.redStatus,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                      child: const Text(
+                        '2',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -262,7 +275,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> with SingleTickerProv
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(40),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

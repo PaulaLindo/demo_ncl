@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.error_outline,
                       color: AppTheme.redStatus,
                       size: 20,
@@ -265,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Expanded(
                       child: Text(
                         authProvider.errorMessage!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppTheme.redStatus,
                           fontSize: 14,
                         ),
@@ -295,12 +295,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
-                  : Row(
+                  : const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Sign In'),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.arrow_forward_rounded, size: 20),
+                        Text('Sign In'),
+                        SizedBox(width: 8),
+                        Icon(Icons.arrow_forward_rounded, size: 20),
                       ],
                     ),
             ),
@@ -340,7 +340,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.info_outline,
                 color: AppTheme.infoBlue,
                 size: 20,

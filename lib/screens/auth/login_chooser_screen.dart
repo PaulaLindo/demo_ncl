@@ -11,7 +11,7 @@ class LoginChooserScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -85,10 +85,10 @@ class LoginChooserScreen extends StatelessWidget {
         children: [
           // You can replace this with actual logo/image
           Container(
-            width: 120,
-            height: 120,
+            width: 180,
+            height: 180,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   AppTheme.primaryPurple,
                   AppTheme.secondaryColor,
@@ -96,18 +96,9 @@ class LoginChooserScreen extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Icon(
-              Icons.home_work_rounded,
-              size: 60,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'NCL Services',
-            style: context.textTheme.titleLarge?.copyWith(
-              color: AppTheme.primaryPurple,
-              fontWeight: FontWeight.bold,
+            child: Image.asset(
+              'assets/images/comprehensive_home_services.png', // <-- Path to your image file
+              fit: BoxFit.cover,
             ),
           ),
         ],

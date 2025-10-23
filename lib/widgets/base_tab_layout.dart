@@ -16,7 +16,7 @@ class BaseTabLayout extends StatelessWidget {
   final VoidCallback? onBackPressed;
 
   const BaseTabLayout({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.statsCards = const [],
@@ -28,8 +28,7 @@ class BaseTabLayout extends StatelessWidget {
     this.actions,
     this.showBackButton = false,
     this.onBackPressed,
-  })  : assert(tabs.length == tabViews.length, 'tabs and tabViews length must match'),
-        super(key: key);
+  })  : assert(tabs.length == tabViews.length, 'tabs and tabViews length must match');
 
   @override
   Widget build(BuildContext context) {
