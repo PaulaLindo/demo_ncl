@@ -2,8 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../widgets/customer_nav_bar.dart';
+
 import '../../providers/booking_provider.dart';
+
 import '../../theme/app_theme.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -34,42 +39,17 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // Modern App Bar
-            SliverAppBar(
-              floating: true,
-              backgroundColor: Colors.white,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        // **START: Changed from CustomScrollView to Column**
+        child: Column(
+          children: [
+            // 1. Fixed Header (using the new _buildHeader method)
+            _buildHeader(context),
+
+            // 2. Scrollable Content (wrapped in Expanded)
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(20), // Apply padding here instead of SliverPadding
                 children: [
-                  Text(
-                    'Welcome back!',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Text(
-                    'James Doe',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ],
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.notifications_outlined),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Notifications coming soon!')),
-                    );
-                  },
-                ),
-              ],
-            ),
-            
-            // Content
-            SliverPadding(
-              padding: const EdgeInsets.all(20),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
                   // Next Booking Section
                   if (_nextBooking != null) ...[
                     _buildSectionHeader('Next Booking'),
@@ -77,7 +57,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     _buildNextBookingCard(),
                     const SizedBox(height: 32),
                   ],
-                  
+
                   // Quick Book Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,16 +77,112 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   ),
                   const SizedBox(height: 12),
                   ...services.map((s) => _buildServiceCard(s)),
-                ]),
+                ],
               ),
             ),
           ],
         ),
+        // **END: Changed from CustomScrollView to Column**
       ),
       bottomNavigationBar: CustomNavBar(
         items: _getNavItems(),
         selectedRoute: _currentRoute,
         onItemSelected: _handleNavigation,
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    const userName = 'James Doe'; // Placeholder for customer name
+    final currentDate = DateFormat('EEEE, MMM d').format(DateTime.now());
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBackground,
+        boxShadow: AppTheme.cardShadow,
+      ),
+      child: Row(
+        children: [
+          // Logo (using a placeholder icon since SvgPicture is not imported)
+          Container(
+            width: 50,
+            height: 50,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryPurple.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: SvgPicture.asset(
+                  'assets/images/comprehensive_home_services.svg',
+                  fit: BoxFit.contain,
+                  // Remove the colorFilter to preserve original colors
+                ),
+          ),
+          
+          const SizedBox(width: 16),
+          
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome, $userName',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textColor,
+                  ),
+                ),
+                Text(
+                  currentDate,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Notifications with Badge (hardcoded '2' for mock data)
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Notifications coming soon!')),
+                  );
+                },
+                style: IconButton.styleFrom(
+                  backgroundColor: AppTheme.backgroundLight,
+                ),
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: AppTheme.redStatus,
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                  child: const Text(
+                    '2',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
