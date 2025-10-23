@@ -138,7 +138,7 @@ class LoginChooserScreen extends StatelessWidget {
           
           // Staff Button
           _RoleButton(
-            label: 'Staff / Cleaner Access',
+            label: 'Staff Access',
             subtitle: 'Manage jobs and timekeeping',
             icon: Icons.badge_outlined,
             gradient: LinearGradient(
