@@ -22,17 +22,18 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x' # Use the latest stable version or specify yours
+          # Use the latest stable version or specify yours
+          flutter-version: '3.22.0' 
           channel: 'stable'
-      
+          
       # 3. Install dependencies
       - name: Get Flutter dependencies
         run: flutter pub get
         
       # 4. Enable web support and run the build
       # The --base-href is crucial for deployment to GitHub Pages 
-      # if the repository name is not the same as the site root.
-      # Replace 'demo_ncl' with your actual repository name if different.
+      # if the repository is not served from the root.
+      # Double-check that '/demo_ncl/' matches your repository name!
       - name: Build Flutter Web
         run: flutter build web --release --base-href /demo_ncl/
         
