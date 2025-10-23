@@ -1,0 +1,50 @@
+name: Web Deploy
+
+on:
+  # Triggers the workflow on pushes to the 'main' branch
+  push:
+    branches:
+      - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    # Use a standard Ubuntu runner
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      # 2. Setup Flutter environment
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x' # Use the latest stable version or specify yours
+          channel: 'stable'
+      
+      # 3. Install dependencies
+      - name: Get Flutter dependencies
+        run: flutter pub get
+        
+      # 4. Enable web support and run the build
+      # The --base-href is crucial for deployment to GitHub Pages 
+      # if the repository name is not the same as the site root.
+      # Replace 'demo_ncl' with your actual repository name if different.
+      - name: Build Flutter Web
+        run: flutter build web --release --base-href /demo_ncl/
+        
+      # 5. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          # This token is automatically provided by GitHub Actions
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # The branch where the built files will be pushed
+          publish_branch: gh-pages
+          # The directory containing the built output
+          publish_dir: ./build/web
+          # Keep the existing files in the gh-pages branch (important for CNAME/other configs)
+          keep_files: true
