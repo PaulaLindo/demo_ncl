@@ -1,0 +1,30 @@
+name: Flutter Web Deploy
+
+on:
+  push:
+    branches:
+      - main # Triggers the workflow on push to the main branch
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Sets up the Flutter SDK
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - run: flutter pub get
+
+      # Builds the web app with the correct base-href
+      - run: flutter build web --release --base-href /demo_ncl/
+
+      # Deploys the content of build/web to the gh-pages branch
+      - uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
