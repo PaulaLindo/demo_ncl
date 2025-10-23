@@ -1,0 +1,69 @@
+name: ncl_mobile_app
+description: A modern mobile app for NCL cleaning and home services
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Routing
+  go_router: ^16.3.0
+
+  # State Management
+  provider: ^6.1.5+1
+
+  # Date formatting
+  intl: ^0.20.2
+
+  # QR Code Scanning
+  mobile_scanner: ^7.1.2
+
+  # Calendar
+  table_calendar: ^3.2.0
+
+  # Local storage
+  shared_preferences: ^2.5.3
+
+  # Icons
+  cupertino_icons: ^1.0.8
+
+  # Location services
+  geolocator: ^14.0.2
+
+  # Firebase
+  firebase_core: ^4.2.0
+
+  # Push notifications
+  firebase_messaging: ^16.0.3
+
+  # Analytics
+  firebase_analytics: ^12.0.3
+
+  # Stripe Payment Integration
+  flutter_stripe: ^12.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - lib/assets/images/
+    # Add your logo and images here
+    # - assets/images/logo.png
+    # - assets/images/comprehensive_home_services.png
+
+  # If you have custom fonts, add them here:
+  # fonts:
+  #   - family: CustomFont
+  #     fonts:
+  #       - asset: fonts/CustomFont-Regular.ttf
+  #       - asset: fonts/CustomFont-Bold.ttf
+  #         weight: 700
