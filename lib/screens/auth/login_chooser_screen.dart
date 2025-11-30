@@ -71,7 +71,7 @@ class LoginChooserScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: context.watch<ThemeProvider>().cardColor,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: context.watch<ThemeProvider>().primaryColor.withOpacity(0.1),

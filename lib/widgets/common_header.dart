@@ -41,7 +41,7 @@ class DashboardHeader extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: AppTheme.primaryPurple.withCustomOpacity(0.1),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: SvgPicture.asset(
                 'assets/images/comprehensive_home_services.svg',
