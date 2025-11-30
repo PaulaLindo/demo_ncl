@@ -6,17 +6,10 @@
   <script>
     // Single Page App for GitHub Pages
     // Store the requested path and redirect to index
-    var path = location.pathname + location.search + location.hash;
-    var basePath = '/demo_ncl/';
-    
-    // Only redirect if not at base path and not a static asset
-    if (path !== basePath && !path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
-      sessionStorage.setItem('spa-path', path);
-      location.replace(basePath);
-    }
+    sessionStorage.setItem('spa-path', location.pathname + location.search + location.hash);
+    location.replace('/demo_ncl/index.html');
   </script>
 </head>
 <body>
-  <h1>Loading...</h1>
 </body>
 </html>
