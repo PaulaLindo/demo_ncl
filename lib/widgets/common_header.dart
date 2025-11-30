@@ -36,12 +36,12 @@ class DashboardHeader extends StatelessWidget {
         children: [
           if (showLogo) ...[
             Container(
-              width: 50,
-              height: 50,
-              padding: const EdgeInsets.all(8),
+              width: 60,
+              height: 60,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: AppTheme.primaryPurple.withCustomOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
               ),
               child: SvgPicture.asset(
                 'assets/images/comprehensive_home_services.svg',

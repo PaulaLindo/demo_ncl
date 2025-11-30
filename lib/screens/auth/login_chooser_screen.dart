@@ -66,17 +66,17 @@ class LoginChooserScreen extends StatelessWidget {
 
   Widget _buildLogo(BuildContext context) {
     return Container(
-      width: 120,
-      height: 120,
-      padding: const EdgeInsets.all(16),
+      width: 140,
+      height: 140,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: context.watch<ThemeProvider>().cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: context.watch<ThemeProvider>().primaryColor.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 25,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
