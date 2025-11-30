@@ -224,7 +224,7 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const LoginScreen(userType: 'customer'),
+        child: const LoginScreen(userRole: 'customer'),
       ),
     ),
 
@@ -234,7 +234,7 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const LoginScreen(userType: 'staff'),
+        child: const LoginScreen(userRole: 'staff'),
       ),
     ),
 
@@ -244,7 +244,7 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const LoginScreen(userType: 'admin'),
+        child: const LoginScreen(userRole: 'admin'),
       ),
     ),
 
@@ -296,7 +296,11 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const PaymentSelectionScreen(),
+        child: const PaymentSelectionScreen(
+        bookingId: 'temp',
+        amount: 0.0,
+        serviceTitle: '',
+      ),
       ),
     ),
 
@@ -322,7 +326,9 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const ConfirmationScreen(),
+        child: const ConfirmationScreen(
+        serviceId: 'temp',
+      ),
       ),
     ),
     GoRoute(
@@ -343,7 +349,7 @@ final GoRouter _router = GoRouter(
         return _buildPageWithFadeTransition(
           context: context,
           state: state,
-          child: StaffGigAcceptanceScreen(gigId: gigId),
+          child: GigAcceptanceScreen(),
         );
       },
     ),
@@ -394,7 +400,7 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const AdminServiceManagement(),
+        child: const AdminServiceManagementScreen(),
       ),
     ),
     GoRoute(
@@ -480,24 +486,28 @@ final GoRouter _router = GoRouter(
     // Catch-all route for 404
     GoRoute(
       path: '/:path(.*)',
-      pageBuilder: (context, state) => Scaffold(
-        appBar: AppBar(title: const Text('Error')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              Text(
-                'Page not found',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('Go to Home'),
-              ),
-            ],
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: Scaffold(
+          appBar: AppBar(title: const Text('Error')),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  'Page not found',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () => context.go('/'),
+                  child: const Text('Go to Home'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
