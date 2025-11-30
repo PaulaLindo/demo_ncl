@@ -40,7 +40,7 @@ jobs:
       # if the repository is not served from the root.
       # Double-check that '/demo_ncl/' matches your repository name!
       - name: Build Flutter Web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: flutter build web --release --base-href "/demo_ncl/"
         
       # 5. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
@@ -52,5 +52,5 @@ jobs:
           publish_branch: gh-pages
           # The directory containing the built output
           publish_dir: ./build/web
-          # Keep the existing files in the gh-pages branch (important for CNAME/other configs)
-          keep_files: true
+          # Force overwrite existing files
+          force_orphan: true
