@@ -5,12 +5,18 @@
   <title>demo_ncl</title>
   <script>
     // Single Page App for GitHub Pages
-    // Redirect all routes to index.html
-    sessionStorage.setItem('redirect', location.pathname + location.search + location.hash);
-    location.replace('/demo_ncl/');
+    // Store the requested path and redirect to index
+    var path = location.pathname + location.search + location.hash;
+    var basePath = '/demo_ncl/';
+    
+    // Only redirect if not at base path and not a static asset
+    if (path !== basePath && !path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+      sessionStorage.setItem('spa-path', path);
+      location.replace(basePath);
+    }
   </script>
 </head>
 <body>
-  <h1>Redirecting...</h1>
+  <h1>Loading...</h1>
 </body>
 </html>

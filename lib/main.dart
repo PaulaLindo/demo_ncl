@@ -85,9 +85,9 @@ void main() async {
 
   // Handle GitHub Pages routing for SPA
   if (kIsWeb) {
-    final redirect = html.window.sessionStorage['redirect'];
+    final redirect = html.window.sessionStorage['spa-path'];
     if (redirect != null && redirect.isNotEmpty) {
-      html.window.sessionStorage.remove('redirect');
+      html.window.sessionStorage.remove('spa-path');
       // Store redirect for later use after app initialization
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (router.routeInformationProvider.value.location != redirect) {
