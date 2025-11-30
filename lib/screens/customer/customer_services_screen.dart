@@ -53,7 +53,7 @@ class CustomerServicesScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1.2, // Same ratio as quick actions - no overflow
+                childAspectRatio: 0.85, // Increased height to prevent overflow
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
@@ -137,9 +137,9 @@ class CustomerServicesScreen extends StatelessWidget {
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 40, left: 14, right: 14, bottom: 14), // Shift content down
+                      padding: const EdgeInsets.all(14), // More balanced padding
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center, // Center all content
+                        crossAxisAlignment: CrossAxisAlignment.start, // Left-align content
                         children: [
                           // Title
                           Text(
@@ -151,7 +151,7 @@ class CustomerServicesScreen extends StatelessWidget {
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left, // Left-align text
                           ),
                           
                           const SizedBox(height: 4),
@@ -164,7 +164,7 @@ class CustomerServicesScreen extends StatelessWidget {
                               color: context.watch<ThemeProvider>().textColor.withOpacity(0.7),
                               fontWeight: FontWeight.w500,
                             ),
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left, // Left-align text
                           ),
                           
                           const SizedBox(height: 12),
@@ -178,14 +178,13 @@ class CustomerServicesScreen extends StatelessWidget {
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left, // Left-align text
                           ),
                           
                           const SizedBox(height: 12),
                           
                           // Duration
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.access_time,
@@ -208,7 +207,6 @@ class CustomerServicesScreen extends StatelessWidget {
                           
                           // Rating
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.star,
@@ -237,6 +235,9 @@ class CustomerServicesScreen extends StatelessWidget {
                           
                           const SizedBox(height: 8),
                           
+                          // Spacer to push price to bottom
+                          const Spacer(),
+                          
                           // Price
                           Text(
                             service['price'] as String,
@@ -245,7 +246,7 @@ class CustomerServicesScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: context.watch<ThemeProvider>().primaryColor,
                             ),
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left, // Left-align text
                           ),
                         ],
                       ),
