@@ -83,14 +83,18 @@ import 'utils/logger.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  print('🔍 Starting NCL App initialization...');
+
   // Handle GitHub Pages routing for SPA
   if (kIsWeb) {
     final redirect = html.window.sessionStorage['spa-path'];
     if (redirect != null && redirect.isNotEmpty) {
+      print('🔍 Found redirect path: $redirect');
       html.window.sessionStorage.remove('spa-path');
       // Store redirect for later use after app initialization
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (router.routeInformationProvider.value.location != redirect) {
+          print('🔍 Redirecting to: $redirect');
           router.go(redirect);
         }
       });
@@ -105,35 +109,39 @@ void main() async {
     print('🐛 Context: ${details.context}');
   };
 
+  print('🔍 Initializing timezone...');
   // Initialize timezone
   tz.initializeTimeZones();
 
   // Initialize theme manager
   try {
     ThemeManager.instance; // Initialize theme manager
+    print('🔍 ThemeManager initialized');
   } catch (e) {
     print('Failed to initialize ThemeManager: $e');
   }
 
+  print('🔍 Initializing shared preferences...');
   // Initialize shared preferences
   final sharedPreferences = await SharedPreferences.getInstance();
 
+  print('🔍 Initializing mock data service...');
   // Initialize mock data service
   final mockDataService = MockDataService();
 
+  print('🔍 Initializing providers...');
   // Initialize providers
   final authProvider = AuthProvider();
   final adminProvider = AdminProviderWeb();
   final staffProvider = StaffProvider();
   final timekeepingProvider = TimekeepingProvider();
-  final bookingProvider = BookingProvider();
-  final jobsProvider = JobsProvider();
-  final paymentProvider = PaymentProvider();
   final schedulerProvider = SchedulerProvider(
     staffProvider: staffProvider,
     timekeepingProvider: timekeepingProvider,
     authProvider: authProvider,
   );
+
+  print('🔍 Providers initialized');
 
   // Initialize repositories
   final jobRepository = JobRepository();
@@ -141,6 +149,7 @@ void main() async {
 
   print('🔍 NCL App initialized - Web configuration complete');
 
+  print('🔍 Starting runApp...');
   runApp(
     MultiProvider(
       providers: [
@@ -148,7 +157,8 @@ void main() async {
         ChangeNotifierProvider<AdminProviderWeb>.value(value: adminProvider),
         ChangeNotifierProvider<StaffProvider>.value(value: staffProvider),
         ChangeNotifierProvider<TimekeepingProvider>.value(value: timekeepingProvider),
-
+        ChangeNotifierProvider<SchedulerProvider>.value(value: schedulerProvider),
+        
         ChangeNotifierProvider<BookingProvider>(
           create: (_) => BookingProvider(),
           lazy: true,
@@ -163,19 +173,11 @@ void main() async {
           create: (_) => PaymentProvider(),
           lazy: true,
         ),
-        
-        ChangeNotifierProvider<SchedulerProvider>(
-          create: (context) => SchedulerProvider(
-            staffProvider: context.read<StaffProvider>(),
-            timekeepingProvider: context.read<TimekeepingProvider>(),
-            authProvider: context.read<AuthProvider>(),
-          ),
-          lazy: true,
-        ),
       ],
       child: NCLApp(),
     ),
   );
+  print('🔍 runApp completed');
 }
 
 /// Main application widget
