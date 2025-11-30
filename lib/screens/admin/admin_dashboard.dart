@@ -28,7 +28,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   final List<Widget> _pages = [
     const AdminOverviewPage(),
-    const EnhancedJobAssignmentTab(),
+    const EnhancedGigAssignmentTab(),
     const TempCardManagementPage(),
     const ProxyTimeManagementPage(),
     const QualityAuditManagementPage(),
