@@ -50,6 +50,8 @@ import 'screens/admin/admin_analytics_screen.dart';
 import 'screens/admin/admin_settings_screen.dart';
 import 'screens/admin/admin_active_gigs_screen.dart';
 import 'screens/admin/admin_upcoming_gigs_screen.dart';
+import 'screens/admin/admin_dashboard.dart';
+import 'screens/admin/admin_service_management.dart';
 
 // Customer Screens
 import 'screens/customer/payment_selection_screen.dart';
