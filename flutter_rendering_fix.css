@@ -1,0 +1,149 @@
+/* flutter_rendering_fix.css - Targeted fix for Flutter web rendering issues */
+
+/* Fix Flutter CanvasKit rendering issues */
+flutter-view {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important;
+    overflow: visible !important;
+}
+
+/* Fix Flutter scene host */
+flt-scene-host {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important;
+    overflow: visible !important;
+}
+
+/* Fix glass pane pointer events without breaking structure */
+flt-glass-pane {
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+/* Ensure semantic elements are visible and interactive */
+flt-semantics-host {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important;
+    overflow: visible !important;
+}
+
+flt-semantics-placeholder,
+flt-semantics-container,
+flt-text-pane,
+flt-semantic-text {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+}
+
+/* Fix Flutter input fields */
+flt-semantics-placeholder input,
+flt-semantics-container input,
+flt-text-pane input,
+input {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    background: white !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
+    padding: 10px !important;
+    margin: 5px 0 !important;
+    border-radius: 4px !important;
+}
+
+/* Fix Flutter buttons */
+flt-semantics-placeholder button,
+flt-semantics-container button,
+flt-text-pane button,
+button,
+[role="button"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    cursor: pointer !important;
+    padding: 12px 24px !important;
+    margin: 10px 0 !important;
+    border: none !important;
+    border-radius: 4px !important;
+    background: #007bff !important;
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    min-width: 120px !important;
+}
+
+/* Fix Flutter text elements */
+flt-semantics-placeholder div,
+flt-semantics-placeholder span,
+flt-semantics-placeholder p,
+flt-semantics-placeholder h1,
+flt-semantics-placeholder h2,
+flt-semantics-placeholder h3,
+flt-semantics-placeholder h4,
+flt-semantics-placeholder h5,
+flt-semantics-placeholder h6,
+flt-semantics-placeholder label,
+flt-semantics-container div,
+flt-semantics-container span,
+flt-semantics-container p,
+flt-semantics-container h1,
+flt-semantics-container h2,
+flt-semantics-container h3,
+flt-semantics-container h4,
+flt-semantics-container h5,
+flt-semantics-container h6,
+flt-semantics-container label,
+div, span, p, h1, h2, h3, h4, h5, h6, label {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    color: #333 !important;
+}
+
+/* Force Flutter canvas to be visible */
+canvas {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Fix any hidden elements */
+*[style*="display: none"] {
+    display: block !important;
+}
+
+*[style*="visibility: hidden"] {
+    visibility: visible !important;
+}
+
+*[style*="opacity: 0"] {
+    opacity: 1 !important;
+}
+
+/* Ensure proper layout */
+html, body {
+    height: 100% !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}

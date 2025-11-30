@@ -1,0 +1,238 @@
+/* flutter_fixes.css - Permanent CSS fixes for Flutter Web rendering issues */
+
+/* Base HTML and Body fixes */
+html, body {
+    height: 100% !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    background: white !important;
+}
+
+/* Flutter container fixes */
+flutter-view, flt-glass-pane, flt-scene-host, flt-semantics-host {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+}
+
+/* Fix pointer events */
+flt-glass-pane {
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+flutter-view {
+    pointer-events: auto !important;
+    z-index: 1 !important;
+}
+
+/* Make Flutter semantic elements visible and interactive */
+flt-semantics-placeholder,
+flt-semantics-container,
+flt-text-pane,
+flt-semantic-text {
+    pointer-events: auto !important;
+    z-index: 10 !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Input field fixes */
+input, textarea, select {
+    pointer-events: auto !important;
+    z-index: 20 !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: white !important;
+    border: 1px solid #ddd !important;
+    padding: 10px !important;
+    margin: 5px 0 !important;
+    border-radius: 4px !important;
+    color: #333 !important;
+    font-size: 14px !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none !important;
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25) !important;
+}
+
+/* Button fixes */
+button, [role="button"] {
+    pointer-events: auto !important;
+    z-index: 20 !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+    padding: 12px 24px !important;
+    margin: 10px 0 !important;
+    border: none !important;
+    border-radius: 4px !important;
+    background: #007bff !important;
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    min-width: 120px !important;
+    transition: all 0.2s ease !important;
+}
+
+button:hover, [role="button"]:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+button:active, [role="button"]:active {
+    transform: translateY(0) !important;
+}
+
+/* Text fixes */
+div, span, p, h1, h2, h3, h4, h5, h6, label {
+    pointer-events: auto !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #333 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600 !important;
+    margin: 10px 0 !important;
+}
+
+/* Form container fixes */
+form {
+    pointer-events: auto !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Card and container fixes */
+.flutter-card, .card, [class*="card"] {
+    pointer-events: auto !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    padding: 16px !important;
+    margin: 10px 0 !important;
+}
+
+/* Link fixes */
+a, [role="link"] {
+    pointer-events: auto !important;
+    position: relative !important;
+    display: inline !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #007bff !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+a:hover, [role="link"]:hover {
+    text-decoration: underline !important;
+}
+
+/* Icon fixes */
+icon, [class*="icon"], i {
+    pointer-events: auto !important;
+    position: relative !important;
+    display: inline !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #333 !important;
+}
+
+/* List and table fixes */
+ul, ol, li, table, tr, td, th {
+    pointer-events: auto !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+table, tr, td, th {
+    display: table-cell !important;
+}
+
+/* Ensure all elements are clickable */
+* {
+    pointer-events: auto !important;
+}
+
+/* Override any hiding styles */
+*[style*="display: none"] {
+    display: block !important;
+}
+
+*[style*="visibility: hidden"] {
+    visibility: visible !important;
+}
+
+*[style*="opacity: 0"] {
+    opacity: 1 !important;
+}
+
+/* Force layout recalculation */
+body::after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+    button, [role="button"] {
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+    }
+    
+    input, textarea, select {
+        padding: 8px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    button, [role="button"] {
+        border: 2px solid currentColor !important;
+    }
+    
+    input, textarea, select {
+        border: 2px solid currentColor !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    button, [role="button"] {
+        transition: none !important;
+    }
+}
