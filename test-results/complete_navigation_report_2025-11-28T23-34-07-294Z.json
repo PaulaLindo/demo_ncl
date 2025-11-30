@@ -1,0 +1,503 @@
+{
+  "timestamp": "2025-11-28T23:34:07.294Z",
+  "summary": {
+    "customer": {
+      "total": 6,
+      "success": 0,
+      "failed": 6
+    },
+    "staff": {
+      "total": 6,
+      "success": 0,
+      "failed": 6
+    },
+    "admin": {
+      "total": 7,
+      "success": 0,
+      "failed": 7
+    }
+  },
+  "overall": {
+    "total": 19,
+    "successful": 0,
+    "failed": 19,
+    "successRate": 0
+  },
+  "results": [
+    {
+      "userType": "customer",
+      "pageName": "Customer Home",
+      "path": "/customer/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Bookings",
+          "found": false
+        },
+        {
+          "content": "Services",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "customer",
+      "pageName": "Customer Bookings",
+      "path": "/customer/bookings",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "My Bookings",
+          "found": false
+        },
+        {
+          "content": "Upcoming",
+          "found": false
+        },
+        {
+          "content": "History",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "customer",
+      "pageName": "Customer Services",
+      "path": "/customer/services",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Services",
+          "found": false
+        },
+        {
+          "content": "Categories",
+          "found": false
+        },
+        {
+          "content": "Book Now",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "customer",
+      "pageName": "Customer Account",
+      "path": "/customer/account",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Profile",
+          "found": false
+        },
+        {
+          "content": "Settings",
+          "found": false
+        },
+        {
+          "content": "Personal Info",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "customer",
+      "pageName": "Booking Confirmation",
+      "path": "/customer/booking/confirmation",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Confirmation",
+          "found": false
+        },
+        {
+          "content": "Details",
+          "found": false
+        },
+        {
+          "content": "Status",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "customer",
+      "pageName": "Customer Registration",
+      "path": "/register/customer",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Register",
+          "found": false
+        },
+        {
+          "content": "Sign Up",
+          "found": false
+        },
+        {
+          "content": "Create Account",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "staff",
+      "pageName": "Staff Dashboard",
+      "path": "/staff/home",
+      "title": "demo_ncl",
+      "bodyTextLength": 469,
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Schedule",
+          "found": false
+        },
+        {
+          "content": "Jobs",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "staff",
+      "pageName": "Staff Schedule",
+      "path": "/staff/schedule",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Schedule",
+          "found": false
+        },
+        {
+          "content": "Calendar",
+          "found": false
+        },
+        {
+          "content": "Shifts",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "staff",
+      "pageName": "Staff Jobs",
+      "path": "/staff/jobs",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Jobs",
+          "found": false
+        },
+        {
+          "content": "Assignments",
+          "found": false
+        },
+        {
+          "content": "Tasks",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "staff",
+      "pageName": "Staff History",
+      "path": "/staff/history",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "History",
+          "found": false
+        },
+        {
+          "content": "Completed",
+          "found": false
+        },
+        {
+          "content": "Records",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "staff",
+      "pageName": "Staff Availability",
+      "path": "/staff/availability",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Availability",
+          "found": false
+        },
+        {
+          "content": "Time Off",
+          "found": false
+        },
+        {
+          "content": "Schedule",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "staff",
+      "pageName": "Staff Profile",
+      "path": "/staff/profile",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Profile",
+          "found": false
+        },
+        {
+          "content": "Information",
+          "found": false
+        },
+        {
+          "content": "Settings",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Home",
+      "path": "/admin/home",
+      "title": "demo_ncl",
+      "bodyTextLength": 469,
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Overview",
+          "found": false
+        },
+        {
+          "content": "Statistics",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Users",
+      "path": "/admin/users",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Users",
+          "found": false
+        },
+        {
+          "content": "Management",
+          "found": false
+        },
+        {
+          "content": "Accounts",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Staff",
+      "path": "/admin/staff",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Staff",
+          "found": true
+        },
+        {
+          "content": "Employees",
+          "found": false
+        },
+        {
+          "content": "Team",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Services",
+      "path": "/admin/services",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Services",
+          "found": false
+        },
+        {
+          "content": "Management",
+          "found": false
+        },
+        {
+          "content": "Offerings",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Bookings",
+      "path": "/admin/bookings",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Bookings",
+          "found": false
+        },
+        {
+          "content": "Management",
+          "found": false
+        },
+        {
+          "content": "Overview",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Reports",
+      "path": "/admin/reports",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Reports",
+          "found": false
+        },
+        {
+          "content": "Analytics",
+          "found": false
+        },
+        {
+          "content": "Data",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    },
+    {
+      "userType": "admin",
+      "pageName": "Admin Settings",
+      "path": "/admin/settings",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Settings",
+          "found": false
+        },
+        {
+          "content": "Configuration",
+          "found": false
+        },
+        {
+          "content": "System",
+          "found": false
+        }
+      ],
+      "pageStatus": "FALLBACK_ACTIVE",
+      "hasError": false,
+      "hasFallback": true,
+      "success": false
+    }
+  ]
+}

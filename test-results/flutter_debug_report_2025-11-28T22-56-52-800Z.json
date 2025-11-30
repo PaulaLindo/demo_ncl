@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-11-28T22:56:52.800Z",
+  "flutterElements": 0,
+  "bodyTextLength": 0,
+  "hasWelcomeText": false,
+  "hasLoginButtons": false,
+  "hasFormElements": false,
+  "flutterEngineState": {
+    "hasFlutter": false,
+    "hasApp": false,
+    "hasEngine": false,
+    "hasRenderer": false,
+    "flutterObject": [],
+    "appObject": []
+  },
+  "consoleMessages": [],
+  "errors": [],
+  "screenshots": []
+}

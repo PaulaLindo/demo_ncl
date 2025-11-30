@@ -1,0 +1,70 @@
+{
+  "startTime": "2025-11-28T23:00:48.080Z",
+  "endTime": "2025-11-28T23:03:47.570Z",
+  "totalTests": 37,
+  "passedTests": 0,
+  "failedTests": 37,
+  "results": {
+    "homePage": {
+      "title": "",
+      "hasWelcomeText": false,
+      "hasProfessionalServices": false,
+      "customerButton": false,
+      "staffButton": false,
+      "adminButton": false,
+      "helpButton": false
+    },
+    "customerLogin": {
+      "title": "",
+      "hasCustomerPortal": false,
+      "hasEmailField": false,
+      "hasPasswordField": false,
+      "hasLoginButton": false,
+      "hasDemoCredentials": false,
+      "hasBackButton": false,
+      "formTestPassed": false,
+      "credentialClickTest": false
+    },
+    "staffLogin": {
+      "title": "",
+      "hasStaffPortal": false,
+      "hasEmailField": false,
+      "hasPasswordField": false,
+      "hasLoginButton": false,
+      "hasDemoCredentials": false,
+      "hasBackButton": false
+    },
+    "adminLogin": {
+      "title": "",
+      "hasAdminPortal": false,
+      "hasEmailField": false,
+      "hasPasswordField": false,
+      "hasLoginButton": false,
+      "hasDemoCredentials": false,
+      "hasBackButton": false
+    },
+    "navigation": [
+      {
+        "from": "home",
+        "to": "customer",
+        "success": false
+      },
+      {
+        "from": "home",
+        "to": "staff",
+        "success": false
+      },
+      {
+        "from": "home",
+        "to": "admin",
+        "success": false
+      },
+      {
+        "from": "customer",
+        "to": "home",
+        "success": false
+      }
+    ],
+    "validation": []
+  }
+}

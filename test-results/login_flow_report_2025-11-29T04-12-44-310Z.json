@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-11-29T04:12:44.310Z",
+  "results": [
+    {
+      "role": "customer",
+      "loginResult": {
+        "success": false,
+        "formType": "Fallback"
+      },
+      "pageResults": []
+    },
+    {
+      "role": "staff",
+      "loginResult": {
+        "success": false,
+        "formType": "Fallback"
+      },
+      "pageResults": []
+    },
+    {
+      "role": "admin",
+      "loginResult": {
+        "success": false,
+        "formType": "Fallback"
+      },
+      "pageResults": []
+    }
+  ]
+}

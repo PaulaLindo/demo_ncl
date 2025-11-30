@@ -1,0 +1,133 @@
+{
+  "timestamp": "2025-11-28T23:50:01.135Z",
+  "results": [
+    {
+      "role": "customer",
+      "finalUrl": "http://localhost:8081/login/customer",
+      "authSuccess": false,
+      "hasError": false,
+      "stillOnLogin": true,
+      "hasFlutterIndicators": true,
+      "foundContent": [
+        "Welcome"
+      ],
+      "consoleMessages": [
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-28T23:48:34.591Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-28T23:48:34.600Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-28T23:48:34.605Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-28T23:48:34.608Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-28T23:48:34.609Z"
+        },
+        {
+          "type": "log",
+          "text": "🔄 Login submitted for customer",
+          "timestamp": "2025-11-28T23:48:38.637Z"
+        }
+      ],
+      "bodyLength": 1338
+    },
+    {
+      "role": "staff",
+      "finalUrl": "http://localhost:8081/login/staff",
+      "authSuccess": false,
+      "hasError": false,
+      "stillOnLogin": true,
+      "hasFlutterIndicators": true,
+      "foundContent": [],
+      "consoleMessages": [
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-28T23:49:07.676Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-28T23:49:07.683Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-28T23:49:07.687Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-28T23:49:07.689Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-28T23:49:07.690Z"
+        },
+        {
+          "type": "log",
+          "text": "🔄 Login submitted for staff",
+          "timestamp": "2025-11-28T23:49:09.290Z"
+        }
+      ],
+      "bodyLength": 1332
+    },
+    {
+      "role": "admin",
+      "finalUrl": "http://localhost:8081/login/admin",
+      "authSuccess": false,
+      "hasError": false,
+      "stillOnLogin": true,
+      "hasFlutterIndicators": true,
+      "foundContent": [],
+      "consoleMessages": [
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-28T23:49:39.059Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-28T23:49:39.067Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-28T23:49:39.074Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-28T23:49:39.076Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-28T23:49:39.078Z"
+        },
+        {
+          "type": "log",
+          "text": "🔄 Login submitted for admin",
+          "timestamp": "2025-11-28T23:49:41.470Z"
+        }
+      ],
+      "bodyLength": 1332
+    }
+  ]
+}

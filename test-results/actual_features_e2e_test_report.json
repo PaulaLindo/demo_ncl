@@ -1,0 +1,96 @@
+{
+  "summary": {
+    "total": 7,
+    "passed": 4,
+    "failed": 3,
+    "successRate": 57,
+    "timestamp": "2025-11-28T19:01:55.046Z"
+  },
+  "results": [
+    {
+      "test": "Admin Dashboard Features",
+      "passed": false,
+      "details": "Found 0 admin features: ",
+      "timestamp": "2025-11-28T19:00:15.789Z"
+    },
+    {
+      "test": "Staff Dashboard Features",
+      "passed": false,
+      "details": "Found 0 staff tabs: ",
+      "timestamp": "2025-11-28T19:00:24.233Z"
+    },
+    {
+      "test": "Customer Dashboard Features",
+      "passed": false,
+      "details": "Found 0 customer tabs: ",
+      "timestamp": "2025-11-28T19:00:32.616Z"
+    },
+    {
+      "test": "Cross-Role Data Flow Integration",
+      "passed": true,
+      "details": "Cross-role navigation and data access working",
+      "timestamp": "2025-11-28T19:01:05.531Z"
+    },
+    {
+      "test": "Quality Audit and Timekeeping Integration",
+      "passed": true,
+      "details": "Quality and timekeeping modules accessible",
+      "timestamp": "2025-11-28T19:01:22.126Z"
+    },
+    {
+      "test": "B2B Leads and Business Features",
+      "passed": true,
+      "details": "B2B and business logistics features accessible",
+      "timestamp": "2025-11-28T19:01:30.398Z"
+    },
+    {
+      "test": "User Profile and Account Management",
+      "passed": true,
+      "details": "Profile and account management features accessible",
+      "timestamp": "2025-11-28T19:01:55.042Z"
+    }
+  ],
+  "coordinates": {
+    "customerLogin": {
+      "x": 640,
+      "y": 360
+    },
+    "staffAccess": {
+      "x": 640,
+      "y": 460
+    },
+    "adminPortal": {
+      "x": 640,
+      "y": 560
+    },
+    "helpButton": {
+      "x": 640,
+      "y": 650
+    }
+  },
+  "actualFeatures": {
+    "admin": [
+      "Overview",
+      "Temp Cards",
+      "Proxy Time",
+      "Quality Audit",
+      "B2B Leads",
+      "Payroll",
+      "Logistics",
+      "Restrictions",
+      "Audit Logs"
+    ],
+    "staff": [
+      "Timekeeping",
+      "Schedule",
+      "Profile",
+      "Jobs"
+    ],
+    "customer": [
+      "Services",
+      "Bookings",
+      "Account",
+      "Home"
+    ]
+  }
+}

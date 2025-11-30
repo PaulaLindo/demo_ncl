@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-11-28T23:40:48.225Z",
+  "results": [
+    {
+      "role": "customer",
+      "loginResult": {
+        "success": true,
+        "finalUrl": "http://localhost:8081/login/customer",
+        "bodyTextLength": 1338,
+        "formType": "Flutter"
+      },
+      "pageResults": [
+        {
+          "pageName": "customer Home",
+          "path": "/customer/home",
+          "title": "NCL - Professional Home Services",
+          "bodyTextLength": 1359,
+          "hasFlutterIndicators": true,
+          "hasFallbackIndicators": true,
+          "contentChecks": [
+            {
+              "content": "Dashboard",
+              "found": false
+            },
+            {
+              "content": "Overview",
+              "found": false
+            },
+            {
+              "content": "Profile",
+              "found": false
+            }
+          ],
+          "success": false
+        }
+      ]
+    },
+    {
+      "role": "staff",
+      "loginResult": {
+        "success": false,
+        "finalUrl": "http://localhost:8081/login/staff",
+        "bodyTextLength": 1332,
+        "formType": "Flutter"
+      },
+      "pageResults": []
+    },
+    {
+      "role": "admin",
+      "loginResult": {
+        "success": false,
+        "finalUrl": "http://localhost:8081/login/admin",
+        "bodyTextLength": 1332,
+        "formType": "Flutter"
+      },
+      "pageResults": []
+    }
+  ]
+}

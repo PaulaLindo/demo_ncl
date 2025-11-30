@@ -1,9 +1,13 @@
 // lib/providers/auth_provider.dart
+import 'dart:async';
 import 'package:flutter/foundation.dart';
-import '../services/auth_service.dart';
-import '../models/job_service_models.dart';
+import 'package:logging/logging.dart';
 
-/// Authentication state
+import '../models/auth_model.dart';
+
+import '../services/mock_data_service.dart';
+
+/// Represents the authentication state of the application
 enum AuthState {
   initial,
   loading,
@@ -12,151 +16,179 @@ enum AuthState {
   error,
 }
 
-/// Manages authentication state across the app
-/// Single source of truth for current user and auth status
+/// Manages authentication state and operations
 class AuthProvider extends ChangeNotifier {
-  final AuthService _authService;
+  final MockDataService _mockDataService;
+  final Logger _logger = Logger('AuthProvider');
 
-  User? _currentUser;
-  AuthState _state = AuthState.initial;
+  AuthUser? _currentUser;
+  AuthState _state = AuthState.unauthenticated;
   String? _errorMessage;
-  bool _isInitialized = false;
+  StreamSubscription<AuthState>? _authStateSubscription;
 
-  AuthProvider(this._authService);
+  AuthProvider([MockDataService? mockDataService]) 
+    : _mockDataService = mockDataService ?? MockDataService() {
+    _initialize();
+  }
 
-  // --- Getters ---
-
-  User? get currentUser => _currentUser;
+  // Getters
+  AuthUser? get currentUser => _currentUser;
   AuthState get state => _state;
   String? get errorMessage => _errorMessage;
-  bool get isInitialized => _isInitialized;
-
-  bool get isAuthenticated => 
-      _state == AuthState.authenticated && _currentUser != null;
-  
+  bool get isAuthenticated => _state == AuthState.authenticated;
   bool get isLoading => _state == AuthState.loading;
-  
-  bool get isStaff => _currentUser?.isStaff ?? false;
-  
-  bool get isCustomer => 
-      _currentUser != null && !_currentUser!.isStaff;
 
-  // --- Public Methods ---
-
-  /// Initialize authentication state from storage
-  /// Should be called once when app starts
-  Future<void> initialize() async {
-    if (_isInitialized) return;
-
-    _setState(AuthState.loading);
-
+  /// Initializes the auth provider
+  Future<void> _initialize() async {
     try {
-      _currentUser = await _authService.getCurrentUser();
-      
-      if (_currentUser != null) {
-        _setState(AuthState.authenticated);
-      } else {
-        _setState(AuthState.unauthenticated);
-      }
-    } catch (e) {
-      _setError('Failed to initialize authentication');
-      _setState(AuthState.error);
-    } finally {
-      _isInitialized = true;
+      _state = AuthState.initial;
+      // Check for existing session or token here if needed
+      _state = AuthState.unauthenticated;
+    } catch (error, stackTrace) {
+      _handleError('Initialization failed', error, stackTrace);
     }
   }
 
-  /// Login with credentials
-  /// Returns true if successful, false otherwise
+  /// Handles user login
   Future<bool> login({
-    required String identifier,
-    required String secret,
-    required bool isStaffAttempt,
+    required String email,
+    required String password,
   }) async {
-    // Clear previous errors
-    _clearError();
-    _setState(AuthState.loading);
+    if (_state == AuthState.loading) return false;
 
     try {
-      final result = await _authService.login(
-        identifier: identifier.trim(),
-        secret: secret.trim(),
-        isStaffAttempt: isStaffAttempt,
+      print(' AuthProvider.login() called with email: $email');
+      _updateState(AuthState.loading);
+      print(' AuthProvider state set to loading');
+      
+      final result = await _mockDataService.authenticateUser(email, password);
+      print(' AuthProvider authentication result received: ${result.isSuccess ? 'SUCCESS' : 'FAILURE'}');
+      
+      return result.fold(
+        (failure) {
+          print(' AuthProvider login failed: $failure');
+          _handleAuthFailure(failure);
+          return false;
+        },
+        (user) {
+          print(' AuthProvider login successful for user: ${user.email}');
+          _currentUser = user;
+          _updateState(AuthState.authenticated);
+          print(' AuthProvider state set to authenticated');
+          print(' AuthProvider.isAuthenticated: ${isAuthenticated}');
+          _logger.info('User logged in: ${user.email}');
+          return true;
+        },
       );
-
-      if (result.success && result.user != null) {
-        _currentUser = result.user;
-        _setState(AuthState.authenticated);
-        return true;
-      } else {
-        _setError(result.errorMessage ?? 'Login failed');
-        _setState(AuthState.unauthenticated);
-        return false;
-      }
-    } catch (e) {
-      _setError('An unexpected error occurred');
-      _setState(AuthState.error);
+    } catch (error, stackTrace) {
+      print(' AuthProvider login error: $error');
+      _handleError('Login failed', error, stackTrace);
       return false;
     }
   }
 
-  /// Logout current user
+  /// Handles user logout
   Future<void> logout() async {
-    _setState(AuthState.loading);
-
     try {
-      await _authService.logout();
-      _currentUser = null;
-      _clearError();
-      _setState(AuthState.unauthenticated);
-    } catch (e) {
-      _setError('Failed to logout');
-      _setState(AuthState.error);
-    }
-  }
-
-  /// Refresh user data from storage
-  Future<void> refreshUser() async {
-    try {
-      await _authService.refreshUser();
-      _currentUser = await _authService.getCurrentUser();
+      _updateState(AuthState.loading);
       
-      if (_currentUser != null) {
-        _setState(AuthState.authenticated);
-      } else {
-        _setState(AuthState.unauthenticated);
-      }
-    } catch (e) {
-      _setError('Failed to refresh user data');
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 300));
+      
+      _currentUser = null;
+      _errorMessage = null; // Clear any error messages
+      _updateState(AuthState.unauthenticated);
+      _logger.info('User logged out');
+    } catch (error, stackTrace) {
+      _handleError('Logout failed', error, stackTrace);
     }
   }
 
-  /// Clear error message
+  /// Handles customer registration
+  Future<void> registerCustomer({
+    required String email,
+    required String password,
+    required String fullName,
+    required String phone,
+  }) async {
+    if (_state == AuthState.loading) return;
+
+    try {
+      _updateState(AuthState.loading);
+      
+      // Simulate registration process
+      await Future.delayed(const Duration(seconds: 1));
+      
+      // Create new customer user
+      final newUser = AuthUser(
+        id: 'customer_${DateTime.now().millisecondsSinceEpoch}',
+        email: email,
+        role: UserRole.customer,
+        firstName: fullName.split(' ').first,
+        lastName: fullName.split(' ').length > 1 ? fullName.split(' ').last : '',
+        phone: phone,
+        createdAt: DateTime.now(),
+      );
+
+      // Simulate successful registration
+      _currentUser = newUser;
+      _updateState(AuthState.authenticated);
+      _logger.info('Customer registered: ${newUser.email}');
+    } catch (error, stackTrace) {
+      _handleError('Registration failed', error, stackTrace);
+      rethrow; // Re-throw to allow UI to handle the error
+    }
+  }
+
+  /// Updates the authentication state
+  void _updateState(AuthState newState, {String? errorMessage}) {
+    if (_state != newState) {
+      _state = newState;
+      _errorMessage = errorMessage;
+      notifyListeners();
+    }
+  }
+
   void clearError() {
-    _clearError();
-  }
-
-  /// Update user profile (for future use)
-  Future<void> updateUser(User updatedUser) async {
-    _currentUser = updatedUser;
-    notifyListeners();
-    // In production, save to backend and storage
-  }
-
-  // --- Private Methods ---
-
-  void _setState(AuthState newState) {
-    _state = newState;
-    notifyListeners();
-  }
-
-  void _setError(String message) {
-    _errorMessage = message;
-    notifyListeners();
-  }
-
-  void _clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Handles authentication errors
+  void _handleError(String message, [Object? error, StackTrace? stackTrace]) {
+    _errorMessage = message;
+    _updateState(AuthState.error, errorMessage: message);
+    _logger.severe(message, error, stackTrace);
+  }
+
+  /// Handles authentication failures (invalid credentials, user not found)
+  void _handleAuthFailure(String message) {
+    _errorMessage = message;
+    _currentUser = null; // Clear current user on auth failure
+    _updateState(AuthState.unauthenticated, errorMessage: message);
+    _logger.info('Authentication failed: $message');
+  }
+
+  @override
+  void dispose() {
+    _authStateSubscription?.cancel();
+    super.dispose();
+  }
+
+  // Methods for tests compatibility
+  bool get hasError => _errorMessage != null;
+  bool get isLoggedIn => isAuthenticated;
+  
+  void setUser(AuthUser user) {
+    _currentUser = user;
+    _updateState(AuthState.authenticated);
+  }
+  
+  void setLoading(bool loading) {
+    _updateState(loading ? AuthState.loading : AuthState.unauthenticated);
+  }
+  
+  void setError(String error) {
+    _handleError(error);
   }
 }

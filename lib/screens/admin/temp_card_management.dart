@@ -1,0 +1,377 @@
+// lib/screens/admin/temp_card_management.dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/admin_provider.dart';
+import '../../models/temp_card_model.dart';
+import '../../theme/app_theme.dart';
+import '../../utils/color_utils.dart';
+
+class TempCardManagementPage extends StatefulWidget {
+  const TempCardManagementPage({super.key});
+
+  @override
+  State<TempCardManagementPage> createState() => _TempCardManagementPageState();
+}
+
+class _TempCardManagementPageState extends State<TempCardManagementPage> {
+  final TextEditingController _staffNameController = TextEditingController();
+  final TextEditingController _staffIdController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
+
+  @override
+  void dispose() {
+    _staffNameController.dispose();
+    _staffIdController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Temp Card Management'),
+        backgroundColor: AppTheme.primaryPurple,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: () => _showIssueTempCardDialog(context),
+            icon: const Icon(Icons.add),
+            tooltip: 'Issue New Temp Card',
+          ),
+        ],
+      ),
+      body: Consumer<AdminProvider>(
+        builder: (context, provider, child) {
+          return StreamBuilder<List<TempCard>>(
+            stream: provider.tempCardsStream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+
+              final tempCards = snapshot.data ?? [];
+
+              if (tempCards.isEmpty) {
+                return const Center(
+                  child: Text('No temp cards issued yet'),
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: tempCards.length,
+                itemBuilder: (context, index) {
+                  final tempCard = tempCards[index];
+                  return _buildTempCardCard(context, tempCard, provider);
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTempCardCard(
+    BuildContext context,
+    TempCard tempCard,
+    AdminProvider provider,
+  ) {
+    final isExpired = DateTime.now().isAfter(tempCard.expiryDate);
+    final isActive = tempCard.isActive && !isExpired;
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isActive ? Colors.green : Colors.red,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    isActive ? 'Active' : 'Inactive',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                if (isActive)
+                  IconButton(
+                    onPressed: () => _showDeactivateDialog(context, tempCard, provider),
+                    icon: const Icon(Icons.block, color: Colors.red),
+                    tooltip: 'Deactivate',
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Icon(Icons.credit_card, color: AppTheme.primaryPurple),
+                const SizedBox(width: 8),
+                Text(
+                  'Card: ${tempCard.cardNumber}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(Icons.person, color: Colors.grey[600]),
+                const SizedBox(width: 8),
+                Text(
+                  'Staff: ${tempCard.userName}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(Icons.schedule, color: Colors.grey[600]),
+                const SizedBox(width: 8),
+                Text(
+                  'Issued: ${tempCard.issueDate.toString().substring(0, 10)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const Spacer(),
+                if (isExpired)
+                  Text(
+                    'EXPIRED',
+                    style: TextStyle(
+                      color: Colors.red[700],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  )
+                else
+                  Text(
+                    'Expires: ${tempCard.expiryDate.toString().substring(0, 10)}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+              ],
+            ),
+            if (tempCard.notes != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Notes: ${tempCard.notes}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+            if (tempCard.deactivationReason != null) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.red.withCustomOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info, color: Colors.red[700], size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Deactivated: ${tempCard.deactivationReason}',
+                        style: TextStyle(
+                          color: Colors.red[700],
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showIssueTempCardDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Issue New Temp Card'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _staffIdController,
+              decoration: const InputDecoration(
+                labelText: 'Staff ID',
+                hintText: 'Enter staff ID',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _staffNameController,
+              decoration: const InputDecoration(
+                labelText: 'Staff Name',
+                hintText: 'Enter staff name',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _notesController,
+              decoration: const InputDecoration(
+                labelText: 'Notes (Optional)',
+                hintText: 'Any additional notes',
+              ),
+              maxLines: 3,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_staffIdController.text.isEmpty || _staffNameController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please fill in all required fields'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              try {
+                final provider = context.read<AdminProvider>();
+                final tempCard = await provider.issueTempCard(
+                  staffId: _staffIdController.text,
+                  staffName: _staffNameController.text,
+                  notes: _notesController.text.isEmpty ? null : _notesController.text,
+                );
+
+                Navigator.of(context).pop();
+                _staffIdController.clear();
+                _staffNameController.clear();
+                _notesController.clear();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Temp card issued: ${tempCard.cardNumber}'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: const Text('Issue Card'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeactivateDialog(BuildContext context, TempCard tempCard, AdminProvider provider) {
+    final reasonController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Deactivate Temp Card'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Card: ${tempCard.cardNumber}'),
+            Text('Staff: ${tempCard.userName}'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: reasonController,
+              decoration: const InputDecoration(
+                labelText: 'Deactivation Reason',
+                hintText: 'Enter reason for deactivation',
+              ),
+              maxLines: 3,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (reasonController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter a deactivation reason'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              try {
+                await provider.deactivateTempCard(tempCard.id, reasonController.text);
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Temp card deactivated'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Deactivate'),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,28 +1,160 @@
 // lib/providers/booking_provider.dart
 import 'package:flutter/foundation.dart';
-import '../models/booking_models.dart';
+import 'package:logging/logging.dart';
 
-enum LoadingState { initial, loading, loaded, error }
+import '../models/booking_model.dart';
+
+class ServiceDetail {
+  final String id;
+  final String name;
+  final String description;
+  final double basePrice;
+  final String duration;
+  final String category;
+  final bool isPopular;
+  final double rating;
+  final int reviewCount;
+  final bool isFeatured;
+  final String priceDisplay;
+  final List<String> features;
+
+  ServiceDetail({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.basePrice,
+    required this.duration,
+    required this.category,
+    this.isPopular = false,
+    this.rating = 0.0,
+    this.reviewCount = 0,
+    this.isFeatured = false,
+    String? priceDisplay,
+    List<String>? features,
+  }) : priceDisplay = priceDisplay ?? 'R${basePrice.toInt()}',
+       features = features ?? <String>[];
+}
+
+// Mock services data
+final List<ServiceDetail> mockServices = [
+  ServiceDetail(
+    id: 's1',
+    name: 'Standard Cleaning',
+    description: 'A thorough standard cleaning of your home.',
+    basePrice: 50.0,
+    duration: '2 hours',
+    category: 'Residential',
+    isPopular: true,
+    rating: 4.5,
+    reviewCount: 128,
+    isFeatured: false,
+    features: ['Living room cleaning', 'Kitchen cleaning', 'Bathroom cleaning', 'Bedroom dusting'],
+  ),
+  ServiceDetail(
+    id: 's2',
+    name: 'Deep Cleaning',
+    description: 'A comprehensive deep clean for a spotless finish.',
+    basePrice: 100.0,
+    duration: '4 hours',
+    category: 'Residential',
+    isPopular: false,
+    rating: 4.8,
+    reviewCount: 89,
+    isFeatured: true,
+    features: ['Deep scrub all surfaces', 'Window cleaning', 'Carpet shampooing', 'Oven cleaning', 'Refrigerator cleaning'],
+  ),
+  ServiceDetail(
+    id: 's3',
+    name: 'Office Cleaning',
+    description: 'Professional cleaning for office spaces.',
+    basePrice: 150.0,
+    duration: '3 hours',
+    category: 'Commercial',
+    isPopular: true,
+    rating: 4.2,
+    reviewCount: 56,
+    isFeatured: false,
+    features: ['Desk sanitization', 'Floor cleaning', 'Trash removal', 'Common area cleaning'],
+  ),
+];
+
+enum LoadingState { 
+  initial, 
+  loading, 
+  loaded, 
+  error 
+}
 
 /// BookingProvider manages booking and service state with proper error handling
 class BookingProvider extends ChangeNotifier {
+  final Logger _logger = Logger('BookingProvider');
+
   List<Booking> _bookings = [];
   final List<ServiceDetail> _services = mockServices;
+
   LoadingState _loadingState = LoadingState.initial;
+  
   String? _errorMessage;
+
+  bool _isLoading = false;
+
   String _bookingFilter = 'all';
   String _serviceFilter = 'all';
 
   // Getters
-  List<Booking> get bookings => _bookings;
-  List<ServiceDetail> get services => _services;
+  List<Booking> get bookings => List.unmodifiable(_bookings);
+  List<ServiceDetail> get services => List.unmodifiable(_services);
+
   LoadingState get loadingState => _loadingState;
+
   bool get isLoading => _loadingState == LoadingState.loading;
   bool get hasError => _loadingState == LoadingState.error;
   bool get isLoaded => _loadingState == LoadingState.loaded;
+
   String? get errorMessage => _errorMessage;
   String get currentFilter => _bookingFilter;
   String get serviceFilter => _serviceFilter;
+
+  Future<void> addBooking(Booking booking) async {
+    _setLoading(true);
+    try {
+      _bookings.add(booking);
+      notifyListeners();
+    } catch (e, stackTrace) {
+      _handleError('Failed to add booking', e, stackTrace);
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  void _setLoading(bool loading) {
+    if (_isLoading != loading) {
+      _isLoading = loading;
+      _loadingState = loading ? LoadingState.loading : LoadingState.initial;
+      notifyListeners();
+    }
+  }
+
+  void _handleError(String message, dynamic error, StackTrace stackTrace) {
+    _errorMessage = message;
+    _logger.severe(message, error, stackTrace);
+    notifyListeners();
+  }
+
+  // Add a method to get bookings by status
+  List<Booking> getBookingsByStatus(BookingStatus status) {
+    return _bookings.where((booking) => booking.status == status).toList();
+  }
+
+  // Add a method to get upcoming bookings
+  List<Booking> getUpcomingBookings() {
+    final now = DateTime.now();
+    return _bookings.where((booking) => 
+      booking.bookingDate.isAfter(now) && 
+      booking.status != BookingStatus.cancelled &&
+      booking.status != BookingStatus.completed
+    ).toList();
+  }
 
   /// Get filtered bookings based on current filter
   List<Booking> get filteredBookings {
@@ -74,9 +206,73 @@ class BookingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Helper methods for state management
+
+  void _setLoaded() {
+    _loadingState = LoadingState.loaded;
+    notifyListeners();
+  }
+
+  void _setError(String message) {
+    _loadingState = LoadingState.error;
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  // Add a method to cancel a booking
+  Future<void> cancelBooking(String bookingId, {String? reason}) async {
+    _setLoading(true);
+    try {
+      // In a real app, this would call an API
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      final index = _bookings.indexWhere((b) => b.id == bookingId);
+      if (index != -1) {
+        _bookings[index] = _bookings[index].copyWith(
+          status: BookingStatus.cancelled,
+          cancellationReason: reason,
+          updatedAt: DateTime.now(),
+        );
+        _setLoaded();
+      } else {
+        _setError('Booking not found');
+      }
+    } catch (e) {
+      _setError('Failed to cancel booking: ${e.toString()}');
+    }
+  }
+
+  // Add a method to reschedule a booking
+  Future<void> rescheduleBooking({
+    required String bookingId,
+    required DateTime newDate,
+    TimeOfDayPreference? newTimePreference,
+  }) async {
+    _setLoading(true);
+    try {
+      // In a real app, this would call an API
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      final index = _bookings.indexWhere((b) => b.id == bookingId);
+      if (index != -1) {
+        _bookings[index] = _bookings[index].copyWith(
+          bookingDate: newDate,
+          timePreference: newTimePreference ?? _bookings[index].timePreference,
+          status: BookingStatus.confirmed, // Reset status to confirmed
+          updatedAt: DateTime.now(),
+        );
+        _setLoaded();
+      } else {
+        _setError('Booking not found');
+      }
+    } catch (e) {
+      _setError('Failed to reschedule booking: ${e.toString()}');
+    }
+  }
+
   /// Load bookings with error handling
   Future<void> loadBookings() async {
-    _setLoading();
+    _setLoading(true);
 
     try {
       // Simulate network delay
@@ -98,62 +294,66 @@ class BookingProvider extends ChangeNotifier {
   Future<bool> createBooking({
     required String serviceId,
     required DateTime bookingDate,
-    required String preferredTime,
+    required String address,
     required String propertySize,
     required String frequency,
-    String specialInstructions = '',
+    TimeOfDayPreference? timePreference,
+    String? notes,
   }) async {
-    _setLoading();
-
+    _setLoading(true);
+    
     try {
-      // Validate inputs
-      if (bookingDate.isBefore(DateTime.now())) {
-        throw Exception('Booking date cannot be in the past');
-      }
+      // Simulate network delay
+      await Future.delayed(const Duration(milliseconds: 1000));
+      
+      // Simulate potential validation error (5% chance) - REMOVED for reliability
+      // if (DateTime.now().millisecond % 20 == 0) {
+      //   throw Exception('Service not available on selected date');
+      // }
 
       final service = getServiceById(serviceId);
       if (service == null) {
-        throw Exception('Service not found');
+        _setError('Service not found');
+        return false;
       }
 
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
+      final propertySizeEnum = PropertySize.values.firstWhere(
+        (size) => size.name == propertySize,
+        orElse: () => PropertySize.medium,
+      );
+      
+      final frequencyEnum = BookingFrequency.values.firstWhere(
+        (freq) => freq.name == frequency,
+        orElse: () => BookingFrequency.oneTime,
+      );
 
-      // Simulate potential error (5% chance)
-      if (DateTime.now().millisecond % 20 == 0) {
-        throw Exception('Booking service temporarily unavailable');
-      }
+      // Calculate final price
+      final calculatedFinalPrice = Booking.calculateFinalPrice(
+        service.basePrice,
+        propertySizeEnum.priceMultiplier,
+        frequencyEnum.discountMultiplier,
+      );
 
-      // Calculate estimated price based on property size
-      double estimatedPrice = service.basePrice;
-      if (propertySize == 'small') {
-        estimatedPrice *= 0.8;
-      } else if (propertySize == 'large') {
-        estimatedPrice *= 1.3;
-      }
-
-      // Apply frequency discount
-      if (frequency == 'weekly') {
-        estimatedPrice *= 0.9; // 10% discount
-      } else if (frequency == 'bi-weekly') {
-        estimatedPrice *= 0.95; // 5% discount
-      }
-
-      final booking = Booking(
-        id: 'B${DateTime.now().millisecondsSinceEpoch}',
+      final newBooking = Booking(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        customerId: 'C001',
         serviceId: serviceId,
         serviceName: service.name,
         bookingDate: bookingDate,
-        preferredTime: preferredTime,
-        address: '47 NCL Lane, Apt 2B', // Mock address
+        timePreference: timePreference ?? TimeOfDayPreference.morning,
+        address: address,
         status: BookingStatus.pending,
-        estimatedPrice: estimatedPrice,
-        propertySize: propertySize,
-        frequency: frequency,
-        specialInstructions: specialInstructions.isNotEmpty ? specialInstructions : null,
+        basePrice: service.basePrice,
+        propertySize: propertySizeEnum,
+        frequency: frequencyEnum,
+        startTime: bookingDate,
+        endTime: bookingDate.add(const Duration(hours: 2)),
+        createdAt: DateTime.now(),
+        notes: notes,
+        finalPrice: calculatedFinalPrice,
       );
 
-      _bookings.insert(0, booking); // Add to start of list
+      _bookings.insert(0, newBooking); // Add to start of list
       _setLoaded();
       return true;
     } catch (e) {
@@ -162,89 +362,13 @@ class BookingProvider extends ChangeNotifier {
     }
   }
 
-  /// Cancel booking with error handling
-  Future<bool> cancelBooking(String bookingId) async {
-    _setLoading();
-
-    try {
-      // Simulate network delay
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      final index = _bookings.indexWhere((b) => b.id == bookingId);
-      if (index == -1) {
-        throw Exception('Booking not found');
-      }
-
-      final booking = _bookings[index];
-      
-      // Check if booking can be cancelled
-      if (booking.status == BookingStatus.completed) {
-        throw Exception('Cannot cancel completed booking');
-      }
-
-      if (booking.status == BookingStatus.cancelled) {
-        throw Exception('Booking is already cancelled');
-      }
-
-      // Update booking status
-      _bookings[index] = booking.copyWith(
-        status: BookingStatus.cancelled,
-      );
-
-      _setLoaded();
-      return true;
-    } catch (e) {
-      _setError(e.toString());
-      return false;
+  // Update booking method example
+  void updateBooking(Booking booking) {
+    final index = _bookings.indexWhere((b) => b.id == booking.id);
+    if (index != -1) {
+      _bookings[index] = booking;
+      notifyListeners();
     }
-  }
-
-  /// Reschedule booking
-  Future<bool> rescheduleBooking(String bookingId, DateTime newDate, String newTime) async {
-    _setLoading();
-
-    try {
-      await Future.delayed(const Duration(milliseconds: 800));
-
-      final index = _bookings.indexWhere((b) => b.id == bookingId);
-      if (index == -1) {
-        throw Exception('Booking not found');
-      }
-
-      if (newDate.isBefore(DateTime.now())) {
-        throw Exception('New date cannot be in the past');
-      }
-
-      _bookings[index] = _bookings[index].copyWith(
-        bookingDate: newDate,
-        preferredTime: newTime,
-      );
-
-      _setLoaded();
-      return true;
-    } catch (e) {
-      _setError(e.toString());
-      return false;
-    }
-  }
-
-  // Private helper methods
-  void _setLoading() {
-    _loadingState = LoadingState.loading;
-    _errorMessage = null;
-    notifyListeners();
-  }
-
-  void _setLoaded() {
-    _loadingState = LoadingState.loaded;
-    _errorMessage = null;
-    notifyListeners();
-  }
-
-  void _setError(String message) {
-    _loadingState = LoadingState.error;
-    _errorMessage = message;
-    notifyListeners();
   }
 
   // Mock data
@@ -252,43 +376,69 @@ class BookingProvider extends ChangeNotifier {
     return [
       Booking(
         id: 'B001',
+        customerId: 'C001',
         serviceId: 'S01',
         serviceName: 'Standard Cleaning',
         bookingDate: DateTime.now().add(const Duration(days: 3)),
-        preferredTime: 'morning',
+        timePreference: TimeOfDayPreference.morning,
         address: '47 NCL Lane, Apt 2B',
         status: BookingStatus.confirmed,
-        estimatedPrice: 280.0,
-        propertySize: 'medium',
-        frequency: 'one-time',
+        basePrice: 250.0,
+        propertySize: PropertySize.medium,
+        frequency: BookingFrequency.oneTime,
+        startTime: DateTime.now().add(const Duration(days: 3)),
+        endTime: DateTime.now().add(const Duration(days: 3, hours: 2)),
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
         assignedStaffName: 'Sarah Mitchell',
       ),
       Booking(
         id: 'B002',
+        customerId: 'C002',
         serviceId: 'S02',
         serviceName: 'Deep Cleaning',
         bookingDate: DateTime.now().add(const Duration(days: 7)),
-        preferredTime: 'afternoon',
+        timePreference: TimeOfDayPreference.afternoon,
         address: '47 NCL Lane, Apt 2B',
         status: BookingStatus.pending,
-        estimatedPrice: 600.0,
-        propertySize: 'medium',
-        frequency: 'one-time',
+        basePrice: 550.0,
+        propertySize: PropertySize.medium,
+        frequency: BookingFrequency.oneTime,
+        startTime: DateTime.now().add(const Duration(days: 7)),
+        endTime: DateTime.now().add(const Duration(days: 7, hours: 4)),
+        createdAt: DateTime.now().subtract(const Duration(days: 2)),
       ),
       Booking(
         id: 'B003',
+        customerId: 'C003',
         serviceId: 'S01',
         serviceName: 'Standard Cleaning',
         bookingDate: DateTime.now().subtract(const Duration(days: 5)),
-        preferredTime: 'morning',
+        timePreference: TimeOfDayPreference.morning,
         address: '47 NCL Lane, Apt 2B',
         status: BookingStatus.completed,
-        estimatedPrice: 280.0,
-        propertySize: 'medium',
-        frequency: 'weekly',
+        basePrice: 250.0,
+        propertySize: PropertySize.medium,
+        frequency: BookingFrequency.weekly,
+        startTime: DateTime.now().subtract(const Duration(days: 5)),
+        endTime: DateTime.now().subtract(const Duration(days: 5, hours: -2)),
+        createdAt: DateTime.now().subtract(const Duration(days: 6)),
         assignedStaffName: 'David Johnson',
         specialInstructions: 'Please focus on kitchen area',
       ),
     ];
+  }
+
+  // Methods for tests compatibility
+  void updateBookingStatus(String bookingId, BookingStatus status) {
+    final index = _bookings.indexWhere((booking) => booking.id == bookingId);
+    if (index != -1) {
+      final updatedBooking = _bookings[index].copyWith(status: status);
+      _bookings[index] = updatedBooking;
+      notifyListeners();
+    }
+  }
+
+  List<Booking> getBookingsForCustomer(String customerId) {
+    return _bookings.where((booking) => booking.customerId == customerId).toList();
   }
 }

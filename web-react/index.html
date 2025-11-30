@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCL - Professional Home Services</title>
+  <meta name="description" content="NCL Professional Home Services - Quality service for your home" />
+  
+  <!-- Device detection and redirect -->
+  <script>
+    // Device detection script
+    (function() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth > 768;
+      
+      // If mobile and not already in Flutter app, redirect to app store
+      if (isMobile && !isTablet) {
+        // Redirect to Flutter app stores
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+        
+        if (isIOS) {
+          window.location.href = 'https://apps.apple.com/app/ncl-home-services'; // Replace with actual App Store URL
+        } else if (isAndroid) {
+          window.location.href = 'https://play.google.com/store/apps/details?id=com.ncl.homeservices'; // Replace with actual Play Store URL
+        }
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.test.jsx"></script>
+</body>
+</html>

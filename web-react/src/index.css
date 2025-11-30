@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for device-specific behavior */
+.device-mobile .mobile-only {
+  display: block;
+}
+
+.device-mobile .desktop-only {
+  display: none;
+}
+
+.device-desktop .desktop-only {
+  display: block;
+}
+
+.device-desktop .mobile-only {
+  display: none;
+}
+
+.device-tablet .tablet-only {
+  display: block;
+}
+
+.device-tablet .mobile-only,
+.device-tablet .desktop-only {
+  display: none;
+}
+
+/* Responsive utilities */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Error states */
+.error {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Success states */
+.success {
+  color: #16a34a;
+  border-color: #16a34a;
+}

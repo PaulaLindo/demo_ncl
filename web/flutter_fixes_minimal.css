@@ -1,0 +1,54 @@
+/* flutter_fixes_minimal.css - Minimal CSS fixes that don't interfere with Flutter structure */
+
+/* Only fix the core layout issues without touching Flutter's internal structure */
+html, body {
+    height: 100% !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+/* Fix pointer events blocking without changing display/visibility */
+flt-glass-pane {
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+flutter-view {
+    pointer-events: auto !important;
+    z-index: 1 !important;
+}
+
+/* Only make semantic elements clickable without changing their display */
+flt-semantics-placeholder,
+flt-semantics-container,
+flt-text-pane,
+flt-semantic-text {
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}
+
+/* Ensure inputs and buttons are clickable without forcing display styles */
+input, textarea, select, button, [role="button"] {
+    pointer-events: auto !important;
+    z-index: 20 !important;
+    position: relative !important;
+}
+
+/* Ensure text elements are clickable without forcing display styles */
+div, span, p, h1, h2, h3, h4, h5, h6, label, a, [role="link"] {
+    pointer-events: auto !important;
+    position: relative !important;
+}
+
+/* Force layout recalculation only */
+body::after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}

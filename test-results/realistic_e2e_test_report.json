@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "total": 6,
+    "passed": 0,
+    "failed": 6,
+    "successRate": 0,
+    "timestamp": "2025-11-28T18:58:05.750Z"
+  },
+  "results": [
+    {
+      "test": "Customer Booking Journey",
+      "passed": false,
+      "details": "Booking flow incomplete",
+      "timestamp": "2025-11-28T18:56:56.798Z"
+    },
+    {
+      "test": "Staff Timekeeping Journey",
+      "passed": false,
+      "details": "Timekeeping flow incomplete",
+      "timestamp": "2025-11-28T18:57:05.102Z"
+    },
+    {
+      "test": "Admin Management Journey",
+      "passed": false,
+      "details": "Management flow incomplete",
+      "timestamp": "2025-11-28T18:57:13.428Z"
+    },
+    {
+      "test": "Cross-Role Job Assignment",
+      "passed": false,
+      "details": "Cross-role flow incomplete",
+      "timestamp": "2025-11-28T18:57:38.646Z"
+    },
+    {
+      "test": "Help and Support Journey",
+      "passed": false,
+      "details": "Help features not working",
+      "timestamp": "2025-11-28T18:57:54.237Z"
+    },
+    {
+      "test": "UI Responsiveness and Navigation",
+      "passed": false,
+      "details": "Responsiveness issues found",
+      "timestamp": "2025-11-28T18:58:05.747Z"
+    }
+  ],
+  "coordinates": {
+    "customerLogin": {
+      "x": 640,
+      "y": 360
+    },
+    "staffAccess": {
+      "x": 640,
+      "y": 460
+    },
+    "adminPortal": {
+      "x": 640,
+      "y": 560
+    },
+    "helpButton": {
+      "x": 640,
+      "y": 650
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5,
+    "successRate": 0,
+    "timestamp": "2025-11-28T18:55:54.744Z"
+  },
+  "results": [
+    {
+      "test": "ITC 5.1: Schedule-to-Job Assignment Flow",
+      "passed": false,
+      "details": "Job assignment flow incomplete",
+      "timestamp": "2025-11-28T18:54:31.222Z"
+    },
+    {
+      "test": "ITC 5.2: Managed Logistics to Punctuality",
+      "passed": false,
+      "details": "Logistics flow incomplete",
+      "timestamp": "2025-11-28T18:54:47.839Z"
+    },
+    {
+      "test": "ITC 5.3: Quality-Gated Payroll Integration",
+      "passed": false,
+      "details": "Quality-gated payroll incomplete",
+      "timestamp": "2025-11-28T18:55:04.701Z"
+    },
+    {
+      "test": "ITC 5.4: Fixed-Price Quote to Billing",
+      "passed": false,
+      "details": "Quote to billing incomplete",
+      "timestamp": "2025-11-28T18:55:21.442Z"
+    },
+    {
+      "test": "ITC 5.6: Training Completion to Job Eligibility",
+      "passed": false,
+      "details": "Training to job eligibility incomplete",
+      "timestamp": "2025-11-28T18:55:54.739Z"
+    }
+  ],
+  "coordinates": {
+    "customerLogin": {
+      "x": 640,
+      "y": 360
+    },
+    "staffAccess": {
+      "x": 640,
+      "y": 460
+    },
+    "adminPortal": {
+      "x": 640,
+      "y": 560
+    },
+    "helpButton": {
+      "x": 640,
+      "y": 650
+    }
+  }
+}

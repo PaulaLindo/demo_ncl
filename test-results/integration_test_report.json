@@ -1,0 +1,47 @@
+{
+  "summary": {
+    "total": 6,
+    "passed": 0,
+    "failed": 6,
+    "successRate": 0,
+    "timestamp": "2025-11-28T18:44:35.687Z"
+  },
+  "results": [
+    {
+      "test": "ITC 5.1: Schedule-to-Job Assignment",
+      "passed": false,
+      "details": "Job offer not found",
+      "timestamp": "2025-11-28T18:43:38.264Z"
+    },
+    {
+      "test": "ITC 5.2: Managed Logistics to Punctuality",
+      "passed": false,
+      "details": "locator.isVisible: Unexpected token \"=\" while parsing css selector \"button:has-text(\"Logout\"), text=Logout\". Did you mean to CSS.escape it?\nCall log:\n\u001b[2m    - checking visibility of button:has-text(\"Logout\"), text=Logout\u001b[22m\n",
+      "timestamp": "2025-11-28T18:43:41.511Z"
+    },
+    {
+      "test": "ITC 5.3: Quality-Gated Payroll Integration",
+      "passed": false,
+      "details": "locator.isVisible: Unexpected token \"=\" while parsing css selector \"button:has-text(\"Clock Out\"), text=Clock Out\". Did you mean to CSS.escape it?\nCall log:\n\u001b[2m    - checking visibility of button:has-text(\"Clock Out\"), text=Clock Out\u001b[22m\n",
+      "timestamp": "2025-11-28T18:43:47.997Z"
+    },
+    {
+      "test": "ITC 5.4: Fixed-Price Quote to Billing",
+      "passed": false,
+      "details": "locator.isVisible: Unexpected token \"=\" while parsing css selector \"button:has-text(\"Book Service\"), text=Book, text=Services\". Did you mean to CSS.escape it?\nCall log:\n\u001b[2m    - checking visibility of button:has-text(\"Book Service\"), text=Book, text=Services\u001b[22m\n",
+      "timestamp": "2025-11-28T18:43:54.321Z"
+    },
+    {
+      "test": "ITC 5.5: Proxy Shift to Payroll Audit Trail",
+      "passed": false,
+      "details": "Proxy shift shows PENDING initially, then APPROVED after staff approval",
+      "timestamp": "2025-11-28T18:44:23.886Z"
+    },
+    {
+      "test": "ITC 5.6: Training Completion to Job Eligibility",
+      "passed": false,
+      "details": "Staff selection not available in job creation",
+      "timestamp": "2025-11-28T18:44:35.682Z"
+    }
+  ]
+}

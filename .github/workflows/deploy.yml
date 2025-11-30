@@ -40,7 +40,7 @@ jobs:
       # if the repository is not served from the root.
       # Double-check that '/demo_ncl/' matches your repository name!
       - name: Build Flutter Web
-        run: flutter build web --release --base-href /demo_ncl/
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
         
       # 5. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages

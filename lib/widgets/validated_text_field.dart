@@ -1,7 +1,10 @@
 // lib/widgets/validated_text_field.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../theme/app_theme.dart';
+
+import '../utils/color_utils.dart';
 
 import '../utils/validators.dart';
 
@@ -100,7 +103,7 @@ class _ValidatedTextFieldState extends State<ValidatedTextField> {
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppTheme.borderColor.withOpacity(0.5)),
+              borderSide: BorderSide(color: AppTheme.borderColor.withCustomOpacity(0.5)),
             ),
           ),
           validator: (value) {

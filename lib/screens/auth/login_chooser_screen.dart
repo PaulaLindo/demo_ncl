@@ -1,7 +1,9 @@
-// lib/screens/auth/login_chooser_screen.dart
+// lib/screens/auth/login_chooser_screen.dart - Login Chooser
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../theme/app_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../providers/theme_provider.dart';
 
 class LoginChooserScreen extends StatelessWidget {
   const LoginChooserScreen({super.key});
@@ -9,61 +11,50 @@ class LoginChooserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppTheme.backgroundLight,
-                Colors.white,
-              ],
+      backgroundColor: context.watch<ThemeProvider>().backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          // Theme Switcher Button
+          IconButton(
+            icon: const Icon(Icons.palette),
+            onPressed: () {
+              context.push('/theme-settings');
+            },
+            tooltip: 'Theme Settings',
+            style: IconButton.styleFrom(
+              backgroundColor: context.watch<ThemeProvider>().cardColor,
+              foregroundColor: context.watch<ThemeProvider>().primaryColor,
             ),
           ),
+        ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              context.watch<ThemeProvider>().primaryColor.withOpacity(0.05),
+              context.watch<ThemeProvider>().backgroundColor,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(32.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo/Image
-                  _buildHeader(context),
-                  
-                  const SizedBox(height: 48),
-                  
-                  // Title
-                  Text(
-                    'Welcome to NCL',
-                    style: context.textTheme.headlineLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  const SizedBox(height: 12),
-                  
-                  // Subtitle
-                  Text(
-                    'Professional home services\nat your fingertips',
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.textGrey,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  
-                  const SizedBox(height: 64),
-                  
-                  // Role Selection Buttons
+                  _buildLogo(context),
+                  const SizedBox(height: 40),
+                  _buildWelcomeText(context),
+                  const SizedBox(height: 40),
                   _buildRoleButtons(context),
-                  
-                  const SizedBox(height: 32),
-                  
-                  // Help Text
-                  TextButton(
-                    onPressed: () {
-                      _showHelpDialog(context);
-                    },
-                    child: const Text('Need help signing in?'),
-                  ),
+                  const SizedBox(height: 24),
+                  _buildHelpButton(context),
                 ],
               ),
             ),
@@ -73,193 +64,183 @@ class LoginChooserScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildLogo(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      width: 120,
+      height: 120,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: AppTheme.cardShadow,
-      ),
-      child: Column(
-        children: [
-          // You can replace this with actual logo/image
-          Container(
-            width: 180,
-            height: 180,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  AppTheme.primaryPurple,
-                  AppTheme.secondaryColor,
-                ],
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Image.asset(
-              'assets/images/comprehensive_home_services.png', // <-- Path to your image file
-              fit: BoxFit.cover,
-            ),
+        color: context.watch<ThemeProvider>().cardColor,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: context.watch<ThemeProvider>().primaryColor.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
+      child: SvgPicture.asset(
+        'assets/images/comprehensive_home_services.svg',
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildWelcomeText(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Welcome to NCL',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: context.watch<ThemeProvider>().textColor,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Professional Home Services',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: context.watch<ThemeProvider>().textColor.withOpacity(0.7),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Choose your role to continue',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: context.watch<ThemeProvider>().textColor.withOpacity(0.6),
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
   Widget _buildRoleButtons(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 400),
-      child: Column(
-        children: [
-          // Customer Button
-          _RoleButton(
-            label: 'Customer Login',
-            subtitle: 'Book and manage your services',
-            icon: Icons.person_outline_rounded,
-            gradient: LinearGradient(
-              colors: [
-                AppTheme.primaryPurple,
-                AppTheme.primaryPurple.withOpacity(0.8),
-              ],
-            ),
-            onTap: () => context.go('/login/customer'),
-          ),
-          
-          const SizedBox(height: 20),
-          
-          // Staff Button
-          _RoleButton(
-            label: 'Staff Access',
-            subtitle: 'Manage jobs and timekeeping',
-            icon: Icons.badge_outlined,
-            gradient: LinearGradient(
-              colors: [
-                AppTheme.secondaryColor,
-                AppTheme.secondaryColor.withOpacity(0.8),
-              ],
-            ),
-            onTap: () => context.go('/login/staff'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showHelpDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Need Help?'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Customer Account:'),
-            const SizedBox(height: 8),
-            Text(
-              'Email: user@example.com\nPassword: password',
-              style: context.textTheme.bodySmall?.copyWith(
-                fontFamily: 'monospace',
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text('Staff Account:'),
-            const SizedBox(height: 8),
-            Text(
-              'ID: staff001\nPIN: 1234',
-              style: context.textTheme.bodySmall?.copyWith(
-                fontFamily: 'monospace',
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        _buildRoleButton(
+          context,
+          'Customer',
+          'Book and manage home services',
+          Icons.person,
+          () => context.push('/login/customer'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Got it'),
+        const SizedBox(height: 16),
+        _buildRoleButton(
+          context,
+          'Staff',
+          'Provide services and manage gigs',
+          Icons.work,
+          () => context.push('/login/staff'),
+        ),
+        const SizedBox(height: 16),
+        _buildRoleButton(
+          context,
+          'Admin',
+          'Manage the entire platform',
+          Icons.admin_panel_settings,
+          () => context.push('/login/admin'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRoleButton(
+    BuildContext context,
+    String title,
+    String description,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.watch<ThemeProvider>().cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: context.watch<ThemeProvider>().primaryColor.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: context.watch<ThemeProvider>().primaryColor.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: context.watch<ThemeProvider>().primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  size: 24,
+                  color: context.watch<ThemeProvider>().primaryColor,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: context.watch<ThemeProvider>().textColor,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: context.watch<ThemeProvider>().textColor.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: context.watch<ThemeProvider>().primaryColor,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
-}
 
-class _RoleButton extends StatelessWidget {
-  final String label;
-  final String subtitle;
-  final IconData icon;
-  final Gradient gradient;
-  final VoidCallback onTap;
-
-  const _RoleButton({
-    required this.label,
-    required this.subtitle,
-    required this.icon,
-    required this.gradient,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: AppTheme.elevatedShadow,
+  Widget _buildHelpButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        // TODO: Navigate to help or support
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Help & Support coming soon!'),
+            duration: Duration(seconds: 2),
           ),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 32,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.white.withOpacity(0.7),
-                  size: 20,
-                ),
-              ],
-            ),
-          ),
+        );
+      },
+      child: Text(
+        'Need Help?',
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: context.watch<ThemeProvider>().primaryColor,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

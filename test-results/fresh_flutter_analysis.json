@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-11-29T07:17:32.311Z",
+  "bodyTextLength": 898,
+  "bodyPreview": "\n  \n  \n\nflutter-view flt-scene-host {  font: normal normal 14px sans-serif;}flutter-view flt-semantics input[type=range] {  appearance: none;  -webkit-appearance: none;  width: 100%;  position: absolu",
+  "flutterElements": {
+    "flutterView": true,
+    "sceneHost": false,
+    "glassPane": true,
+    "semanticsHost": true
+  },
+  "content": {
+    "hasActualContent": false,
+    "hasAuthElements": false
+  },
+  "flutterElementCount": 1,
+  "canvasElementCount": 0,
+  "diagnosis": "❌ CONFIRMED: Flutter loads but scene host missing (same issue)"
+}

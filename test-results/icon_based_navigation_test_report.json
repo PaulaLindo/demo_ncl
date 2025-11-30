@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "total": 6,
+    "passed": 2,
+    "failed": 4,
+    "successRate": 33,
+    "timestamp": "2025-11-28T19:05:47.084Z"
+  },
+  "results": [
+    {
+      "test": "Admin Icon-Based Navigation",
+      "passed": false,
+      "details": "Successfully navigated to 0 sections: ",
+      "timestamp": "2025-11-28T19:02:54.109Z"
+    },
+    {
+      "test": "Staff Tab-Based Navigation",
+      "passed": false,
+      "details": "Found 0 tabs and 0 features: ",
+      "timestamp": "2025-11-28T19:03:02.438Z"
+    },
+    {
+      "test": "Customer Tab-Based Navigation",
+      "passed": false,
+      "details": "Found 0 tabs and 0 features: ",
+      "timestamp": "2025-11-28T19:03:10.745Z"
+    },
+    {
+      "test": "Content Discovery and Interaction",
+      "passed": true,
+      "details": "Admin: 1 buttons, 0 inputs, 0 cards, 0 tables",
+      "timestamp": "2025-11-28T19:04:05.922Z"
+    },
+    {
+      "test": "Form Interaction Testing",
+      "passed": false,
+      "details": "Found 0 forms, successfully interacted with 0 forms",
+      "timestamp": "2025-11-28T19:04:14.297Z"
+    },
+    {
+      "test": "Visual Layout and Responsiveness",
+      "passed": true,
+      "details": "Layout tested across Desktop, Tablet, and Mobile viewports",
+      "timestamp": "2025-11-28T19:05:47.081Z"
+    }
+  ],
+  "coordinates": {
+    "customerLogin": {
+      "x": 640,
+      "y": 360
+    },
+    "staffAccess": {
+      "x": 640,
+      "y": 460
+    },
+    "adminPortal": {
+      "x": 640,
+      "y": 560
+    },
+    "helpButton": {
+      "x": 640,
+      "y": 650
+    }
+  }
+}

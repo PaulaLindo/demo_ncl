@@ -1,0 +1,39 @@
+{
+  "summary": {
+    "total": 3,
+    "passed": 0,
+    "failed": 3,
+    "successRate": 0,
+    "timestamp": "2025-11-28T19:35:31.669Z"
+  },
+  "results": [
+    {
+      "test": "customer Login Button",
+      "passed": false,
+      "details": "customer login button not found",
+      "timestamp": "2025-11-28T19:34:53.513Z"
+    },
+    {
+      "test": "staff Login Button",
+      "passed": false,
+      "details": "staff login button not found",
+      "timestamp": "2025-11-28T19:35:12.694Z"
+    },
+    {
+      "test": "admin Login Button",
+      "passed": false,
+      "details": "admin login button not found",
+      "timestamp": "2025-11-28T19:35:31.663Z"
+    }
+  ],
+  "loginResults": {
+    "customer": false,
+    "staff": false,
+    "admin": false
+  },
+  "recommendations": [
+    "Fix customer login flow - check form selectors and validation",
+    "Fix staff login flow - verify staff dashboard elements",
+    "Fix admin login flow - check admin navigation elements"
+  ]
+}

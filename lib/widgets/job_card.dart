@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/job_service_models.dart';
+import '../models/job_model.dart';
+import '../models/job_status.dart';
 import 'package:intl/intl.dart';
+
+import '../utils/color_utils.dart';
 
 /// JobCard - Matches job card styling from staff_dashboard.html
 /// Displays job information with actions
@@ -48,7 +51,7 @@ class JobCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        job.serviceType,
+                        job.description ?? job.title,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -62,7 +65,7 @@ class JobCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Expanded(
                             child: Text(
-                              job.customerName,
+                              job.customerName ?? 'Unknown Customer',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,
@@ -87,7 +90,7 @@ class JobCard extends StatelessWidget {
             const SizedBox(height: 8),
             _buildJobDetail(
               Icons.location_on,
-              job.address,
+              job.address ?? 'No address',
             ),
             const SizedBox(height: 16),
 
@@ -103,12 +106,12 @@ class JobCard extends StatelessWidget {
   /// Build status badge - matches job-status-badge from CSS
   Widget _buildStatusBadge() {
     final statusColor = job.status.getColor();
-    final statusText = job.status.displayName;
+    final statusText = job.status.toString().split('.').last;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
+        color: statusColor.withCustomOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: statusColor, width: 1),
       ),

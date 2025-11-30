@@ -1,0 +1,290 @@
+{
+  "timestamp": "2025-11-28T23:38:41.459Z",
+  "results": [
+    {
+      "routeName": "Customer Home",
+      "path": "/customer/home",
+      "title": "NCL - Professional Home Services",
+      "finalUrl": "http://localhost:8081/customer/home",
+      "bodyTextLength": 1359,
+      "contentType": "FLUTTER_LOADING",
+      "confidence": 0.5,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "CanvasKit",
+          "found": false
+        },
+        {
+          "indicator": "engine",
+          "found": false
+        },
+        {
+          "indicator": "NCLApp",
+          "found": false
+        }
+      ],
+      "fallbackChecks": [
+        {
+          "indicator": "Welcome to NCL",
+          "found": true
+        },
+        {
+          "indicator": "flutter-fallback-container",
+          "found": false
+        },
+        {
+          "indicator": "Demo Credentials",
+          "found": false
+        },
+        {
+          "indicator": "Sign In",
+          "found": false
+        }
+      ],
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Services",
+          "found": false
+        },
+        {
+          "content": "Bookings",
+          "found": false
+        },
+        {
+          "content": "Profile",
+          "found": false
+        }
+      ],
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "🔧 Simple Flutter Fallback Forms loaded"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced."
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called"
+        }
+      ],
+      "hasExpectedContent": false,
+      "success": true
+    },
+    {
+      "routeName": "Staff Home",
+      "path": "/staff/home",
+      "title": "NCL - Professional Home Services",
+      "finalUrl": "http://localhost:8081/staff/home",
+      "bodyTextLength": 1359,
+      "contentType": "FLUTTER_LOADING",
+      "confidence": 0.5,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "CanvasKit",
+          "found": false
+        },
+        {
+          "indicator": "engine",
+          "found": false
+        },
+        {
+          "indicator": "NCLApp",
+          "found": false
+        }
+      ],
+      "fallbackChecks": [
+        {
+          "indicator": "Welcome to NCL",
+          "found": true
+        },
+        {
+          "indicator": "flutter-fallback-container",
+          "found": false
+        },
+        {
+          "indicator": "Demo Credentials",
+          "found": false
+        },
+        {
+          "indicator": "Sign In",
+          "found": false
+        }
+      ],
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Schedule",
+          "found": false
+        },
+        {
+          "content": "Jobs",
+          "found": false
+        },
+        {
+          "content": "Profile",
+          "found": false
+        }
+      ],
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "🔧 Simple Flutter Fallback Forms loaded"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced."
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called"
+        }
+      ],
+      "hasExpectedContent": false,
+      "success": true
+    },
+    {
+      "routeName": "Admin Home",
+      "path": "/admin/home",
+      "title": "NCL - Professional Home Services",
+      "finalUrl": "http://localhost:8081/admin/home",
+      "bodyTextLength": 1359,
+      "contentType": "FLUTTER_LOADING",
+      "confidence": 0.5,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "CanvasKit",
+          "found": false
+        },
+        {
+          "indicator": "engine",
+          "found": false
+        },
+        {
+          "indicator": "NCLApp",
+          "found": false
+        }
+      ],
+      "fallbackChecks": [
+        {
+          "indicator": "Welcome to NCL",
+          "found": true
+        },
+        {
+          "indicator": "flutter-fallback-container",
+          "found": false
+        },
+        {
+          "indicator": "Demo Credentials",
+          "found": false
+        },
+        {
+          "indicator": "Sign In",
+          "found": false
+        }
+      ],
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Overview",
+          "found": false
+        },
+        {
+          "content": "Statistics",
+          "found": false
+        },
+        {
+          "content": "Management",
+          "found": false
+        }
+      ],
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "🔧 Simple Flutter Fallback Forms loaded"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced."
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called"
+        }
+      ],
+      "hasExpectedContent": false,
+      "success": true
+    }
+  ]
+}

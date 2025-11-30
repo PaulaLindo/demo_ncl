@@ -1,6 +1,9 @@
 // lib/widgets/service_card.dart
 import 'package:flutter/material.dart';
-import '../models/job_service_models.dart';
+
+import '../models/service_model.dart';
+
+import '../utils/color_utils.dart';
 
 class ServiceCard extends StatelessWidget {
   final Service service;
@@ -17,7 +20,7 @@ class ServiceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withCustomOpacity(0.08),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -56,7 +59,7 @@ class ServiceCard extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {
                   // Simulate booking process
-                  print('Start booking: ${service.name}');
+                  debugPrint('Start booking: ${service.name}');
                 },
                 icon: const Icon(Icons.calendar_today, size: 18),
                 label: const Text('Book Service'),

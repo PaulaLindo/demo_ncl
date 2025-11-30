@@ -1,0 +1,185 @@
+{
+  "timestamp": "2025-11-28T23:53:39.728Z",
+  "summary": {
+    "total": 3,
+    "successful": 0,
+    "failed": 3,
+    "successRate": 0
+  },
+  "contentTypes": {
+    "FLUTTER_LOADED": [
+      "Customer Home"
+    ],
+    "EMPTY_OR_ERROR": [
+      "Staff Home",
+      "Admin Home"
+    ]
+  },
+  "results": [
+    {
+      "routeName": "Customer Home",
+      "path": "/customer/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "contentType": "FLUTTER_LOADED",
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        }
+      ],
+      "fallbackChecks": [
+        {
+          "indicator": "Welcome to NCL",
+          "found": false
+        },
+        {
+          "indicator": "flutter-fallback-container",
+          "found": false
+        },
+        {
+          "indicator": "Login",
+          "found": false
+        }
+      ],
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Services",
+          "found": false
+        },
+        {
+          "content": "Bookings",
+          "found": false
+        },
+        {
+          "content": "Profile",
+          "found": false
+        }
+      ],
+      "hasExpectedContent": false,
+      "success": false
+    },
+    {
+      "routeName": "Staff Home",
+      "path": "/staff/home",
+      "title": "demo_ncl",
+      "bodyTextLength": 8,
+      "contentType": "EMPTY_OR_ERROR",
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": false
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": false
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": false
+        }
+      ],
+      "fallbackChecks": [
+        {
+          "indicator": "Welcome to NCL",
+          "found": false
+        },
+        {
+          "indicator": "flutter-fallback-container",
+          "found": false
+        },
+        {
+          "indicator": "Login",
+          "found": false
+        }
+      ],
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Schedule",
+          "found": false
+        },
+        {
+          "content": "Jobs",
+          "found": false
+        },
+        {
+          "content": "Profile",
+          "found": false
+        }
+      ],
+      "hasExpectedContent": false,
+      "success": false
+    },
+    {
+      "routeName": "Admin Home",
+      "path": "/admin/home",
+      "title": "demo_ncl",
+      "bodyTextLength": 8,
+      "contentType": "EMPTY_OR_ERROR",
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": false
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": false
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": false
+        }
+      ],
+      "fallbackChecks": [
+        {
+          "indicator": "Welcome to NCL",
+          "found": false
+        },
+        {
+          "indicator": "flutter-fallback-container",
+          "found": false
+        },
+        {
+          "indicator": "Login",
+          "found": false
+        }
+      ],
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Overview",
+          "found": false
+        },
+        {
+          "content": "Statistics",
+          "found": false
+        },
+        {
+          "content": "Management",
+          "found": false
+        }
+      ],
+      "hasExpectedContent": false,
+      "success": false
+    }
+  ]
+}

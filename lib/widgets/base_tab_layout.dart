@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import 'customer_nav_bar.dart';
+import 'nav_bar.dart';
 
 class BaseTabLayout extends StatelessWidget {
   final String title;

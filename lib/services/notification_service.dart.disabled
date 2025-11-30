@@ -1,0 +1,232 @@
+// Temporarily disabled for integration testing
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
+// import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
+import 'package:rxdart/rxdart.dart';
+
+class NotificationService {
+    static final NotificationService _instance = NotificationService._internal();
+    final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+    final BehaviorSubject<String> _onNotificationClick = BehaviorSubject<String>();
+
+    factory NotificationService() {
+        return _instance;
+    }
+
+    NotificationService._internal();
+
+    Stream<String> get onNotificationClick => _onNotificationClick.stream;
+
+    Future<void> initialize() async {
+        // Initialize timezone data
+        tz.initializeTimeZones();
+
+        const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+        const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
+        requestSoundPermission: true,
+        requestBadgePermission: true,
+        requestAlertPermission: true,
+        );
+
+        const InitializationSettings settings = InitializationSettings(
+        android: androidSettings,
+        iOS: iosSettings,
+        );
+
+        await _notificationsPlugin.initialize(
+        settings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+            _onNotificationClick.add(response.payload ?? '');
+        },
+        );
+    }
+
+    Future<void> requestPermissions() async {
+        final bool? result = await _notificationsPlugin
+            .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+            ?.requestPermission();
+        
+        if (result != null && result) {
+        // Permissions granted
+        }
+    }
+
+    Future<void> showNotification({
+        required int id,
+        required String title,
+        required String body,
+        String? payload,
+        String? channelId,
+        String? channelName,
+        String? channelDescription,
+    }) async {
+        final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+        channelId ?? 'default_channel',
+        channelName ?? 'Default Channel',
+        channelDescription: channelDescription ?? 'Default notification channel',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        styleInformation: const BigTextStyleInformation(''),
+        );
+
+        const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+        );
+
+        final NotificationDetails platformDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+        );
+
+        await _notificationsPlugin.show(
+        id,
+        title,
+        body,
+        platformDetails,
+        payload: payload,
+        );
+    }
+
+        Future<void> scheduleNotification({
+            required int id,
+            required String title,
+            required String body,
+            required DateTime scheduledDate,
+            String? payload,
+            String? channelId,
+            String? channelName,
+            String? channelDescription,
+        }) async {
+            final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+            channelId ?? 'scheduled_channel',
+            channelName ?? 'Scheduled Notifications',
+            channelDescription: channelDescription ?? 'Scheduled notifications channel',
+            importance: Importance.max,
+            priority: Priority.high,
+            styleInformation: const BigTextStyleInformation(''),
+            );
+
+            const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+            );
+
+            final NotificationDetails platformDetails = NotificationDetails(
+            android: androidDetails,
+            iOS: iosDetails,
+            );
+
+            await _notificationsPlugin.zonedSchedule(
+            id,
+            title,
+            body,
+            tz.TZDateTime.from(scheduledDate, tz.local),
+            platformDetails,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            matchDateTimeComponents: DateTimeComponents.time,
+            payload: payload,
+            );
+        }
+
+        Future<void> cancelNotification(int id) async {
+            await _notificationsPlugin.cancel(id);
+        }
+
+        Future<void> cancelAllNotifications() async {
+            await _notificationsPlugin.cancelAll();
+        }
+
+        // Specific notification methods for the app
+        Future<void> showNewGigNotification({
+            required String gigId,
+            required String gigTitle,
+            required DateTime startTime,
+        }) async {
+            await showNotification(
+            id: 'new_gig_${DateTime.now().millisecondsSinceEpoch}'.hashCode,
+            title: 'New Gig Assigned',
+            body: 'You have been assigned to: $gigTitle on ${_formatDate(startTime)} at ${_formatTime(startTime)}',
+            payload: gigId,
+            channelId: 'gig_updates',
+            channelName: 'Gig Updates',
+            channelDescription: 'Notifications for new gig assignments and updates',
+            );
+        }
+
+        Future<void> scheduleGigReminder({
+            required String gigId,
+            required String gigTitle,
+            required DateTime startTime,
+            Duration reminderBefore = const Duration(hours: 1),
+        }) async {
+            final reminderTime = startTime.subtract(reminderBefore);
+            
+            if (reminderTime.isAfter(DateTime.now())) {
+            await scheduleNotification(
+                id: 'reminder_${gigId.hashCode}'.hashCode.hashCode,
+                title: 'Upcoming Gig',
+                body: 'Your gig "$gigTitle" starts in ${_formatDuration(reminderBefore)}',
+                scheduledDate: reminderTime,
+                payload: gigId,
+                channelId: 'gig_reminders',
+                channelName: 'Gig Reminders',
+                channelDescription: 'Reminders for upcoming gigs',
+            );
+            }
+        }
+
+        Future<void> showShiftSwapRequest({
+            required String requestId,
+            required String gigTitle,
+            required String fromUser,
+        }) async {
+            await showNotification(
+            id: 'swap_request_${DateTime.now().millisecondsSinceEpoch}'.hashCode,
+            title: 'Shift Swap Request',
+            body: '$fromUser requested to swap shifts for: $gigTitle',
+            payload: 'swap_$requestId',
+            channelId: 'shift_swaps',
+            channelName: 'Shift Swaps',
+            channelDescription: 'Notifications for shift swap requests',
+            );
+        }
+
+    void handleNotificationTap(String? payload, BuildContext context) {
+        if (payload == null) return;
+
+    if (payload.startsWith('shift_swap_')) {
+        // Navigate to the specific request or inbox
+        if (context.mounted) {
+        Navigator.pushNamed(context, '/staff/shift-swap/inbox');
+        }
+    } else if (payload.startsWith('gig_')) {
+        final gigId = payload.replaceFirst('gig_', '');
+        // Removed the navigation code here
+        Navigator.pushNamed(context, '/gig/$gigId');
+        }
+    }
+    }
+
+        // Helper methods
+        String _formatDate(DateTime date) {
+            return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+        }
+
+String _formatTime(DateTime time) {
+  return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:${time.second.toString().padLeft(2, '0')}';
+}
+
+String _formatDuration(Duration duration) {
+  if (duration.inHours > 0) {
+    return '${duration.inHours} ${duration.inHours == 1 ? 'hour' : 'hours'}';
+  } else {
+    return '${duration.inMinutes} ${duration.inMinutes == 1 ? 'minute' : 'minutes'}';
+  }
+}

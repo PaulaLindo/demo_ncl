@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-11-29T03:33:12.875Z",
+  "results": [
+    {
+      "role": "customer",
+      "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]')\u001b[22m\n",
+      "authSuccess": false
+    },
+    {
+      "role": "staff",
+      "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]')\u001b[22m\n",
+      "authSuccess": false
+    },
+    {
+      "role": "admin",
+      "error": "page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"email\"]')\u001b[22m\n",
+      "authSuccess": false
+    }
+  ]
+}

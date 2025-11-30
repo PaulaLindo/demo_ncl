@@ -1,6 +1,9 @@
 // lib/widgets/loading_error_widgets.dart
 import 'package:flutter/material.dart';
+
 import '../theme/app_theme.dart';
+
+import '../utils/color_utils.dart';
 
 /// Loading Indicator Widget
 class LoadingIndicator extends StatelessWidget {
@@ -70,7 +73,7 @@ class ErrorDisplay extends StatelessWidget {
             Icon(
               icon,
               size: 80,
-              color: AppTheme.redStatus.withOpacity(0.5),
+              color: AppTheme.redStatus.withCustomOpacity(0.5),
             ),
             const SizedBox(height: 24),
             Text(
@@ -143,7 +146,7 @@ class EmptyState extends StatelessWidget {
             Icon(
               icon,
               size: 80,
-              color: AppTheme.textGrey.withOpacity(0.3),
+              color: AppTheme.textGrey.withCustomOpacity(0.3),
             ),
             const SizedBox(height: 24),
             Text(

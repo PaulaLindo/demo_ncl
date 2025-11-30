@@ -1,0 +1,237 @@
+{
+  "timestamp": "2025-11-28T23:36:06.156Z",
+  "summary": {
+    "total": 8,
+    "successful": 4,
+    "failed": 4,
+    "successRate": 50
+  },
+  "contentTypes": {
+    "FALLBACK_CONTENT": [
+      "Login Chooser",
+      "Customer Registration",
+      "Customer Home",
+      "Staff Home",
+      "Admin Home"
+    ],
+    "SOME_CONTENT": [
+      "Customer Login",
+      "Staff Login",
+      "Admin Login"
+    ]
+  },
+  "results": [
+    {
+      "routeName": "Login Chooser",
+      "path": "/",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Welcome to NCL",
+          "found": true
+        },
+        {
+          "content": "Customer Login",
+          "found": true
+        },
+        {
+          "content": "Staff Access",
+          "found": true
+        },
+        {
+          "content": "Admin Portal",
+          "found": true
+        }
+      ],
+      "contentType": "FALLBACK_CONTENT",
+      "hasExpectedContent": true,
+      "success": true
+    },
+    {
+      "routeName": "Customer Login",
+      "path": "/login/customer",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1338,
+      "contentChecks": [
+        {
+          "content": "Welcome Back",
+          "found": true
+        },
+        {
+          "content": "Email Address",
+          "found": false
+        },
+        {
+          "content": "Password",
+          "found": true
+        },
+        {
+          "content": "Sign In",
+          "found": true
+        }
+      ],
+      "contentType": "SOME_CONTENT",
+      "hasExpectedContent": true,
+      "success": true
+    },
+    {
+      "routeName": "Staff Login",
+      "path": "/login/staff",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1332,
+      "contentChecks": [
+        {
+          "content": "Staff Portal",
+          "found": true
+        },
+        {
+          "content": "Email Address",
+          "found": false
+        },
+        {
+          "content": "Password",
+          "found": true
+        },
+        {
+          "content": "Sign In",
+          "found": true
+        }
+      ],
+      "contentType": "SOME_CONTENT",
+      "hasExpectedContent": true,
+      "success": true
+    },
+    {
+      "routeName": "Admin Login",
+      "path": "/login/admin",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1332,
+      "contentChecks": [
+        {
+          "content": "Admin System",
+          "found": true
+        },
+        {
+          "content": "Email Address",
+          "found": false
+        },
+        {
+          "content": "Password",
+          "found": true
+        },
+        {
+          "content": "Sign In",
+          "found": true
+        }
+      ],
+      "contentType": "SOME_CONTENT",
+      "hasExpectedContent": true,
+      "success": true
+    },
+    {
+      "routeName": "Customer Registration",
+      "path": "/register/customer",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Register",
+          "found": false
+        },
+        {
+          "content": "Sign Up",
+          "found": false
+        },
+        {
+          "content": "Create Account",
+          "found": false
+        }
+      ],
+      "contentType": "FALLBACK_CONTENT",
+      "hasExpectedContent": false,
+      "success": false
+    },
+    {
+      "routeName": "Customer Home",
+      "path": "/customer/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Services",
+          "found": false
+        },
+        {
+          "content": "Bookings",
+          "found": false
+        },
+        {
+          "content": "Profile",
+          "found": false
+        }
+      ],
+      "contentType": "FALLBACK_CONTENT",
+      "hasExpectedContent": false,
+      "success": false
+    },
+    {
+      "routeName": "Staff Home",
+      "path": "/staff/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Schedule",
+          "found": false
+        },
+        {
+          "content": "Jobs",
+          "found": false
+        },
+        {
+          "content": "Profile",
+          "found": false
+        }
+      ],
+      "contentType": "FALLBACK_CONTENT",
+      "hasExpectedContent": false,
+      "success": false
+    },
+    {
+      "routeName": "Admin Home",
+      "path": "/admin/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 1359,
+      "contentChecks": [
+        {
+          "content": "Dashboard",
+          "found": false
+        },
+        {
+          "content": "Overview",
+          "found": false
+        },
+        {
+          "content": "Statistics",
+          "found": false
+        },
+        {
+          "content": "Management",
+          "found": false
+        }
+      ],
+      "contentType": "FALLBACK_CONTENT",
+      "hasExpectedContent": false,
+      "success": false
+    }
+  ]
+}

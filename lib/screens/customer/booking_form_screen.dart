@@ -2,14 +2,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../models/booking_model.dart';
+
 import '../../providers/booking_provider.dart';
-import 'booking_confirmation_screen.dart';
+import '../../providers/theme_provider.dart';
+
 import '../../theme/app_theme.dart';
 
 class BookingFormScreen extends StatefulWidget {
   final String serviceId;
+  final Booking? existingBooking;
 
-  const BookingFormScreen({super.key, required this.serviceId});
+  const BookingFormScreen({
+    super.key, 
+    required this.serviceId,
+    this.existingBooking,
+  });
 
   @override
   State<BookingFormScreen> createState() => _BookingFormScreenState();
@@ -18,149 +28,475 @@ class BookingFormScreen extends StatefulWidget {
 class _BookingFormScreenState extends State<BookingFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _instructionsController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _scrollController = ScrollController();
 
-  DateTime? _selectedDate;
-  String _preferredTime = 'morning';
-  String _propertySize = 'medium';
-  String _frequency = 'one-time';
-  bool _isSubmitting = false;
+  late DateTime _selectedDate;
+  late TimeOfDayPreference _timePreference;
+  late PropertySize _propertySize;
+  late BookingFrequency _frequency;
+  bool _isLoading = false;
+  bool _isEditMode = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _isEditMode = widget.existingBooking != null;
+    
+    if (_isEditMode) {
+      final booking = widget.existingBooking!;
+      _selectedDate = booking.bookingDate;
+      _timePreference = booking.timePreference;
+      _propertySize = booking.propertySize;
+      _frequency = booking.frequency;
+      _instructionsController.text = booking.specialInstructions ?? '';
+      _addressController.text = booking.address;
+    } else {
+      _selectedDate = DateTime.now().add(const Duration(days: 30)); // Start from one month advance
+      _timePreference = TimeOfDayPreference.morning;
+      _propertySize = PropertySize.medium;
+      _frequency = BookingFrequency.oneTime;
+    }
+  }
 
   @override
   void dispose() {
     _instructionsController.dispose();
+    _addressController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now().add(const Duration(days: 30)), // Start from one month advance
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).primaryColor,
+              onPrimary: Colors.white,
+              onSurface: Colors.black87,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() => _selectedDate = picked);
+    }
+  }
+
+  void _submitForm() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final bookingProvider = context.read<BookingProvider>();
+      
+      final booking = Booking(
+        id: _isEditMode ? widget.existingBooking!.id : DateTime.now().toString(),
+        customerId: 'current_user_id', // Replace with actual user ID
+        serviceId: widget.serviceId,
+        serviceName: 'Cleaning Service', // Get from service details
+        bookingDate: _selectedDate,
+        timePreference: _timePreference,
+        address: _addressController.text,
+        status: BookingStatus.pending,
+        basePrice: 100.0, // Get from service details
+        propertySize: _propertySize,
+        frequency: _frequency,
+        specialInstructions: _instructionsController.text.trim().isNotEmpty
+            ? _instructionsController.text
+            : null,
+        createdAt: DateTime.now(),
+        startTime: _selectedDate,
+        endTime: _selectedDate.add(const Duration(hours: 2)),
+        assignedStaffId: _isEditMode ? widget.existingBooking!.assignedStaffId : null,
+        assignedStaffName: _isEditMode ? widget.existingBooking!.assignedStaffName : null,
+      );
+
+      if (_isEditMode) {
+        // Update existing booking
+        bookingProvider.updateBooking(booking);
+        if (mounted) {
+          Navigator.of(context).pop(true); // Return success
+        }
+      } else {
+        // Create new booking
+        print('Creating booking with serviceId: ${widget.serviceId}');
+        print('Selected date: $_selectedDate');
+        print('Address: ${_addressController.text}');
+        print('Property size: ${_propertySize.name}');
+        print('Frequency: ${_frequency.name}');
+        print('Time preference: $_timePreference');
+        
+        final success = await bookingProvider.createBooking(
+          serviceId: widget.serviceId,
+          bookingDate: _selectedDate,
+          address: _addressController.text,
+          propertySize: _propertySize.name,
+          frequency: _frequency.name,
+          timePreference: _timePreference,
+          notes: _instructionsController.text.trim().isNotEmpty
+              ? _instructionsController.text
+              : null,
+        );
+        
+        print('Booking creation success: $success');
+        
+        if (success && mounted) {
+          // Get the first booking (most recently created)
+          final bookings = bookingProvider.bookings;
+          print('Total bookings: ${bookings.length}');
+          
+          if (bookings.isNotEmpty) {
+            final currentBooking = bookings.first;
+            print('Booking ID: ${currentBooking.id}');
+            print('Booking amount: ${currentBooking.basePrice}');
+            print('Booking service: ${currentBooking.serviceName}');
+            
+            // Navigate to payment screen
+            print('Navigating to payment: /customer/payment/${currentBooking.id}?amount=${currentBooking.basePrice}&service=${currentBooking.serviceName}');
+            context.push('/customer/payment/${currentBooking.id}?amount=${currentBooking.basePrice}&service=${currentBooking.serviceName}');
+          } else {
+            print('Error: No bookings found after successful creation');
+          }
+        } else {
+          print('Booking creation failed or widget not mounted');
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to ${_isEditMode ? 'update' : 'create'} booking: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<BookingProvider>();
-    final service = provider.getServiceById(widget.serviceId);
-
-    if (service == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Error')),
-        body: const Center(child: Text('Service not found')),
-      );
-    }
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppTheme.lightBackground,
       appBar: AppBar(
-        backgroundColor: AppTheme.cardBackground,
+        backgroundColor: context.watch<ThemeProvider>().cardColor,
+        foregroundColor: context.watch<ThemeProvider>().primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
-          color: AppTheme.primaryPurple,
         ),
-        title: const Text(
-          'Book Service',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.primaryPurple,
+        title: Text(_isEditMode ? 'Update Booking' : 'New Booking'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: context.watch<ThemeProvider>().primaryColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Service summary card
-            _buildServiceSummary(service),
-
-            // Booking form
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
+      body: Form(
+        key: _formKey,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Date Selection
-                    _buildFormSection(
-                      'Select Date',
-                      _buildDatePicker(),
-                      'Choose your preferred service date',
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Time Selection
-                    _buildFormSection(
-                      'Preferred Time',
-                      _buildTimeDropdown(),
-                      'When would you prefer the service?',
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Property Size
-                    _buildFormSection(
-                      'Property Size',
-                      _buildPropertySizeDropdown(),
-                      'This helps us estimate duration and pricing',
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Frequency
-                    _buildFormSection(
-                      'Booking Frequency',
-                      _buildFrequencyDropdown(),
-                      'Save with regular bookings',
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Special Instructions
-                    _buildFormSection(
-                      'Special Instructions (Optional)',
-                      TextField(
-                        controller: _instructionsController,
-                        maxLines: 4,
-                        maxLength: 500,
-                        decoration: const InputDecoration(
-                          hintText:
-                              'Any specific requirements, access instructions, or areas of focus...',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      'Let us know about any special requirements',
-                    ),
-
+                    _buildSectionHeader('When', Icons.calendar_today),
+                    _buildDateField(theme),
+                    const SizedBox(height: 16),
+                    _buildTimePreferenceField(theme),
+                    
+                    const SizedBox(height: 24),
+                    _buildSectionHeader('Property Details', Icons.home),
+                    _buildAddressField(theme),
+                    const SizedBox(height: 16),
+                    _buildPropertySizeField(theme),
+                    
+                    const SizedBox(height: 24),
+                    _buildSectionHeader('Service Options', Icons.settings),
+                    _buildFrequencyField(theme),
+                    const SizedBox(height: 16),
+                    _buildSpecialInstructionsField(theme),
+                    
                     const SizedBox(height: 32),
-
-                    // Submit Button
-                    ElevatedButton.icon(
-                      onPressed: _isSubmitting ? null : _handleSubmit,
-                      icon: _isSubmitting
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            )
-                          : const Icon(Icons.check_circle_rounded),
-                      label:
-                          Text(_isSubmitting ? 'Processing...' : 'Confirm Booking'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.primaryPurple,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        minimumSize: const Size(double.infinity, 54),
-                      ),
-                    ),
-
-                    const SizedBox(height: 32),
+                    _buildSubmitButton(theme),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: Theme.of(context).primaryColor),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+ Widget _buildDateField(ThemeData theme) {
+    return InkWell(
+      onTap: () => _selectDate(context),
+      borderRadius: BorderRadius.circular(12),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: 'Select Date',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          prefixIcon: const Icon(Icons.calendar_today),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              DateFormat('EEEE, MMMM d, y').format(_selectedDate),
+              style: const TextStyle(fontSize: 16),
+            ),
+            const Icon(Icons.arrow_drop_down, size: 24),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTimePreferenceField(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Preferred Time',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: TimeOfDayPreference.values.map((time) {
+            final isSelected = _timePreference == time;
+            return ChoiceChip(
+              label: Text(
+                '${time.displayName} (${time.timeRange})',
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black87,
+                ),
+              ),
+              selected: isSelected,
+              selectedColor: theme.primaryColor,
+              backgroundColor: Colors.grey[200],
+              onSelected: (selected) {
+                if (selected) {
+                  setState(() => _timePreference = time);
+                }
+              },
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAddressField(ThemeData theme) {
+    return TextFormField(
+      controller: _addressController,
+      decoration: InputDecoration(
+        labelText: 'Address',
+        hintText: 'Enter your full address',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        prefixIcon: const Icon(Icons.location_on),
+      ),
+      maxLines: 2,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'Please enter your address';
+        }
+        
+        // Check if address contains both numbers and letters (road name)
+        final hasNumbers = RegExp(r'\d').hasMatch(value);
+        final hasLetters = RegExp(r'[a-zA-Z]').hasMatch(value);
+        
+        if (!hasNumbers) {
+          return 'Please include street number in your address';
+        }
+        
+        if (!hasLetters) {
+          return 'Please include street name in your address';
+        }
+        
+        if (value.trim().length < 5) {
+          return 'Please enter a complete address';
+        }
+        
+        return null;
+      },
+    );
+  }
+
+  Widget _buildPropertySizeField(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Property Size',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: PropertySize.values.map((size) {
+            final isSelected = _propertySize == size;
+            return ChoiceChip(
+              label: Text(
+                size.displayName, // TODO: Add sqMeters to PropertySize enum
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black87,
+                ),
+              ),
+              selected: isSelected,
+              selectedColor: theme.primaryColor,
+              backgroundColor: Colors.grey[200],
+              onSelected: (selected) {
+                if (selected) {
+                  setState(() => _propertySize = size);
+                }
+              },
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+ Widget _buildFrequencyField(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Cleaning Frequency',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: BookingFrequency.values.map((freq) {
+            final isSelected = _frequency == freq;
+            return ChoiceChip(
+              label: Text(
+                '${freq.displayName} ${freq != BookingFrequency.oneTime ? '(${freq.discountMultiplier * 100}% off)' : ''}',
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black87,
+                ),
+              ),
+              selected: isSelected,
+              selectedColor: theme.primaryColor,
+              backgroundColor: Colors.grey[200],
+              onSelected: (selected) {
+                if (selected) {
+                  setState(() => _frequency = freq);
+                }
+              },
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSpecialInstructionsField(ThemeData theme) {
+    return TextFormField(
+      controller: _instructionsController,
+      decoration: InputDecoration(
+        labelText: 'Special Instructions (Optional)',
+        hintText: 'Any special requests or instructions for the cleaner?',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        prefixIcon: const Icon(Icons.note_add),
+      ),
+      maxLines: 3,
+    );
+  }
+
+  Widget _buildSubmitButton(ThemeData theme) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: _isLoading ? null : _submitForm,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+        ),
+        child: _isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                _isEditMode ? 'UPDATE BOOKING' : 'BOOK NOW',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
       ),
     );
   }
@@ -266,7 +602,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
 
   Widget _buildTimeDropdown() {
     return DropdownButtonFormField<String>(
-      value: _preferredTime,
+      initialValue: _timePreference.name,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -280,14 +616,14 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         DropdownMenuItem(value: 'flexible', child: Text('Flexible')),
       ],
       onChanged: (value) {
-        if (value != null) setState(() => _preferredTime = value);
+        if (value != null) setState(() => _timePreference = TimeOfDayPreference.values.firstWhere((e) => e.name == value));
       },
     );
   }
 
   Widget _buildPropertySizeDropdown() {
-    return DropdownButtonFormField<String>(
-      value: _propertySize,
+    return DropdownButtonFormField<PropertySize>(
+      initialValue: _propertySize,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -295,11 +631,12 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
-      items: const [
-        DropdownMenuItem(value: 'small', child: Text('Small (1-2 Bedrooms)')),
-        DropdownMenuItem(value: 'medium', child: Text('Medium (3-4 Bedrooms)')),
-        DropdownMenuItem(value: 'large', child: Text('Large (5+ Bedrooms)')),
-      ],
+      items: PropertySize.values.map((size) {
+        return DropdownMenuItem(
+          value: size,
+          child: Text(size.displayName),
+        );
+      }).toList(),
       onChanged: (value) {
         if (value != null) setState(() => _propertySize = value);
       },
@@ -307,8 +644,8 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
   }
 
   Widget _buildFrequencyDropdown() {
-    return DropdownButtonFormField<String>(
-      value: _frequency,
+    return DropdownButtonFormField<BookingFrequency>(
+      initialValue: _frequency,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -316,12 +653,12 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
-      items: const [
-        DropdownMenuItem(value: 'one-time', child: Text('One-time service')),
-        DropdownMenuItem(value: 'weekly', child: Text('Weekly (10% discount)')),
-        DropdownMenuItem(value: 'bi-weekly', child: Text('Bi-weekly (5% discount)')),
-        DropdownMenuItem(value: 'monthly', child: Text('Monthly')),
-      ],
+      items: BookingFrequency.values.map((freq) {
+        return DropdownMenuItem(
+          value: freq,
+          child: Text(freq.displayName),
+        );
+      }).toList(),
       onChanged: (value) {
         if (value != null) setState(() => _frequency = value);
       },
@@ -348,7 +685,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
 
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isSubmitting = true);
+    setState(() => _isLoading = true);
 
     final provider = Provider.of<BookingProvider>(context, listen: false);
 
@@ -356,23 +693,35 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
       final success = await provider.createBooking(
         serviceId: widget.serviceId,
         bookingDate: _selectedDate!,
-        preferredTime: _preferredTime,
-        propertySize: _propertySize,
-        specialInstructions: _instructionsController.text.trim(),
-        frequency: _frequency,
+        address: _addressController.text.trim(),
+        propertySize: _propertySize.name,
+        frequency: _frequency.name,
+        timePreference: _timePreference,
+        notes: _instructionsController.text.trim(),
       );
 
       if (success && mounted) {
-        // Get the created booking
-        final createdBooking = provider.bookings.last;
-        
-        // Navigate to confirmation screen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BookingConfirmationScreen(
-              booking: createdBooking,
-            ),
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Booking Confirmed!'),
+            content: const Text('Your booking has been successfully created.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.go('/customer/bookings');
+                },
+                child: const Text('View Bookings'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.go('/customer/home');
+                },
+                child: const Text('Home'),
+              ),
+            ],
           ),
         );
       } else if (mounted) {
@@ -384,7 +733,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
       }
     } finally {
       if (mounted) {
-        setState(() => _isSubmitting = false);
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -422,7 +771,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryPurple.withOpacity(0.1),
+                  color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -491,5 +840,4 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         ],
       ),
     );
-  }
-}
+  }}

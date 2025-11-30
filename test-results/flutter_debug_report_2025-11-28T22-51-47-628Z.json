@@ -1,0 +1,587 @@
+{
+  "timestamp": "2025-11-28T22:51:47.628Z",
+  "flutterElements": 3,
+  "bodyTextLength": 892,
+  "hasWelcomeText": false,
+  "hasLoginButtons": false,
+  "hasFormElements": false,
+  "flutterEngineState": {
+    "hasFlutter": false,
+    "hasApp": false,
+    "hasEngine": false,
+    "hasRenderer": false,
+    "flutterObject": [],
+    "appObject": []
+  },
+  "consoleMessages": [
+    {
+      "type": "log",
+      "text": "🔧 Enhanced Navigation Helper loaded",
+      "location": {
+        "url": "http://localhost:8081/",
+        "lineNumber": 52,
+        "columnNumber": 10
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "log",
+      "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1582,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "warning",
+      "text": "window.flutterWebRenderer is now deprecated.\nUse engineInitializer.initializeEngine(config) instead.\nSee: https://docs.flutter.dev/development/platform-integration/web/initialization",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 235718,
+        "columnNumber": 17
+      }
+    },
+    {
+      "type": "warning",
+      "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 235718,
+        "columnNumber": 17
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.initState() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "debug",
+      "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 54804,
+        "columnNumber": 12
+      }
+    },
+    {
+      "type": "debug",
+      "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 54804,
+        "columnNumber": 12
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 Router created successfully: true",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.didChangeDependencies() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider obtained from provider tree: true",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.build() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 _authProvider is null: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 _router is null: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider.isAuthenticated: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider.currentUser: null",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔧 Enhanced Navigation Helper loaded",
+      "location": {
+        "url": "http://localhost:8081/login/customer",
+        "lineNumber": 52,
+        "columnNumber": 10
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "log",
+      "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1582,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "warning",
+      "text": "window.flutterWebRenderer is now deprecated.\nUse engineInitializer.initializeEngine(config) instead.\nSee: https://docs.flutter.dev/development/platform-integration/web/initialization",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 235718,
+        "columnNumber": 17
+      }
+    },
+    {
+      "type": "warning",
+      "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 235718,
+        "columnNumber": 17
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.initState() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "debug",
+      "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 54804,
+        "columnNumber": 12
+      }
+    },
+    {
+      "type": "debug",
+      "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 54804,
+        "columnNumber": 12
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 Router created successfully: true",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.didChangeDependencies() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider obtained from provider tree: true",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.build() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 _authProvider is null: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 _router is null: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider.isAuthenticated: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider.currentUser: null",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔧 Enhanced Navigation Helper loaded",
+      "location": {
+        "url": "http://localhost:8081/",
+        "lineNumber": 52,
+        "columnNumber": 10
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "log",
+      "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1582,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "warning",
+      "text": "window.flutterWebRenderer is now deprecated.\nUse engineInitializer.initializeEngine(config) instead.\nSee: https://docs.flutter.dev/development/platform-integration/web/initialization",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 235718,
+        "columnNumber": 17
+      }
+    },
+    {
+      "type": "warning",
+      "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 235718,
+        "columnNumber": 17
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.initState() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "debug",
+      "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 54804,
+        "columnNumber": 12
+      }
+    },
+    {
+      "type": "debug",
+      "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 54804,
+        "columnNumber": 12
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 Router created successfully: true",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.didChangeDependencies() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider obtained from provider tree: true",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 NCLApp.build() called",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 _authProvider is null: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 _router is null: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider.isAuthenticated: false",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔍 AuthProvider.currentUser: null",
+      "location": {
+        "url": "http://localhost:8081/dart_sdk.js",
+        "lineNumber": 26380,
+        "columnNumber": 14
+      }
+    },
+    {
+      "type": "log",
+      "text": "🔧 Enhanced Navigation Helper loaded",
+      "location": {
+        "url": "http://localhost:8081/",
+        "lineNumber": 52,
+        "columnNumber": 10
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "info",
+      "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+      "location": {
+        "url": "http://localhost:8081/ddc_module_loader.js",
+        "lineNumber": 1014,
+        "columnNumber": 16
+      }
+    },
+    {
+      "type": "debug",
+      "text": "Injecting <script> tag. Using callback.",
+      "location": {
+        "url": "http://localhost:8081/flutter_bootstrap.js",
+        "lineNumber": 0,
+        "columnNumber": 2400
+      }
+    }
+  ],
+  "errors": [
+    "Identifier 'styles' has already been declared",
+    "Cannot read properties of undefined (reading 'initializeEngine')",
+    "Identifier 'styles' has already been declared",
+    "Cannot read properties of undefined (reading 'initializeEngine')",
+    "Identifier 'styles' has already been declared",
+    "Cannot read properties of undefined (reading 'initializeEngine')",
+    "Identifier 'styles' has already been declared",
+    "Cannot read properties of undefined (reading 'initializeEngine')"
+  ],
+  "screenshots": []
+}

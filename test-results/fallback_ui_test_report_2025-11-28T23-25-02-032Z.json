@@ -1,0 +1,79 @@
+{
+  "startTime": "2025-11-28T23:20:28.082Z",
+  "endTime": "2025-11-28T23:25:01.434Z",
+  "totalTests": 37,
+  "passedTests": 26,
+  "failedTests": 11,
+  "results": {
+    "homePage": {
+      "title": "NCL - Professional Home Services",
+      "hasWelcomeText": true,
+      "hasProfessionalServices": true,
+      "customerButton": true,
+      "staffButton": true,
+      "adminButton": true,
+      "helpButton": true
+    },
+    "customerLogin": {
+      "title": "NCL - Professional Home Services",
+      "hasCustomerPortal": true,
+      "hasEmailField": true,
+      "hasPasswordField": true,
+      "hasLoginButton": true,
+      "hasDemoCredentials": true,
+      "hasBackButton": false,
+      "formTestPassed": true,
+      "credentialClickTest": false
+    },
+    "staffLogin": {
+      "title": "NCL - Professional Home Services",
+      "hasStaffPortal": true,
+      "hasEmailField": true,
+      "hasPasswordField": true,
+      "hasLoginButton": true,
+      "hasDemoCredentials": true,
+      "hasBackButton": false
+    },
+    "adminLogin": {
+      "title": "NCL - Professional Home Services",
+      "hasAdminPortal": true,
+      "hasEmailField": true,
+      "hasPasswordField": true,
+      "hasLoginButton": true,
+      "hasDemoCredentials": true,
+      "hasBackButton": false
+    },
+    "navigation": [
+      {
+        "from": "home",
+        "to": "customer",
+        "success": false
+      },
+      {
+        "from": "home",
+        "to": "staff",
+        "success": false
+      },
+      {
+        "from": "home",
+        "to": "admin",
+        "success": false
+      },
+      {
+        "from": "customer",
+        "to": "home",
+        "success": false
+      }
+    ],
+    "validation": [
+      {
+        "test": "empty_form",
+        "result": false
+      },
+      {
+        "test": "email_validation",
+        "result": false
+      }
+    ]
+  }
+}

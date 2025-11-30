@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-11-28T23:54:59.103Z",
+  "results": [
+    {
+      "route": "/customer/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "hasFlutter": true,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        }
+      ],
+      "bodyErrors": [],
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "🔍 _authProvider is null: false",
+          "timestamp": "2025-11-28T23:54:28.435Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _router is null: false",
+          "timestamp": "2025-11-28T23:54:28.436Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-28T23:54:28.441Z"
+        }
+      ],
+      "totalConsoleMessages": 16
+    },
+    {
+      "route": "/staff/home",
+      "title": "demo_ncl",
+      "bodyTextLength": 8,
+      "hasFlutter": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": false
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": false
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "consoleMessages": [],
+      "totalConsoleMessages": 3
+    },
+    {
+      "route": "/admin/home",
+      "title": "demo_ncl",
+      "bodyTextLength": 8,
+      "hasFlutter": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": false
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": false
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "consoleMessages": [],
+      "totalConsoleMessages": 3
+    }
+  ]
+}

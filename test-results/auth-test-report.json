@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-11-29T06:19:30.395Z",
+  "flutterServer": true,
+  "flutterRendering": false,
+  "testResults": [
+    {
+      "test": "Run comprehensive authentication tests",
+      "status": "FAILED",
+      "error": "Command failed: npx cypress run --config cypress.config.auth.js --spec cypress/e2e/auth_e2e_test.cy.js --reporter spec\n"
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1
+  }
+}

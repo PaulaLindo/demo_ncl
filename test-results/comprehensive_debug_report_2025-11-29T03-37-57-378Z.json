@@ -1,0 +1,565 @@
+{
+  "timestamp": "2025-11-29T03:37:57.378Z",
+  "results": [
+    {
+      "route": "/",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "hasFlutter": true,
+      "hasActualContent": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "flutter-app",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "totalMessages": 16,
+      "errorMessages": 0,
+      "warningMessages": 1,
+      "debugMessages": 3,
+      "allMessages": [
+        {
+          "type": "debug",
+          "text": "Injecting <script> tag. Using callback.",
+          "timestamp": "2025-11-29T03:36:34.637Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:36:34.657Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:36:35.301Z"
+        },
+        {
+          "type": "log",
+          "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+          "timestamp": "2025-11-29T03:36:41.621Z"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+          "timestamp": "2025-11-29T03:36:41.953Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called",
+          "timestamp": "2025-11-29T03:36:42.515Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-29T03:36:42.526Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-29T03:36:42.534Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 Router created successfully: true",
+          "timestamp": "2025-11-29T03:36:42.535Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called",
+          "timestamp": "2025-11-29T03:36:42.536Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-29T03:36:42.537Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called",
+          "timestamp": "2025-11-29T03:36:42.538Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _authProvider is null: false",
+          "timestamp": "2025-11-29T03:36:42.539Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _router is null: false",
+          "timestamp": "2025-11-29T03:36:42.540Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-29T03:36:42.540Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-29T03:36:42.541Z"
+        }
+      ]
+    },
+    {
+      "route": "/login/customer",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "hasFlutter": true,
+      "hasActualContent": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "flutter-app",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "totalMessages": 16,
+      "errorMessages": 0,
+      "warningMessages": 1,
+      "debugMessages": 3,
+      "allMessages": [
+        {
+          "type": "debug",
+          "text": "Injecting <script> tag. Using callback.",
+          "timestamp": "2025-11-29T03:36:54.185Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:36:54.206Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:36:55.146Z"
+        },
+        {
+          "type": "log",
+          "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+          "timestamp": "2025-11-29T03:37:01.855Z"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+          "timestamp": "2025-11-29T03:37:01.985Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called",
+          "timestamp": "2025-11-29T03:37:02.564Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-29T03:37:02.576Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-29T03:37:02.582Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 Router created successfully: true",
+          "timestamp": "2025-11-29T03:37:02.584Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called",
+          "timestamp": "2025-11-29T03:37:02.584Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-29T03:37:02.587Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called",
+          "timestamp": "2025-11-29T03:37:02.588Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _authProvider is null: false",
+          "timestamp": "2025-11-29T03:37:02.589Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _router is null: false",
+          "timestamp": "2025-11-29T03:37:02.590Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-29T03:37:02.591Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-29T03:37:02.591Z"
+        }
+      ]
+    },
+    {
+      "route": "/customer/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "hasFlutter": true,
+      "hasActualContent": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "flutter-app",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "totalMessages": 16,
+      "errorMessages": 0,
+      "warningMessages": 1,
+      "debugMessages": 3,
+      "allMessages": [
+        {
+          "type": "debug",
+          "text": "Injecting <script> tag. Using callback.",
+          "timestamp": "2025-11-29T03:37:14.388Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:37:14.408Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:37:15.383Z"
+        },
+        {
+          "type": "log",
+          "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+          "timestamp": "2025-11-29T03:37:22.221Z"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+          "timestamp": "2025-11-29T03:37:22.353Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called",
+          "timestamp": "2025-11-29T03:37:22.940Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-29T03:37:22.953Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-29T03:37:22.963Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 Router created successfully: true",
+          "timestamp": "2025-11-29T03:37:22.963Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called",
+          "timestamp": "2025-11-29T03:37:22.964Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-29T03:37:22.969Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called",
+          "timestamp": "2025-11-29T03:37:22.972Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _authProvider is null: false",
+          "timestamp": "2025-11-29T03:37:22.972Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _router is null: false",
+          "timestamp": "2025-11-29T03:37:22.972Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-29T03:37:22.972Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-29T03:37:22.973Z"
+        }
+      ]
+    },
+    {
+      "route": "/staff/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "hasFlutter": true,
+      "hasActualContent": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "flutter-app",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "totalMessages": 16,
+      "errorMessages": 0,
+      "warningMessages": 1,
+      "debugMessages": 3,
+      "allMessages": [
+        {
+          "type": "debug",
+          "text": "Injecting <script> tag. Using callback.",
+          "timestamp": "2025-11-29T03:37:28.592Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:37:28.619Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:37:29.596Z"
+        },
+        {
+          "type": "log",
+          "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+          "timestamp": "2025-11-29T03:37:36.773Z"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+          "timestamp": "2025-11-29T03:37:36.951Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called",
+          "timestamp": "2025-11-29T03:37:37.653Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-29T03:37:37.665Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-29T03:37:37.672Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 Router created successfully: true",
+          "timestamp": "2025-11-29T03:37:37.674Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called",
+          "timestamp": "2025-11-29T03:37:37.674Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-29T03:37:37.675Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called",
+          "timestamp": "2025-11-29T03:37:37.677Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _authProvider is null: false",
+          "timestamp": "2025-11-29T03:37:37.678Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _router is null: false",
+          "timestamp": "2025-11-29T03:37:37.679Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-29T03:37:37.680Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-29T03:37:37.680Z"
+        }
+      ]
+    },
+    {
+      "route": "/admin/home",
+      "title": "NCL - Professional Home Services",
+      "bodyTextLength": 898,
+      "hasFlutter": true,
+      "hasActualContent": false,
+      "flutterChecks": [
+        {
+          "indicator": "flutter-view",
+          "found": true
+        },
+        {
+          "indicator": "flt-scene-host",
+          "found": true
+        },
+        {
+          "indicator": "flt-semantic",
+          "found": true
+        },
+        {
+          "indicator": "flutter-app",
+          "found": false
+        }
+      ],
+      "bodyErrors": [],
+      "totalMessages": 16,
+      "errorMessages": 0,
+      "warningMessages": 1,
+      "debugMessages": 3,
+      "allMessages": [
+        {
+          "type": "debug",
+          "text": "Injecting <script> tag. Using callback.",
+          "timestamp": "2025-11-29T03:37:42.805Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 1/2 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:37:42.834Z"
+        },
+        {
+          "type": "info",
+          "text": "DDC is about to load 994/994 scripts with pool size = 1000",
+          "timestamp": "2025-11-29T03:37:43.919Z"
+        },
+        {
+          "type": "log",
+          "text": "Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.",
+          "timestamp": "2025-11-29T03:37:52.053Z"
+        },
+        {
+          "type": "warning",
+          "text": "Found an existing <meta name=\"viewport\"> tag. Flutter Web uses its own viewport configuration for better compatibility with Flutter. This tag will be replaced.",
+          "timestamp": "2025-11-29T03:37:52.219Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.initState() called",
+          "timestamp": "2025-11-29T03:37:52.930Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: Full paths for routes:\n├─/ \n├─/login/:role \n├─/reg…min/users \n├─/admin/user/:id \n└─/admin/services \n, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 0}",
+          "timestamp": "2025-11-29T03:37:52.945Z"
+        },
+        {
+          "type": "debug",
+          "text": "dart.developer.log {message: setting initial location /, name: GoRouter, level: 800, time: dartDevEmbedder.defineLibrary.core.DateTime.now, sequenceNumber: 1}",
+          "timestamp": "2025-11-29T03:37:52.952Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 Router created successfully: true",
+          "timestamp": "2025-11-29T03:37:52.953Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.didChangeDependencies() called",
+          "timestamp": "2025-11-29T03:37:52.954Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider obtained from provider tree: true",
+          "timestamp": "2025-11-29T03:37:52.958Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 NCLApp.build() called",
+          "timestamp": "2025-11-29T03:37:52.971Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _authProvider is null: false",
+          "timestamp": "2025-11-29T03:37:52.971Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 _router is null: false",
+          "timestamp": "2025-11-29T03:37:52.972Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.isAuthenticated: false",
+          "timestamp": "2025-11-29T03:37:52.972Z"
+        },
+        {
+          "type": "log",
+          "text": "🔍 AuthProvider.currentUser: null",
+          "timestamp": "2025-11-29T03:37:52.972Z"
+        }
+      ]
+    }
+  ]
+}

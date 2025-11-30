@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+
+import '../../models/timekeeping_exports.dart';
 import '../../providers/timekeeping_provider.dart';
-import '../../models/timekeeping_models.dart';
+import '../../providers/theme_provider.dart';
+import '../../utils/color_utils.dart';
 
 class ScheduleTab extends StatefulWidget {
   const ScheduleTab({super.key});
@@ -21,7 +24,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TimekeepingProvider>(context);
-    final primaryColor = Theme.of(context).primaryColor;
+    final primaryColor = context.watch<ThemeProvider>().primaryColor;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -51,7 +54,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
               border: Border.all(color: Colors.grey.shade200),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withCustomOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -111,38 +114,15 @@ class _ScheduleTabState extends State<ScheduleTab> {
               
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, day, events) {
-                  if (events.isEmpty) return null;
-                  
-                  // Get the first shift type to determine marker color
-                  final shift = events.first as WorkShift;
-                  Color markerColor;
-                  
-                  if (shift.isExternal) {
-                    markerColor = Colors.orange;
-                  } else if (shift.isNCL) {
-                    markerColor = primaryColor;
-                  } else {
-                    markerColor = Colors.green;
+                  final hasJob = provider.getJobsForDate(day).isNotEmpty;
+                  if (hasJob) {
+                    return const Positioned(
+                      right: 1,
+                      bottom: 1,
+                      child: Icon(Icons.work, size: 16, color: Colors.green),
+                    );
                   }
-                  
-                  return Positioned(
-                    bottom: 4,
-                    child: Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: markerColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: markerColor.withOpacity(0.5),
-                            blurRadius: 2,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return null;
                 },
                 // Add special styling for days with events
                 defaultBuilder: (context, day, focusedDay) {
@@ -153,11 +133,11 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   Color bgColor;
                   
                   if (shift.isExternal) {
-                    bgColor = Colors.orange.withOpacity(0.1);
+                    bgColor = Colors.orange.withCustomOpacity(0.1);
                   } else if (shift.isNCL) {
-                    bgColor = primaryColor.withOpacity(0.1);
+                    bgColor = primaryColor.withCustomOpacity(0.1);
                   } else {
-                    bgColor = Colors.green.withOpacity(0.1);
+                    bgColor = Colors.green.withCustomOpacity(0.1);
                   }
                   
                   return Container(
@@ -355,7 +335,7 @@ class _LegendItem extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.4),
+                color: color.withCustomOpacity(0.4),
                 blurRadius: 3,
                 spreadRadius: 1,
               ),
@@ -400,7 +380,7 @@ class _ShiftCard extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: textColor.withOpacity(0.3),
+          color: textColor.withCustomOpacity(0.3),
         ),
       ),
       child: Column(
@@ -421,11 +401,11 @@ class _ShiftCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: textColor.withOpacity(0.2),
+                  color: textColor.withCustomOpacity(0.2),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  shift.type,
+                  shift.type.name,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
@@ -439,13 +419,13 @@ class _ShiftCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.access_time, size: 16, color: textColor.withOpacity(0.7)),
+                Icon(Icons.access_time, size: 16, color: textColor.withCustomOpacity(0.7)),
                 const SizedBox(width: 4),
                 Text(
-                  shift.hours!,
+                  shift.hours!.toString(),
                   style: TextStyle(
                     fontSize: 14,
-                    color: textColor.withOpacity(0.8),
+                    color: textColor.withCustomOpacity(0.8),
                   ),
                 ),
               ],
@@ -455,14 +435,14 @@ class _ShiftCard extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                Icon(Icons.location_on, size: 16, color: textColor.withOpacity(0.7)),
+                Icon(Icons.location_on, size: 16, color: textColor.withCustomOpacity(0.7)),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
                     shift.location!,
                     style: TextStyle(
                       fontSize: 14,
-                      color: textColor.withOpacity(0.8),
+                      color: textColor.withCustomOpacity(0.8),
                     ),
                   ),
                 ),
