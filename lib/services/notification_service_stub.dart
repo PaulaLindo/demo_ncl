@@ -1,6 +1,7 @@
 // lib/services/notification_service_stub.dart
 // Simplified stub for integration testing
 import 'package:flutter/material.dart';
+import '../routes/app_routes.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NotificationService {
@@ -119,11 +120,11 @@ class NotificationService {
         
         if (payload.startsWith('shift_swap_')) {
             if (context.mounted) {
-                Navigator.pushNamed(context, '/staff/shift-swap/inbox');
+                Navigator.pushNamed(context, AppRoutes.staffShiftSwapInbox);
             }
         } else if (payload.startsWith('gig_')) {
             final gigId = payload.replaceFirst('gig_', '');
-            Navigator.pushNamed(context, '/gig/$gigId');
+            Navigator.pushNamed(context, AppRoutes.gigDetailsById(gigId));
         }
     }
 

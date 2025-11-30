@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 
 class CustomerServicesScreen extends StatelessWidget {
   const CustomerServicesScreen({super.key});
@@ -133,7 +134,7 @@ class CustomerServicesScreen extends StatelessWidget {
                     onTap: () {
                       // Navigate to booking screen for this service with correct service ID
                       final serviceIds = ['s1', 's2', 's3', 's4', 's5', 's6'];
-                      context.push('/customer/booking/${serviceIds[index]}');
+                      context.push(AppRoutes.bookingFormForService(serviceIds[index]));
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(

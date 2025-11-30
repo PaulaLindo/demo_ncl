@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../models/job_model.dart';
 import '../models/job_status.dart';
 import '../theme/app_theme.dart';
+import '../routes/app_routes.dart';
 
 import 'package:demo_ncl/providers/auth_provider.dart';
 import 'package:demo_ncl/utils/color_utils.dart';
@@ -348,7 +349,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             children: [
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: () => context.push('/customer/bookings'),
+                  onPressed: () => context.push(AppRoutes.customerBookings),
                   icon: const Icon(Icons.visibility_rounded, size: 18),
                   label: const Text('View Details'),
                   style: ElevatedButton.styleFrom(
@@ -400,7 +401,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             icon: Icons.add_circle_outline_rounded,
             label: 'Book Service',
             color: AppTheme.primaryPurple,
-            onTap: () => context.push('/customer/services'),
+            onTap: () => context.push(AppRoutes.customerServices),
           ),
         ),
         const SizedBox(width: 12),
@@ -409,7 +410,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             icon: Icons.history_rounded,
             label: 'My Bookings',
             color: AppTheme.goldAccent,
-            onTap: () => context.push('/customer/bookings'),
+            onTap: () => context.push(AppRoutes.customerBookings),
           ),
         ),
       ],
@@ -425,7 +426,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           icon: service.$2,
           price: service.$3,
           category: service.$4,
-          onTap: () => context.push('/customer/services'),
+          onTap: () => context.push(AppRoutes.customerServices),
         ),
       );
     }).toList();
@@ -438,10 +439,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     
     switch (route) {
       case 'services':
-        context.push('/customer/services_screen');
+        context.push(AppRoutes.customerServices);
         break;
       case 'bookings':
-        context.push('/customer/bookings_screen');
+        context.push(AppRoutes.customerBookings);
         break;
       case 'account':
         ScaffoldMessenger.of(context).showSnackBar(

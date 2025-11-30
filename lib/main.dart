@@ -77,8 +77,7 @@ import 'repositories/staff_schedule_repository.dart';
 import 'theme/app_theme.dart';
 import 'theme/theme_manager.dart';
 
-// Utils
-import 'utils/logger.dart';
+import 'routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -475,6 +474,15 @@ final GoRouter _router = GoRouter(
           child: BookingFormScreen(serviceId: serviceId),
         );
       },
+    ),
+
+    GoRoute(
+      path: '/staff/shift-swap/inbox',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const StaffHistoryScreen(), // Temporary - use history screen as placeholder
+      ),
     ),
 
     // Theme settings route

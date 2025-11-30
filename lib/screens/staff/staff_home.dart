@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../models/gig_assignment.dart';
@@ -872,7 +873,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
           child: InkWell(
             onTap: () {
               // Navigate to gig details with GPS map and transport options
-              context.push('/staff/gig/${gig['id']}');
+              context.push(AppRoutes.gigDetailsById(gig['id'] as String));
             },
             borderRadius: BorderRadius.circular(12),
             child: Padding(

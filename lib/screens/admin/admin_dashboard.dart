@@ -138,69 +138,43 @@ class AdminOverviewPage extends StatelessWidget {
               
               // Quick Stats Grid
               Expanded(
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1.5,
-                  children: [
-                    _buildStatCard(
-                      context,
-                      'Active Temp Cards',
-                      '12',
-                      Icons.credit_card,
-                      AppTheme.primaryPurple,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'Pending Proxy Hours',
-                      '5',
-                      Icons.access_time,
-                      Colors.orange,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'Quality Flags',
-                      '3',
-                      Icons.flag,
-                      Colors.red,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'New B2B Leads',
-                      '8',
-                      Icons.business,
-                      Colors.green,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'Draft Payroll',
-                      '2',
-                      Icons.attach_money,
-                      Colors.blue,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'Active Staff',
-                      '24',
-                      Icons.people,
-                      AppTheme.primaryPurple,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'Blocked Staff',
-                      '2',
-                      Icons.block,
-                      Colors.red,
-                    ),
-                    _buildStatCard(
-                      context,
-                      'Live Jobs',
-                      '7',
-                      Icons.gps_fixed,
-                      Colors.green,
-                    ),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Responsive grid: 4 columns on large screens, 2 on smaller
+                    final crossAxisCount = constraints.maxWidth > 1200 ? 4 : 
+                                        constraints.maxWidth > 800 ? 3 : 2;
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        // Let Flutter calculate optimal aspect ratio based on content
+                        childAspectRatio: constraints.maxWidth > 1200 ? 1.5 : 1.3,
+                      ),
+                      itemCount: 8,
+                      itemBuilder: (context, index) {
+                        final stats = [
+                          {'title': 'Active Temp Cards', 'value': '12', 'icon': Icons.credit_card, 'color': AppTheme.primaryPurple},
+                          {'title': 'Pending Proxy Hours', 'value': '5', 'icon': Icons.access_time, 'color': Colors.orange},
+                          {'title': 'Quality Flags', 'value': '3', 'icon': Icons.flag, 'color': Colors.red},
+                          {'title': 'New B2B Leads', 'value': '8', 'icon': Icons.business, 'color': Colors.green},
+                          {'title': 'Draft Payroll', 'value': '2', 'icon': Icons.attach_money, 'color': Colors.blue},
+                          {'title': 'Active Staff', 'value': '24', 'icon': Icons.people, 'color': AppTheme.primaryPurple},
+                          {'title': 'Blocked Staff', 'value': '2', 'icon': Icons.block, 'color': Colors.red},
+                          {'title': 'Live Jobs', 'value': '7', 'icon': Icons.gps_fixed, 'color': Colors.green},
+                        ];
+                        
+                        final stat = stats[index];
+                        return _buildStatCard(
+                          context,
+                          stat['title'] as String,
+                          stat['value'] as String,
+                          stat['icon'] as IconData,
+                          stat['color'] as Color,
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
               
@@ -267,22 +241,36 @@ class AdminOverviewPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: color, size: 24),
+                // Let Flutter control icon size by removing fixed size
+                Icon(
+                  icon, 
+                  color: color,
+                  // Remove fixed size to let Flutter optimize for different icons
+                ),
                 const Spacer(),
-                Text(
-                  value,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  // Use Flexible to prevent text overflow
+                  child: Text(
+                    value,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis, // Prevent text overflow
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
+            Flexible(
+              // Use Flexible for title to prevent overflow
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey[600],
+                ),
+                overflow: TextOverflow.ellipsis, // Prevent text overflow
+                maxLines: 2, // Allow title to wrap if needed
               ),
             ),
           ],
