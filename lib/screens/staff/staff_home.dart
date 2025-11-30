@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../providers/theme_provider.dart';
+import 'package:intl/intl.dart';
+import '../../providers/theme_provider.dart';
 import '../../routes/app_routes.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -9,7 +10,6 @@ import '../../models/gig_assignment.dart';
 import '../../models/shift_swap_request.dart';
 
 import '../../providers/staff_provider.dart';
-import '../../providers/theme_provider.dart';
 import '../../providers/auth_provider.dart';
 
 class StaffHome extends StatefulWidget {
