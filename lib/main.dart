@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Import for web-specific functionality
+import 'dart:html' as html show window, sessionStorage;
 
 // Theme Provider
 import 'providers/theme_provider.dart';
@@ -77,6 +80,20 @@ import 'utils/logger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Handle GitHub Pages routing for SPA
+  if (kIsWeb) {
+    final redirect = html.window.sessionStorage['redirect'];
+    if (redirect != null && redirect.isNotEmpty) {
+      html.window.sessionStorage.remove('redirect');
+      // Store redirect for later use after app initialization
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (router.routeInformationProvider.value.location != redirect) {
+          router.go(redirect);
+        }
+      });
+    }
+  }
 
   // Add Flutter error debugging
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -191,7 +208,7 @@ final GoRouter _router = GoRouter(
     return null; // No redirect
   },
   routes: [
-    // Public routes
+    // Login Chooser Route
     GoRoute(
       path: '/',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
@@ -200,17 +217,38 @@ final GoRouter _router = GoRouter(
         child: const LoginChooserScreen(),
       ),
     ),
+
+    // Customer Login Route
     GoRoute(
-      path: '/login/:role',
-      pageBuilder: (context, state) {
-        final role = state.pathParameters['role'] ?? 'customer';
-        return _buildPageWithFadeTransition(
-          context: context,
-          state: state,
-          child: LoginScreen(userRole: role),
-        );
-      },
+      path: '/login/customer',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const LoginScreen(userType: 'customer'),
+      ),
     ),
+
+    // Staff Login Route
+    GoRoute(
+      path: '/login/staff',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const LoginScreen(userType: 'staff'),
+      ),
+    ),
+
+    // Admin Login Route
+    GoRoute(
+      path: '/login/admin',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const LoginScreen(userType: 'admin'),
+      ),
+    ),
+
+    // Customer Registration Route
     GoRoute(
       path: '/register/customer',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
@@ -219,7 +257,7 @@ final GoRouter _router = GoRouter(
         child: const CustomerRegistrationScreen(),
       ),
     ),
-    
+
     // Customer routes
     GoRoute(
       path: '/customer/home',
@@ -227,14 +265,6 @@ final GoRouter _router = GoRouter(
         context: context,
         state: state,
         child: const CustomerHome(),
-      ),
-    ),
-    GoRoute(
-      path: '/customer/services',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const CustomerServicesScreen(),
       ),
     ),
     GoRoute(
@@ -246,27 +276,11 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/customer/booking/:serviceId',
+      path: '/customer/services',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: BookingFormScreen(serviceId: state.pathParameters['serviceId'] ?? '1'),
-      ),
-    ),
-    GoRoute(
-      path: '/customer/payment/:bookingId',
-      builder: (context, state) => PaymentSelectionScreen(
-        bookingId: state.pathParameters['bookingId'] ?? '1',
-        amount: double.tryParse(state.uri.queryParameters['amount'] ?? '450.00') ?? 450.00,
-        serviceTitle: state.uri.queryParameters['service'] ?? 'Cleaning Service',
-      ),
-    ),
-    GoRoute(
-      path: '/theme-settings',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const ThemeSettingsScreen(),
+        child: const CustomerServicesScreen(),
       ),
     ),
     GoRoute(
@@ -274,18 +288,18 @@ final GoRouter _router = GoRouter(
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const CustomerProfileScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/customer/settings',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
         child: const CustomerSettingsScreen(),
       ),
     ),
-    
+    GoRoute(
+      path: '/customer/payment-selection',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const PaymentSelectionScreen(),
+      ),
+    ),
+
     // Staff routes
     GoRoute(
       path: '/staff/home',
@@ -293,62 +307,6 @@ final GoRouter _router = GoRouter(
         context: context,
         state: state,
         child: const StaffHome(),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/timekeeping',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const StaffTimekeepingScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/schedule',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const StaffScheduleScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/profile',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const StaffProfileScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/settings',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const StaffSettingsScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/services',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const StaffServicesScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/service/:serviceId',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: GigDetailsScreen(gigId: state.pathParameters['serviceId'] ?? '1'),
-      ),
-    ),
-    GoRoute(
-      path: '/staff/gig/:gigId',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: GigDetailsScreen(gigId: state.pathParameters['gigId'] ?? '1'),
       ),
     ),
     GoRoute(
@@ -360,34 +318,36 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/staff/confirm-service/:serviceId',
+      path: '/staff/confirm',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: ConfirmationScreen(serviceId: state.pathParameters['serviceId'] ?? '1'),
+        child: const ConfirmationScreen(),
       ),
     ),
     GoRoute(
-      path: '/staff/gig-acceptance',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const GigAcceptanceScreen(),
-      ),
+      path: '/staff/gig-details/:gigId',
+      pageBuilder: (context, state) {
+        final gigId = state.pathParameters['gigId'] ?? '';
+        return _buildPageWithFadeTransition(
+          context: context,
+          state: state,
+          child: GigDetailsScreen(gigId: gigId),
+        );
+      },
     ),
     GoRoute(
-      path: '/staff/cancel-gig/:gigId',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: ConfirmationScreen(
-          serviceId: state.pathParameters['gigId'] ?? '1',
-          gigId: state.pathParameters['gigId'] ?? '1',
-          isAvailableService: false,
-        ),
-      ),
+      path: '/staff/gig-acceptance/:gigId',
+      pageBuilder: (context, state) {
+        final gigId = state.pathParameters['gigId'] ?? '';
+        return _buildPageWithFadeTransition(
+          context: context,
+          state: state,
+          child: StaffGigAcceptanceScreen(gigId: gigId),
+        );
+      },
     ),
-    
+
     // Admin routes
     GoRoute(
       path: '/admin/home',
@@ -395,6 +355,14 @@ final GoRouter _router = GoRouter(
         context: context,
         state: state,
         child: const AdminHomeScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/dashboard',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const AdminDashboard(),
       ),
     ),
     GoRoute(
@@ -406,11 +374,43 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/admin/total-users',
+      path: '/admin/schedule',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const AdminTotalUsersScreen(),
+        child: const AdminScheduleScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/timekeeping',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const AdminTimekeepingScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/services',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const AdminServiceManagement(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/settings',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const AdminSettingsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/jobs',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const AdminJobsScreen(),
       ),
     ),
     GoRoute(
@@ -430,30 +430,6 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/admin/jobs',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const AdminJobsScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/admin/timekeeping',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const AdminTimekeepingScreen(),
-      ),
-    ),
-    GoRoute(
-      path: '/admin/schedule',
-      pageBuilder: (context, state) => _buildPageWithFadeTransition(
-        context: context,
-        state: state,
-        child: const AdminScheduleScreen(),
-      ),
-    ),
-    GoRoute(
       path: '/admin/payments',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
@@ -470,11 +446,60 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/admin/settings',
+      path: '/admin/total-users',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
-        child: const AdminSettingsScreen(),
+        child: const AdminTotalUsersScreen(),
+      ),
+    ),
+
+    // Service booking routes
+    GoRoute(
+      path: '/booking/:serviceId',
+      pageBuilder: (context, state) {
+        final serviceId = state.pathParameters['serviceId'] ?? '';
+        return _buildPageWithFadeTransition(
+          context: context,
+          state: state,
+          child: BookingFormScreen(serviceId: serviceId),
+        );
+      },
+    ),
+
+    // Theme settings route
+    GoRoute(
+      path: '/theme-settings',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const ThemeSettingsScreen(),
+      ),
+    ),
+
+    // Catch-all route for 404
+    GoRoute(
+      path: '/:path(.*)',
+      pageBuilder: (context, state) => Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(
+                'Page not found',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                child: const Text('Go to Home'),
+              ),
+            ],
+          ),
+        ),
       ),
     ),
   ],
@@ -519,3 +544,6 @@ Page<T> _buildPageWithFadeTransition<T>({
     },
   );
 }
+
+// Global router getter for GitHub Pages redirect
+GoRouter get router => _router;
