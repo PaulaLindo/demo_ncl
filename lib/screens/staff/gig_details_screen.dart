@@ -4,18 +4,34 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/theme_provider.dart';
+import '../../providers/timekeeping_provider.dart';
+
+import '../../models/gig_model.dart';
+
 import '../../theme/theme_manager.dart';
+import '../../theme/app_theme.dart';
+
+import '../../widgets/location_check_dialog.dart';
+
 import '../../utils/color_utils.dart';
 
-class GigDetailsScreen extends StatelessWidget {
-  final String gigId;
+class GigDetailsScreen extends StatefulWidget {
+  final Gig gig;
   
-  const GigDetailsScreen({super.key, required this.gigId});
+  const GigDetailsScreen({super.key, required this.gig});
+
+  @override
+  State<GigDetailsScreen> createState() => _GigDetailsScreenState();
+
+}
+
+class _GigDetailsScreenState extends State<GigDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
     // Mock gig data based on ID
-    final gigData = _getGigData(gigId);
+    final gig = widget.gig;
 
     return Scaffold(
       body: CustomScrollView(
@@ -35,8 +51,8 @@ class GigDetailsScreen extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          context.watch<ThemeProvider>().primaryColor.withCustomOpacity(0.8),
-                          context.watch<ThemeProvider>().secondaryColor.withCustomOpacity(0.6),
+                          themeProvider.primaryColor.withCustomOpacity(0.8),
+                          themeProvider.secondaryColor.withCustomOpacity(0.6),
                         ],
                       ),
                     ),
@@ -58,7 +74,7 @@ class GigDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Distance: ${gigData['distance']}',
+                            'Distance: ${gig.distance}',
                             style: TextStyle(
                               color: Colors.white.withCustomOpacity(0.8),
                               fontSize: 14,
@@ -100,7 +116,7 @@ class GigDetailsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          gigData['title'] as String,
+                          gig.title,
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -109,15 +125,15 @@ class GigDetailsScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: gigData['status'] == 'confirmed' 
+                          color: gig.status == 'confirmed' 
                               ? Colors.green.withCustomOpacity(0.1)
                               : Colors.orange.withCustomOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          (gigData['status'] as String).toUpperCase(),
+                          gig.status.toUpperCase(),
                           style: TextStyle(
-                            color: gigData['status'] == 'confirmed' 
+                            color: gig.status == 'confirmed' 
                                 ? Colors.green
                                 : Colors.orange,
                             fontSize: 12,
@@ -136,9 +152,9 @@ class GigDetailsScreen extends StatelessWidget {
                     'Client Information',
                     Icons.person_outline,
                     [
-                      _buildDetailRow('Client', gigData['client'] as String),
+                      _buildDetailRow('Client', gig.client),
                       _buildDetailRow('Contact', '+27 21 123 4567'),
-                      _buildDetailRow('Service Type', gigData['serviceType'] as String),
+                      _buildDetailRow('Service Type', gig.serviceType),
                     ],
                   ),
                   
@@ -150,11 +166,11 @@ class GigDetailsScreen extends StatelessWidget {
                     'Location & Timing',
                     Icons.location_on_outlined,
                     [
-                      _buildDetailRow('Address', gigData['address'] as String),
-                      _buildDetailRow('Distance', gigData['distance'] as String),
-                      _buildDetailRow('Date', gigData['date'] as String),
-                      _buildDetailRow('Time', gigData['time'] as String),
-                      _buildDetailRow('Duration', gigData['duration'] as String),
+                      _buildDetailRow('Address', gig.address),
+                      _buildDetailRow('Distance', gig.distance),
+                      _buildDetailRow('Date', gig.date),
+                      _buildDetailRow('Time', gig.time),
+                      _buildDetailRow('Duration', gig.duration),
                     ],
                   ),
                   
@@ -166,9 +182,9 @@ class GigDetailsScreen extends StatelessWidget {
                     'Payment Details',
                     Icons.attach_money,
                     [
-                      _buildDetailRow('Base Rate', gigData['baseRate'] as String),
-                      _buildDetailRow('Transport Allowance', gigData['transport'] as String),
-                      _buildDetailRow('Total Earnings', gigData['totalPay'] as String, isHighlight: true),
+                      _buildDetailRow('Base Rate', gig.baseRate),
+                      _buildDetailRow('Transport Allowance', gig.transport),
+                      _buildDetailRow('Total Earnings', gig.totalPay, isHighlight: true),
                     ],
                   ),
                   
@@ -180,7 +196,7 @@ class GigDetailsScreen extends StatelessWidget {
                     'Requirements',
                     Icons.assignment_outlined,
                     [
-                      ...((gigData['requirements'] as List<String>)
+                      ...((gig.requirements)
                           .map((req) => Padding(
                                 padding: const EdgeInsets.only(bottom: 4),
                                 child: Row(
@@ -282,6 +298,17 @@ class GigDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _handleLocationClockIn,
+                          icon: const Icon(Icons.location_on),
+                          label: const Text('Clock In with Location'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   
@@ -293,6 +320,59 @@ class GigDetailsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _handleLocationClockIn() async {
+    try {
+      final timekeepingProvider = Provider.of<TimekeepingProvider>(
+        context,
+        listen: false,
+      );
+      
+      // Show location verification dialog
+      final locationVerified = await showDialog<bool>(
+        context: context,
+        builder: (context) => LocationCheckDialog(
+          targetLat: widget.gig.latitude, // Make sure these are available in your gig object
+          targetLon: widget.gig.longitude,
+          jobAddress: widget.gig.location ?? 'Job Location',
+          onVerified: () => Navigator.pop(context, true),
+        ),
+      ) ?? false;
+
+      if (!mounted) return;
+
+      if (!locationVerified) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Location verification required for check-in'),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        return;
+      }
+
+      // Proceed with check-in
+      await timekeepingProvider.checkIn(widget.gig.id);
+      
+      if (mounted) return;
+
+      Navigator.pop(context); // Close the gig details screen
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Successfully clocked in to ${ widget.gig.title}'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildMapControl(BuildContext context, IconData icon, String tooltip) {
@@ -393,75 +473,6 @@ class GigDetailsScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Map<String, dynamic> _getGigData(String gigId) {
-    // Mock gig data based on ID
-    switch (gigId) {
-      case 'gig_1':
-        return {
-          'title': 'Deep Cleaning - Downtown Office',
-          'client': 'ABC Corporation',
-          'serviceType': 'Commercial Deep Cleaning',
-          'address': '123 Main St, Downtown Cape Town',
-          'distance': '2.5 km from your location',
-          'date': 'Dec 15, 2024',
-          'time': '10:00 AM - 2:00 PM',
-          'duration': '4 hours',
-          'baseRate': 'R 1,200',
-          'transport': 'R 300',
-          'totalPay': 'R 1,500',
-          'status': 'confirmed',
-          'requirements': [
-            'Industrial cleaning equipment provided',
-            'Safety gear required',
-            '2+ years commercial cleaning experience',
-            'Available for weekend work if needed',
-          ],
-        };
-      case 'gig_2':
-        return {
-          'title': 'Regular Cleaning - Suburban Home',
-          'client': 'Smith Family',
-          'serviceType': 'Residential Cleaning',
-          'address': '456 Oak Ave, Suburbs',
-          'distance': '5.1 km from your location',
-          'date': 'Dec 17, 2024',
-          'time': '2:00 PM - 6:00 PM',
-          'duration': '4 hours',
-          'baseRate': 'R 600',
-          'transport': 'R 200',
-          'totalPay': 'R 800',
-          'status': 'pending',
-          'requirements': [
-            'Residential cleaning experience',
-            'Attention to detail',
-            'Pet-friendly (family has 2 cats)',
-            'Own cleaning supplies preferred',
-          ],
-        };
-      default:
-        return {
-          'title': 'Kitchen Cleaning - Restaurant',
-          'client': 'Italian Restaurant',
-          'serviceType': 'Commercial Kitchen Cleaning',
-          'address': '789 Food Court, City Center',
-          'distance': '8.3 km from your location',
-          'date': 'Dec 20, 2024',
-          'time': '8:00 AM - 12:00 PM',
-          'duration': '4 hours',
-          'baseRate': 'R 1,200',
-          'transport': 'R 300',
-          'totalPay': 'R 1,500',
-          'status': 'confirmed',
-          'requirements': [
-            'Food safety certified',
-            'Commercial kitchen experience',
-            'Available early morning hours',
-            'Deep cleaning equipment knowledge',
-          ],
-        };
-    }
   }
 
   void _requestUber(BuildContext context) {

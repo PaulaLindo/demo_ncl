@@ -12,6 +12,7 @@ import '../../../utils/color_utils.dart';
 import '../../../models/auth_model.dart';
 import '../../../models/time_record_model.dart';
 import '../../../models/qr_validation_model.dart';
+import '../../../screens/staff/gig_details_screen.dart';
 import '../../../widgets/qr_scanner_dialog.dart';
 import '../../../widgets/quality_gate_dialog.dart';
 import '../../../widgets/location_check_dialog.dart';
@@ -303,22 +304,51 @@ class _EnhancedMobileTimekeepingTabState extends State<EnhancedMobileTimekeeping
     );
   }
 
+  Widget _buildClockButton(bool isCheckedIn, dynamic currentJob, TimekeepingProvider timekeepingProvider) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () => isCheckedIn 
+            ? _handleClockOut(timekeepingProvider)
+            : _handleStandardClockIn(currentJob, timekeepingProvider),
+        icon: Icon(isCheckedIn ? Icons.logout : Icons.login, size: 24),
+        label: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Text(
+            isCheckedIn ? 'CLOCK OUT' : 'CLOCK IN',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isCheckedIn 
+              ? Colors.red[400] 
+              : context.watch<ThemeProvider>().primaryColor,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          elevation: 2,
+        ),
+      ),
+    );
+  }
+
   Widget _buildTimerTab(TimekeepingProvider timekeepingProvider, bool isCheckedIn, dynamic currentJob) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // Clock In/Out Button
-          _buildClockButton(isCheckedIn, currentJob, timekeepingProvider),
-          
-          const SizedBox(height: 24),
-          
-          // Current Session Info
-          if (isCheckedIn)
+          if (isCheckedIn) ...[
+            // Clock Out Button
+            _buildClockButton(isCheckedIn, currentJob, timekeepingProvider),
+            const SizedBox(height: 24),
+            // Current Session Info
             _buildCurrentSessionInfo(null), // Mock data since currentEntry is not available
-          
+          ] else ...[
+            // Clock In Options
+            _buildClockInOptions(currentJob, timekeepingProvider),
+          ],
           const SizedBox(height: 24),
-          
           // Quick Actions
           _buildQuickActions(),
         ],
@@ -326,71 +356,91 @@ class _EnhancedMobileTimekeepingTabState extends State<EnhancedMobileTimekeeping
     );
   }
 
-  Widget _buildClockButton(bool isCheckedIn, dynamic currentJob, TimekeepingProvider timekeepingProvider) {
-    return AnimatedBuilder(
-      animation: _pulseAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: isCheckedIn ? _pulseAnimation.value : 1.0,
-          child: Container(
-            width: double.infinity,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: isCheckedIn
-                  ? [Colors.red, Colors.red.withCustomOpacity(0.8)]
-                  : [Colors.green, Colors.green.withCustomOpacity(0.8)],
-              ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: (isCheckedIn ? Colors.red : Colors.green).withCustomOpacity(0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
-                ),
-              ],
+  Widget _buildClockInOptions(dynamic currentJob, TimekeepingProvider timekeepingProvider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // QR Code Clock In Button
+        ElevatedButton.icon(
+          onPressed: () => _handleClockInWithQR(currentJob, timekeepingProvider),
+          icon: const Icon(Icons.qr_code_scanner, size: 24),
+          label: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              'SCAN QR CODE TO CLOCK IN',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () => _handleClockAction(isCheckedIn, currentJob, timekeepingProvider),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        isCheckedIn ? Icons.logout : Icons.login,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        isCheckedIn ? 'Clock Out' : 'Clock In',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      if (!isCheckedIn)
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: context.watch<ThemeProvider>().primaryColor,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            elevation: 2,
+          ),
+        ),
+        
+        if (currentJob != null) ...[
+          const SizedBox(height: 16),
+          // Job Details Card
+          GestureDetector(
+            onTap: () {
+              // Navigate to gig details
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GigDetailsScreen(gig: currentJob),
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.work_outline,
+                    color: context.watch<ThemeProvider>().primaryColor,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          'Start your work session',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white.withCustomOpacity(0.8),
+                          currentJob.title ?? 'Current Job',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                         ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          'Tap to view job details and clock-in options',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  Icon(
+                    Icons.chevron_right,
+                    color: Colors.grey[600],
+                  ),
+                ],
               ),
             ),
           ),
-        );
-      },
+        ],
+      ],
     );
   }
 
@@ -1627,107 +1677,189 @@ class _EnhancedMobileTimekeepingTabState extends State<EnhancedMobileTimekeeping
     );
   }
 
-  void _handleClockAction(bool isCheckedIn, dynamic currentJob, TimekeepingProvider timekeepingProvider) async {
-    try {
-      if (isCheckedIn) {
-        // Show quality gate dialog before clocking out
-        final activeRecord = timekeepingProvider.timeRecords
-            .where((r) => r.checkOutTime == null)
-            .firstOrNull;
-        
-        if (activeRecord != null) {
-          final result = await showDialog<bool>(
-            context: context,
-            builder: (context) => QualityGateDialog(
-              timeRecord: activeRecord,
-              onApproved: () => Navigator.pop(context, true),
-              onRejected: () => Navigator.pop(context, false),
+  Future<void> _handleClockOut(TimekeepingProvider timekeepingProvider) async {
+    // Show quality gate dialog before clocking out
+    final activeRecord = timekeepingProvider.timeRecords
+        .where((r) => r.checkOutTime == null)
+        .firstOrNull;
+
+    if (activeRecord != null) {
+      final result = await showDialog<bool>(
+        context: context,
+        builder: (context) => QualityGateDialog(
+          timeRecord: activeRecord,
+          onApproved: () => Navigator.pop(context, true),
+          onRejected: () => Navigator.pop(context, false),
+        ),
+      );
+
+      if (result == true) {
+        // Clock out with quality data
+        await timekeepingProvider.checkOut(
+          qualityData: {
+            'checks_completed': true,
+            'customer_satisfied': true,
+            'timestamp': DateTime.now().toIso8601String(),
+          },
+          customerRating: 5,
+        );
+        _pulseController.stop();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Clocked out successfully! Quality check passed.'),
+              backgroundColor: Colors.green,
             ),
           );
-          
-          if (result == true) {
-            // Clock out with quality data
-            await timekeepingProvider.checkOut(
-              qualityData: {
-                'checks_completed': true,
-                'customer_satisfied': true,
-                'timestamp': DateTime.now().toIso8601String(),
-              },
-              customerRating: 5,
-            );
-            _pulseController.stop();
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Clocked out successfully! Quality check passed.'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            }
-          } else if (result == false) {
-            // Report issue
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Issue reported. Please contact your supervisor.'),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
-          }
         }
-      } else {
-        // Check location first
-        final locationVerified = await showDialog<bool>(
-          context: context,
-          builder: (context) => LocationCheckDialog(
-            targetLat: 40.7128, // Example coordinates
-            targetLon: -74.0060,
-            jobAddress: currentJob?.location ?? 'Job Location',
-            onVerified: () => Navigator.pop(context, true),
+      } else if (result == false) {
+        // Report issue
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Issue reported. Please contact your supervisor.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _handleStandardClockIn(dynamic currentJob, TimekeepingProvider timekeepingProvider) async {
+    try {
+      if (currentJob == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No job selected for check-in')),
+          );
+        }
+        return;
+      }
+
+      // Verify location before check-in
+      final locationVerified = await showDialog<bool>(
+        context: context,
+        builder: (context) => LocationCheckDialog(
+          targetLat: 40.7128, // Example coordinates
+          targetLon: -74.0060,
+          jobAddress: currentJob.location ?? 'Job Location',
+          onVerified: () => Navigator.pop(context, true),
+        ),
+      ) ?? false;
+
+      if (!locationVerified) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location verification required for check-in')),
+          );
+        }
+        return;
+      }
+
+      // Proceed with check-in using the current job
+      await timekeepingProvider.checkIn(currentJob.id);
+      _pulseController.repeat(reverse: true);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Checked in to ${currentJob.title} successfully!'),
+            backgroundColor: Colors.green,
           ),
         );
-        
-        if (locationVerified == true) {
-          // Show QR scanner for job verification
-          final qrResult = await showDialog<String>(
-            context: context,
-            builder: (context) => QRScannerDialog(
-              title: 'Scan Job QR Code',
-              subtitle: 'Scan the QR code at the job location to verify',
-              allowManualInput: true,
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleClockInWithQR(dynamic currentJob, TimekeepingProvider timekeepingProvider) async {
+    try {
+      // Show QR scanner for job verification first
+      final qrResult = await showDialog<String>(
+        context: context,
+        builder: (context) => QRScannerDialog(
+          title: 'Scan Job QR Code',
+          subtitle: 'Scan the QR code at the job location',
+          allowManualInput: true,
+          onQRCodeScanned: (code) => Navigator.of(context).pop(code),
+        ),
+      );
+
+      if (qrResult == null || qrResult.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('QR code scan cancelled or failed')),
+          );
+        }
+        return;
+      }
+
+      // Validate the scanned QR code
+      final validation = await timekeepingProvider.validateQRCode(qrResult);
+
+      if (!validation.isValid) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Invalid QR code: ${validation.error}'),
+              backgroundColor: Colors.red,
             ),
           );
-          
-          if (qrResult != null) {
-            // Validate QR code
-            final validation = await timekeepingProvider.validateQRCode(qrResult);
-            
-            if (validation.isValid) {
-              // Check in with validated job
-              String jobId = validation.jobId ?? currentJob?.id ?? 'default-job';
-              await timekeepingProvider.checkIn(jobId);
-              _pulseController.repeat(reverse: true);
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Checked in to ${validation.job?.title ?? 'job'} successfully!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              }
-            } else {
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Invalid QR code: ${validation.error}'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            }
-          }
         }
+        return;
+      }
+
+      // Then verify location
+      final locationVerified = await showDialog<bool>(
+        context: context,
+        builder: (context) => LocationCheckDialog(
+          targetLat: 40.7128, // Example coordinates
+          targetLon: -74.0060,
+          jobAddress: validation.job?.location ?? currentJob?.location ?? 'Job Location',
+          onVerified: () => Navigator.pop(context, true),
+        ),
+      ) ?? false;
+
+      if (!locationVerified) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location verification required for check-in')),
+          );
+        }
+        return;
+      }
+
+      // Proceed with check-in using the validated job ID
+      String jobId = validation.jobId ?? currentJob?.id;
+      
+      if (jobId == null || jobId.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No valid job ID found')),
+          );
+        }
+        return;
+      }
+
+      await timekeepingProvider.checkIn(jobId);
+      _pulseController.repeat(reverse: true);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Checked in to ${validation.job?.title ?? 'job'} successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
