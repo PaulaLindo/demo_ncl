@@ -82,7 +82,7 @@ class LoginChooserScreen extends StatelessWidget {
       ),
       child: SvgPicture.asset(
         'assets/images/comprehensive_home_services.svg',
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.contain, // Use contain to ensure full logo fits
       ),
     );
   }

@@ -55,7 +55,7 @@ class ProxyTimeRecord extends Equatable {
       totalHours: (json['totalHours'] as num).toDouble(),
       adminId: json['adminId'] as String?,
       adminNotes: json['adminNotes'] as String?,
-      approvedBy: json['approvedBy'] as String?,
+      approvedBy: json['approvedBy'] as DateTime?,
       approvedAt: json['approvedAt'] != null 
           ? DateTime.parse(json['approvedAt'] as String) 
           : null,
@@ -96,7 +96,7 @@ class ProxyTimeRecord extends Equatable {
     switch (status) {
       case TimeRecordStatus.pendingApproval:
         return 'Pending Proxy Approval';
-      case TimeRecordStatus.approved:
+      case TimeRecordStatus.completed:
         return 'Approved';
       case TimeRecordStatus.rejected:
         return 'Rejected';

@@ -1,10 +1,10 @@
 // lib/screens/customer/payment_selection_screen.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../../theme/app_theme.dart';
+import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
+import '../../theme/app_theme.dart';
 import '../../utils/color_utils.dart';
 import '../../providers/booking_provider.dart';
 
@@ -427,7 +427,7 @@ class _PaymentSelectionScreenState extends State<PaymentSelectionScreen> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(); // Close success dialog
-                    context.go('/customer/home'); // Navigate to home
+                    context.go(AppRoutes.customerHome); // Navigate to home
                   },
                   child: Text('OK'),
                 ),

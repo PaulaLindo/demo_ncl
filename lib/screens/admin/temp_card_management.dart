@@ -1,89 +1,99 @@
 // lib/screens/admin/temp_card_management.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-import '../../providers/admin_provider.dart';
 import '../../models/temp_card_model.dart';
-import '../../theme/app_theme.dart';
-import '../../utils/color_utils.dart';
+import '../../providers/theme_provider.dart';
+import '../../providers/admin_provider_web.dart';
+import '../../routes/app_routes.dart';
+import '../../theme/theme_manager.dart';
 
 class TempCardManagementPage extends StatefulWidget {
-  const TempCardManagementPage({super.key});
+  const TempCardManagementPage({Key? key}) : super(key: key);
 
   @override
   State<TempCardManagementPage> createState() => _TempCardManagementPageState();
 }
 
 class _TempCardManagementPageState extends State<TempCardManagementPage> {
-  final TextEditingController _staffNameController = TextEditingController();
+  late ThemeProvider themeProvider;
   final TextEditingController _staffIdController = TextEditingController();
+  final TextEditingController _staffNameController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Load temp cards when the page initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AdminProviderWeb>().loadTempCards();
+    });
+  }
+
+  @override
   void dispose() {
-    _staffNameController.dispose();
     _staffIdController.dispose();
+    _staffNameController.dispose();
     _notesController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final adminProvider = context.watch<AdminProviderWeb>();
+    themeProvider = context.watch<ThemeProvider>();
+    final backgroundColor = themeProvider.backgroundColor;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Temp Card Management'),
-        backgroundColor: AppTheme.primaryPurple,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            onPressed: () => _showIssueTempCardDialog(context),
-            icon: const Icon(Icons.add),
-            tooltip: 'Issue New Temp Card',
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
+          title: const Text('Temproray Card Management'),
+          backgroundColor: themeProvider.cardColor,
+          foregroundColor: themeProvider.primaryColor,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
           ),
-        ],
-      ),
-      body: Consumer<AdminProvider>(
-        builder: (context, provider, child) {
-          return StreamBuilder<List<TempCard>>(
-            stream: provider.tempCardsStream,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+          actions: [
+            IconButton(
+              onPressed: () => _showIssueTempCardDialog(context),
+              icon: const Icon(Icons.add),
+              tooltip: 'Issue New Temp Card',
+            ),
+          ],
+        ),
+        body: Consumer<AdminProviderWeb>(
+          builder: (context, adminProvider, _) {
+            if (adminProvider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              }
+            final tempCards = adminProvider.tempCards;
 
-              final tempCards = snapshot.data ?? [];
+            if (tempCards.isEmpty) {
+              return const Center(child: Text('No temporary cards found.'));
+            }
 
-              if (tempCards.isEmpty) {
-                return const Center(
-                  child: Text('No temp cards issued yet'),
-                );
-              }
-
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: tempCards.length,
-                itemBuilder: (context, index) {
-                  final tempCard = tempCards[index];
-                  return _buildTempCardCard(context, tempCard, provider);
-                },
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: tempCards.length,
+              itemBuilder: (context, index) {
+                final tempCard = tempCards[index];
+                return _buildTempCardCard(context, tempCard, adminProvider);
+              },
+            );
+          },
+        ),
+      );
+    }
 
   Widget _buildTempCardCard(
     BuildContext context,
     TempCard tempCard,
-    AdminProvider provider,
+    AdminProviderWeb provider,
   ) {
     final isExpired = DateTime.now().isAfter(tempCard.expiryDate);
     final isActive = tempCard.isActive && !isExpired;
@@ -124,7 +134,7 @@ class _TempCardManagementPageState extends State<TempCardManagementPage> {
             const SizedBox(height: 12),
             Row(
               children: [
-                Icon(Icons.credit_card, color: AppTheme.primaryPurple),
+                Icon(Icons.credit_card, color: themeProvider.primaryColor),
                 const SizedBox(width: 8),
                 Text(
                   'Card: ${tempCard.cardNumber}',
@@ -197,7 +207,7 @@ class _TempCardManagementPageState extends State<TempCardManagementPage> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.red.withCustomOpacity(0.1),
+                  color: Colors.red.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -224,6 +234,7 @@ class _TempCardManagementPageState extends State<TempCardManagementPage> {
   }
 
   void _showIssueTempCardDialog(BuildContext context) {
+    final theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -275,12 +286,27 @@ class _TempCardManagementPageState extends State<TempCardManagementPage> {
               }
 
               try {
-                final provider = context.read<AdminProvider>();
+                final provider = context.read<AdminProviderWeb>();
                 final tempCard = await provider.issueTempCard(
                   staffId: _staffIdController.text,
                   staffName: _staffNameController.text,
                   notes: _notesController.text.isEmpty ? null : _notesController.text,
                 );
+                
+                // Clear the form
+                _staffIdController.clear();
+                _staffNameController.clear();
+                _notesController.clear();
+                
+                // Show success message
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Temporary card issued: ${tempCard.cardNumber}'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
 
                 Navigator.of(context).pop();
                 _staffIdController.clear();
@@ -309,7 +335,7 @@ class _TempCardManagementPageState extends State<TempCardManagementPage> {
     );
   }
 
-  void _showDeactivateDialog(BuildContext context, TempCard tempCard, AdminProvider provider) {
+  void _showDeactivateDialog(BuildContext context, TempCard tempCard, AdminProviderWeb provider) {
     final reasonController = TextEditingController();
 
     showDialog(

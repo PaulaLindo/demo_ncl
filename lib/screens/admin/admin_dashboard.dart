@@ -15,16 +15,22 @@ import '../admin/live_logistics.dart';
 import '../admin/staff_restrictions.dart';
 import '../admin/audit_logs.dart';
 import '../admin/enhanced_job_assignment_tab.dart';
+import 'reports_page.dart';
 
 class AdminDashboard extends StatefulWidget {
-  const AdminDashboard({super.key});
+  final int initialIndex;
+
+  const AdminDashboard({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   final List<Widget> _pages = [
     const AdminOverviewPage(),
@@ -37,7 +43,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
     const LiveLogisticsPage(),
     const StaffRestrictionsPage(),
     const AuditLogsPage(),
+    const ReportsPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +107,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
               NavigationRailDestination(
                 icon: Icon(Icons.history),
                 label: Text('Audit Logs'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.history),
+                label: Text('Reports'),
               ),
             ],
           ),
@@ -232,48 +249,76 @@ class AdminOverviewPage extends StatelessWidget {
     IconData icon,
     Color color,
   ) {
+     // Map of titles to their corresponding navigation indices
+    final navigationMap = {
+      'Active Temp Cards': 2,  // Index of Temp Card Management in _pages list
+      'Pending Proxy Hours': 3,
+      'Quality Flags': 4,
+      'New B2B Leads': 5,
+      'Draft Payroll': 6,
+      'Active Staff': 1,  // Job Assignments shows staff
+      'Blocked Staff': 8,  // Staff Restrictions
+      'Live Jobs': 7,      // Live Logistics
+    };
+
     return Card(
       elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // Let Flutter control icon size by removing fixed size
-                Icon(
-                  icon, 
-                  color: color,
-                  // Remove fixed size to let Flutter optimize for different icons
-                ),
-                const Spacer(),
-                Flexible(
-                  // Use Flexible to prevent text overflow
-                  child: Text(
-                    value,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.bold,
+      child: InkWell(
+        onTap: () {
+          final index = navigationMap[title] ?? 0;
+          // Instead of pushing a new route, find the AdminDashboard's state and update it
+          final adminDashboardState = context.findAncestorStateOfType<_AdminDashboardState>();
+          if (adminDashboardState != null) {
+            adminDashboardState.setState(() {
+              adminDashboardState._selectedIndex = index;
+            });
+          }
+        },
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // Icon with flexible constraints
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Icon(
+                        icon, 
+                        color: color,
+                        size: 24,  // Standard size that will scale down if needed
+                      ),
                     ),
-                    overflow: TextOverflow.ellipsis, // Prevent text overflow
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Flexible(
-              // Use Flexible for title to prevent overflow
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
-                ),
-                overflow: TextOverflow.ellipsis, // Prevent text overflow
-                maxLines: 2, // Allow title to wrap if needed
+                  const Spacer(),
+                  Flexible(
+                    child: Text(
+                      value,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Flexible(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

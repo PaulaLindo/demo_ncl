@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/theme_manager.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/color_utils.dart';
@@ -21,7 +22,7 @@ class CustomerBookingsScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/customer/home');
+            context.go(AppRoutes.customerHome);
           },
         ),
       ),
@@ -183,19 +184,14 @@ class CustomerBookingsScreen extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       final status = booking['status'] as String;
-                      final serviceId = booking['id'] as String;
                       
-                      // Navigate based on booking status
-                      if (status == 'active') {
-                        // Active booking - navigate to active service details
-                        context.push('/customer/booking/1'); // Navigate to booking form for this service
-                      } else if (status == 'completed') {
-                        // Completed booking - navigate to last completed service details
-                        context.push('/customer/booking/${serviceId}'); // Navigate to service details
-                      } else if (status == 'pending') {
-                        // Pending booking - navigate to latest upcoming service
-                        context.push('/customer/booking/2'); // Navigate to upcoming service
+                      // Only allow navigation for completed bookings
+                      if (status == 'completed') {
+                        final serviceId = booking['id'] as String;
+                        // Navigate to service details for re-booking
+                        context.push(AppRoutes.bookingFormForService(serviceId));
                       }
+                      // Active and pending bookings are not clickable
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(
@@ -326,7 +322,7 @@ class CustomerBookingsScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.push('/customer/services');
+                      context.push(AppRoutes.customerServices);
                     },
                     icon: const Icon(Icons.add),
                     label: const Text('Book New Service'),

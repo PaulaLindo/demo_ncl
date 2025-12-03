@@ -38,6 +38,9 @@ class TimekeepingProvider extends BaseProvider {
   double? _targetLat;
   double? _targetLon;
   final double _maxDistanceMeters = 100;
+
+  // qr code state
+  bool _isClockedIn = false;
   
   // UI state
   bool _isSyncing = false;
@@ -52,6 +55,8 @@ class TimekeepingProvider extends BaseProvider {
   List<TempCard> get tempCards => List.unmodifiable(_tempCards);
   
   String? get activeJobId => _activeJobId;
+
+  bool get isClockedIn => _isClockedIn;
   
   @override
   String? get error => _error;
@@ -75,6 +80,12 @@ class TimekeepingProvider extends BaseProvider {
   
   Future<void> _initialize() async {
     await loadInitialData();
+  }
+
+  Future<void> resetCheckInState() async {
+    _activeJobId = null;
+    _isClockedIn = false;
+    notifyListeners();
   }
   
   Future<void> loadInitialData() async {
@@ -278,6 +289,16 @@ class TimekeepingProvider extends BaseProvider {
 
   Future<void> deleteJob(String jobId) async {
     _jobs.removeWhere((j) => j.id == jobId);
+    notifyListeners();
+  }
+
+  Future<void> clockIn(String jobId) async {
+    _isClockedIn = true;
+    notifyListeners();
+  }
+
+  Future<void> clockOut() async {
+    _isClockedIn = false;
     notifyListeners();
   }
 

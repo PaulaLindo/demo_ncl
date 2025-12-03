@@ -43,6 +43,29 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
+  // Text Styles
+  TextTheme get textTheme => currentThemeData.textTheme;
+  TextStyle? get bodyLarge => currentThemeData.textTheme.bodyLarge;
+  TextStyle? get bodyMedium => currentThemeData.textTheme.bodyMedium;
+  TextStyle? get bodySmall => currentThemeData.textTheme.bodySmall;
+  TextStyle? get titleLarge => currentThemeData.textTheme.titleLarge;
+  TextStyle? get titleMedium => currentThemeData.textTheme.titleMedium;
+  TextStyle? get titleSmall => currentThemeData.textTheme.titleSmall;
+  
+  // Colors from theme
+  Color get errorColor => currentThemeData.colorScheme.error;
+  Color get onPrimaryColor => currentThemeData.colorScheme.onPrimary;
+  Color get onErrorColor => currentThemeData.colorScheme.onError;
+  Color get onSurfaceColor => currentThemeData.colorScheme.onSurface;
+  Color get surfaceColor => currentThemeData.colorScheme.surface;
+  Brightness get brightness => currentThemeData.brightness;
+  
+  // Border color (using outline variant or primary with opacity)
+  Color get borderColor => currentThemeData.colorScheme.outlineVariant.withOpacity(0.5);
+  
+  // Theme data access
+  ThemeData get theme => currentThemeData;
+  
   String get currentThemeName {
     switch (_currentTheme) {
       case ClientThemeMode.currentTheme:

@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../widgets/nav_bar.dart';
 import '../../providers/booking_provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../providers/auth_provider.dart';
 
 class CustomerHome extends StatefulWidget {
@@ -59,7 +60,7 @@ class _CustomerHomeState extends State<CustomerHome> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.go(AppRoutes.home),
         ),
         title: Row(
           children: [
@@ -129,7 +130,7 @@ class _CustomerHomeState extends State<CustomerHome> {
                 // Quick Book Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    context.push('/customer/services');
+                    context.push(AppRoutes.customerServices);
                   },
                   icon: const Icon(Icons.spa_rounded),
                   label: const Text('Book Now'),
@@ -201,7 +202,7 @@ class _CustomerHomeState extends State<CustomerHome> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => context.push('/customer/services'),
+                  onPressed: () => context.push(AppRoutes.customerServices),
                   child: Text(
                     'See All',
                     style: TextStyle(
@@ -314,7 +315,7 @@ class _CustomerHomeState extends State<CustomerHome> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    context.push('/customer/profile');
+                    context.push(AppRoutes.customerProfile);
                   },
                   icon: const Icon(Icons.person_outline),
                   label: const Text('View Profile'),
@@ -327,7 +328,7 @@ class _CustomerHomeState extends State<CustomerHome> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    context.push('/customer/settings');
+                    context.push(AppRoutes.customerSettings);
                   },
                   icon: const Icon(Icons.settings_outlined),
                   label: const Text('Settings'),
@@ -452,7 +453,7 @@ class _CustomerHomeState extends State<CustomerHome> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.push('/customer/bookings'),
+              onPressed: () => context.push(AppRoutes.customerBookings),
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.watch<ThemeProvider>().primaryColor,
                 foregroundColor: Colors.white,
@@ -494,7 +495,7 @@ class _CustomerHomeState extends State<CustomerHome> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => context.push('/customer/booking/${service.id}'),
+          onTap: () => context.push(AppRoutes.bookingFormForService(service.id)),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(20),

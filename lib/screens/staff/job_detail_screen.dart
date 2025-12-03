@@ -1,7 +1,8 @@
 // lib/screens/staff/job_detail_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/job_model.dart';
@@ -27,8 +28,11 @@ class JobDetailScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.swap_horiz),
             onPressed: () {
-              // Navigate to shift swap
-              context.push('/staff/shift-swap/request/$jobId');
+              // Navigate to shift swap - this route doesn't exist yet, comment out for now
+              // context.push('/staff/shift-swap/request/$jobId');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Shift swap feature coming soon!')),
+              );
             },
             tooltip: 'Request shift swap',
           ),

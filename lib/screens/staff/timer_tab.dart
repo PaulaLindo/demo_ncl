@@ -9,6 +9,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/location_check_dialog.dart';
 import '../../widgets/job_selection_dialog.dart';
+import '../../widgets/qr_scanner_dialog.dart';
 
 class TimerTab extends StatefulWidget {
   const TimerTab({super.key});
@@ -34,24 +35,6 @@ class _TimerTabState extends State<TimerTab> {
   void dispose() {
     _tempCardController.dispose();
     super.dispose();
-  }
-
-  Future<void> _handleCheckIn(String jobId, {String? proxyCardId}) async {
-    try {
-      final provider = Provider.of<TimekeepingProvider>(context, listen: false);
-      await provider.checkIn(jobId, proxyCardId: proxyCardId);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Checked in successfully!')),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error checking in: $e')),
-        );
-      }
-    }
   }
 
   Future<void> _handleCheckOut() async {
@@ -103,46 +86,139 @@ class _TimerTabState extends State<TimerTab> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<TimekeepingProvider>(context);
-    final primaryColor = context.watch<ThemeProvider>().primaryColor;
-    final isCheckedIn = provider.activeJobId != null;
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget _buildCheckInOptions(Color primaryColor) {
+    return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Text(
+        'Check-in Method',
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+      ),
+      const SizedBox(height: 12),
+      Row(
         children: [
-          // Check In/Out Button
+          // Location Check-in Option
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: _handleLocationCheckIn,
+              icon: const Icon(Icons.location_on_outlined),
+              label: const Text('Location Check-in'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                side: BorderSide(color: primaryColor),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // QR Code Check-in Option
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: _showQRCodeScannerForCheckIn,
+              icon: const Icon(Icons.qr_code_scanner),
+              label: const Text('QR Code Check-in'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 8),
+      const Text(
+        'Choose your preferred check-in method',
+        style: TextStyle(fontSize: 12, color: Colors.grey),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  );
+}
+
+  @override
+Widget build(BuildContext context) {
+  final provider = Provider.of<TimekeepingProvider>(context, listen: true);
+  final primaryColor = context.watch<ThemeProvider>().primaryColor;
+  final isCheckedIn = provider.activeJobId != null;
+
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Check In/Out Section
+        if (isCheckedIn)
+          // Show Check Out button when checked in
           ElevatedButton(
-            onPressed: isCheckedIn ? _handleCheckOut : _showJobSelection,
+            onPressed: _handleCheckOut,
             style: ElevatedButton.styleFrom(
-              backgroundColor: isCheckedIn ? Colors.red : primaryColor,
+              backgroundColor: Colors.red,
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: Text(
-              isCheckedIn ? 'CHECK OUT' : 'CHECK IN',
-              style: const TextStyle(
+            child: const Text(
+              'CHECK OUT',
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
+          )
+        else
+          // Show Check-in options when not checked in
+          _buildCheckInOptions(primaryColor),
+        
+        const SizedBox(height: 24),
+        
+        // Current Status Card
+        _buildStatusCard(context, provider),
+
+        // Admin Section (if admin)
+        if (_isAdmin) ...[
           const SizedBox(height: 24),
+          _buildAdminSection(context, provider),
+        ],
+      ],
+    ),
+  );
+}
 
-          // Current Status
-          _buildStatusCard(context, provider),
-
-          // Admin-only Temp Card Section
-          if (_isAdmin) ...[
-            const SizedBox(height: 24),
-            _buildAdminSection(context, provider),
-          ],
+// Add this new method to build the QR Scanner section
+Widget _buildQRScannerSection() {
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'SCAN QR CODE',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).hintColor,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton.icon(
+            onPressed: _showQRCodeScannerForCheckIn,
+            icon: const Icon(Icons.qr_code_scanner),
+            label: const Text('Scan QR Code'),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Use this to scan QR codes at the job site after clocking in.',
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildStatusCard(BuildContext context, TimekeepingProvider provider) {
     final theme = Theme.of(context);
@@ -246,15 +322,216 @@ class _TimerTabState extends State<TimerTab> {
   }
 
   Future<void> _showJobSelection() async {
-    final jobId = await showDialog<String>(
-      context: context,
-      builder: (context) => const JobSelectionDialog(),
-    );
+    try {
+      // First verify location
+      final locationVerified = await showDialog<bool>(
+        context: context,
+        builder: (context) => const LocationCheckDialog(),
+      ) ?? false;
 
-    if (jobId != null && mounted) {
-      await _handleCheckIn(jobId);
+      if (!locationVerified) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location verification required for check-in')),
+          );
+        }
+        return;
+      }
+
+      // Show job selection after location verification
+      final jobId = await showDialog<String>(
+        context: context,
+        builder: (context) => const JobSelectionDialog(),
+      );
+
+      if (jobId != null && jobId.isNotEmpty && mounted) {
+        await _handleCheckIn(jobId);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error during check-in: $e')),
+        );
+      }
     }
-}
+  }
+
+  // Handle location-based check-in
+  Future<void> _handleLocationCheckIn() async {
+    try {
+      // First verify location
+      final locationVerified = await showDialog<bool>(
+        context: context,
+        builder: (context) => const LocationCheckDialog(),
+      ) ?? false;
+
+      if (!locationVerified) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location verification required for check-in')),
+          );
+        }
+        return;
+      }
+
+      // Show job selection after location verification
+      final jobId = await showDialog<String>(
+        context: context,
+        builder: (context) => const JobSelectionDialog(),
+      );
+
+      if (jobId != null && jobId.isNotEmpty && mounted) {
+        await _handleCheckIn(jobId);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error during check-in: $e')),
+        );
+      }
+    }
+  }
+
+  // Handle the actual check-in
+Future<void> _handleCheckIn(String jobId) async {
+  try {
+    final provider = Provider.of<TimekeepingProvider>(context, listen: false);
+    await provider.checkIn(jobId);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Checked in successfully!')),
+      );
+    }
+  } catch (e) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error checking in: $e')),
+      );
+    }
+  }
+
+  Future<void> _showQRCodeScannerForCheckIn() async {
+    try {
+      // Check camera permissions first
+      final cameraStatus = await Permission.camera.status;
+      if (!cameraStatus.isGranted) {
+        final result = await Permission.camera.request();
+        if (!result.isGranted) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Camera permission is required to scan QR codes')),
+            );
+          }
+          return;
+        }
+      }
+
+      // First scan QR code
+      final qrCode = await showDialog<String>(
+        context: context,
+        builder: (context) => QRScannerDialog(
+          title: 'Scan Job QR Code',
+          subtitle: 'Scan the QR code at the job location',
+          onQRCodeScanned: (code) => Navigator.pop(context, code),
+        ),
+      );
+
+      if (qrCode == null || qrCode.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('QR code scan cancelled or failed')),
+          );
+        }
+        return;
+      }
+
+      if (!_isValidQRCode(qrCode)) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid QR code. Please scan a valid job QR code.')),
+          );
+        }
+        return;
+      }
+
+      // Validate the scanned QR code
+      final provider = Provider.of<TimekeepingProvider>(context, listen: false);
+      final validation = await provider.validateQRCode(qrCode);
+
+      if (!validation.isValid) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Invalid QR code: ${validation.error}')),
+          );
+        }
+        return;
+      }
+
+      // Verify location
+      final locationVerified = await showDialog<bool>(
+        context: context,
+        builder: (context) => const LocationCheckDialog(),
+      ) ?? false;
+
+      if (!locationVerified) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location verification required for check-in')),
+          );
+        }
+        return;
+      }
+
+      // Handle the scanned QR code
+      if (mounted) {
+        await _handleCheckIn(validation.jobId ?? qrCode);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error scanning QR code: $e')),
+        );
+      }
+    }
+  }
+
+  Future<QRValidationResult> validateQRCode(String qrCode) async {
+    try {
+      // Here you would typically validate the QR code against your backend
+      // For now, we'll just check if it's not empty and has a valid format
+      if (qrCode.isEmpty) {
+        return QRValidationResult(
+          isValid: false,
+          error: 'Empty QR code',
+        );
+      }
+
+      // Example validation - check if it's a valid job ID format
+      // Adjust this based on your actual QR code format
+      final job = _availableJobs.firstWhere(
+        (job) => job.id == qrCode,
+        orElse: () => null,
+      );
+
+      if (job == null) {
+        return QRValidationResult(
+          isValid: false,
+          error: 'Invalid job ID',
+        );
+      }
+
+    return QRValidationResult(
+      isValid: true,
+      jobId: job.id,
+      job: job,
+    );
+  } catch (e) {
+    return QRValidationResult(
+        isValid: false,
+        error: 'Error validating QR code: $e',
+      );
+    }
+  }
 
   Future<void> _showLocationCheckDialog() async {
     try {

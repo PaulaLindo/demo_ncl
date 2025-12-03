@@ -7,11 +7,11 @@ class QRValidationResult extends Equatable {
   final bool isValid;
   final String? error;
   final String? jobId;
-  final Job? job;
+  final dynamic job;
 
   const QRValidationResult({
     required this.isValid,
-    this.error,
+    this.error = '',
     this.jobId,
     this.job,
   });

@@ -5,6 +5,7 @@ import '../../theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import 'enhanced_mobile_timekeeping_tab.dart';
 
 class StaffTimekeepingScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class StaffTimekeepingScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push('/staff/home');
+            context.push(AppRoutes.staffHome);
           },
         ),
       ),

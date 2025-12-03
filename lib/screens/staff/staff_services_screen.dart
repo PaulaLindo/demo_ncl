@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 
 import '../../providers/staff_provider.dart';
 import '../../providers/theme_provider.dart';
@@ -96,7 +97,7 @@ class StaffServicesScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push('/staff/home');
+            context.push(AppRoutes.staffHome);
           },
         ),
         title: const Text('Available Services'),
@@ -147,30 +148,36 @@ class StaffServicesScreen extends StatelessWidget {
                   ),
                   child: InkWell(
                     onTap: () {
-                      // Navigate to service details
-                      context.push('/staff/service/${service['id']}');
+                      // Navigate to service details - this route doesn't exist yet, comment out for now
+                      // context.push(AppRoutes.serviceDetails(service['id']));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Service details for ${service['title']} coming soon!')),
+                      );
                     },
                     borderRadius: BorderRadius.circular(16),
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Header Row
+                          // Header with title and urgency
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 child: Text(
                                   service['title'] as String,
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: context.watch<ThemeProvider>().textColor,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   color: service['urgency'] == 'high' 
                                       ? Colors.red.withCustomOpacity(0.1)
@@ -187,7 +194,7 @@ class StaffServicesScreen extends StatelessWidget {
                                         : service['urgency'] == 'medium'
                                             ? Colors.orange
                                             : Colors.green,
-                                    fontSize: 12,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -197,77 +204,21 @@ class StaffServicesScreen extends StatelessWidget {
                           
                           const SizedBox(height: 12),
                           
-                          // Description
-                          Text(
-                            service['description'] as String,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: context.watch<ThemeProvider>().textColor.withOpacity(0.7),
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                          // Location and time
+                          _buildDetailItem(
+                            context,
+                            Icons.location_on_outlined,
+                            service['location'] as String,
+                            size: 16,
                           ),
                           
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 4),
                           
-                          // Details Grid
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _buildDetailItem(
-                                  context,
-                                  Icons.location_on_outlined,
-                                  '${service['location']} • ${service['distance']}',
-                                ),
-                              ),
-                              Expanded(
-                                child: _buildDetailItem(
-                                  context,
-                                  Icons.access_time,
-                                  '${service['time']} • ${service['duration']}',
-                                ),
-                              ),
-                            ],
-                          ),
-                          
-                          const SizedBox(height: 8),
-                          
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _buildDetailItem(
-                                  context,
-                                  Icons.person_outline,
-                                  service['client'] as String,
-                                ),
-                              ),
-                              Expanded(
-                                child: _buildDetailItem(
-                                  context,
-                                  Icons.attach_money,
-                                  service['pay'] as String,
-                                  isPrice: true,
-                                ),
-                              ),
-                            ],
-                          ),
-                          
-                          const SizedBox(height: 16),
-                          
-                          // Skills Chips
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 4,
-                            children: (service['skills'] as List<String>)
-                                .take(3)
-                                .map((skill) => Chip(
-                                      label: Text(
-                                        skill,
-                                        style: const TextStyle(fontSize: 11),
-                                      ),
-                                      backgroundColor: context.watch<ThemeProvider>().primaryColor.withCustomOpacity(0.1),
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    ))
-                                .toList(),
+                          _buildDetailItem(
+                            context,
+                            Icons.access_time,
+                            '${service['time']} • ${service['duration']}',
+                            size: 16,
                           ),
                           
                           const SizedBox(height: 16),
@@ -278,8 +229,8 @@ class StaffServicesScreen extends StatelessWidget {
                               Expanded(
                                 child: OutlinedButton.icon(
                                   onPressed: () {
-                                    // View more details
-                                    context.push('/staff/service/${service['id']}');
+                                    // Show gig details in a bottom sheet
+                                    _showGigDetails(context, service);
                                   },
                                   icon: const Icon(Icons.info_outline),
                                   label: const Text('Details'),
@@ -294,7 +245,7 @@ class StaffServicesScreen extends StatelessWidget {
                                 child: ElevatedButton.icon(
                                   onPressed: () {
                                     // Accept service
-                                    context.push('/staff/confirm-service/${service['id']}');
+                                    context.push(AppRoutes.acceptGig(service['id'] as String));
                                   },
                                   icon: const Icon(Icons.check_circle),
                                   label: const Text('Accept Service'),
@@ -320,12 +271,12 @@ class StaffServicesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailItem(BuildContext context, IconData icon, String text, {bool isPrice = false}) {
+  Widget _buildDetailItem(BuildContext context, IconData icon, String text, {bool isPrice = false, double size = 14}) {
     return Row(
       children: [
         Icon(
           icon,
-          size: 16,
+          size: size,
           color: context.watch<ThemeProvider>().textColor.withOpacity(0.7),
         ),
         const SizedBox(width: 6),
@@ -339,6 +290,167 @@ class StaffServicesScreen extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
+      ],
+    );
+  }
+
+  void _showGigDetails(BuildContext context, Map<String, dynamic> service) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: context.watch<ThemeProvider>().cardColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              Text(
+                service['title'] as String,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: context.watch<ThemeProvider>().textColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              
+              // Service Details
+              _buildDetailSection(
+                context,
+                'Service Details',
+                [
+                  _buildDetailItem(context, Icons.location_on_outlined, 
+                      '${service['location']} • ${service['distance']}'),
+                  _buildDetailItem(context, Icons.access_time, 
+                      '${service['time']} • ${service['duration']}'),
+                  _buildDetailItem(context, Icons.person_outline, 
+                      service['client'] as String),
+                  _buildDetailItem(context, Icons.attach_money, 
+                      service['pay'] as String, isPrice: true),
+                ],
+              ),
+              
+              // Description
+              _buildDetailSection(
+                context,
+                'Description',
+                [
+                  Text(
+                    service['description'] as String,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.watch<ThemeProvider>().textColor.withOpacity(0.8),
+                    ),
+                  ),
+                ],
+              ),
+              
+              // Skills Required
+              if ((service['skills'] as List<dynamic>).isNotEmpty)
+                _buildDetailSection(
+                  context,
+                  'Skills Required',
+                  [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: (service['skills'] as List<dynamic>)
+                          .map<Widget>((skill) => Chip(
+                                label: Text(
+                                  skill.toString(),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                backgroundColor: context.watch<ThemeProvider>().primaryColor.withCustomOpacity(0.1),
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              
+              // Equipment Needed
+              if ((service['equipment'] as List<dynamic>).isNotEmpty)
+                _buildDetailSection(
+                  context,
+                  'Equipment Needed',
+                  [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: (service['equipment'] as List<dynamic>)
+                          .map<Widget>((item) => Chip(
+                                label: Text(
+                                  item.toString(),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                backgroundColor: Colors.grey[200],
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              
+              const SizedBox(height: 20),
+              
+              // Accept Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the bottom sheet
+                    context.push(AppRoutes.acceptGig(service['id'] as String));
+                  },
+                  icon: const Icon(Icons.check_circle_outline, size: 20),
+                  label: const Text('Accept This Gig'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.watch<ThemeProvider>().primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildDetailSection(BuildContext context, String title, List<Widget> children) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: context.watch<ThemeProvider>().textColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        ...children,
       ],
     );
   }

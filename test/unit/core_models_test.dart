@@ -10,7 +10,7 @@ void main() {
     group('AuthUser Model Tests', () {
       test('should create AuthUser with required fields', () {
         // Arrange
-        final user = AuthUser(
+        final user = const AuthUser(
           id: 'user123',
           email: 'test@example.com',
           role: UserRole.customer,
@@ -70,6 +70,8 @@ void main() {
           rating: 4.5,
           reviewCount: 10,
           features: ['Feature 1', 'Feature 2'],
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         );
 
         // Assert
@@ -78,7 +80,7 @@ void main() {
         expect(service.basePrice, equals(100.0));
         expect(service.duration, equals('2 hours'));
         expect(service.category, equals('Test'));
-        expect(service.isHourly, isFalse); // Default value
+        expect(service.pricingUnit == 'hour', isFalse); // Default value
         expect(service.rating, equals(4.5));
         expect(service.reviewCount, equals(10));
         expect(service.features, contains('Feature 1'));
@@ -97,6 +99,8 @@ void main() {
           rating: 0.0,
           reviewCount: 0,
           features: [],
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         );
 
         // Assert
@@ -104,7 +108,7 @@ void main() {
         expect(service.features, isEmpty);
         expect(service.rating, equals(0.0));
         expect(service.reviewCount, equals(0));
-        expect(service.isHourly, isFalse);
+        expect(service.pricingUnit == 'hour', isFalse);
       });
 
       test('should handle popular and featured services', () {
@@ -121,6 +125,8 @@ void main() {
           rating: 5.0,
           reviewCount: 100,
           features: ['Premium Feature 1', 'Premium Feature 2'],
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         );
 
         // Assert

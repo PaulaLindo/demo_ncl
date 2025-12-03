@@ -27,7 +27,10 @@ class _StaffHomeScreenState extends State<StaffHome> {
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
+    // Delay the data loading to after the first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadInitialData();
+    });
   }
 
   Future<void> _loadInitialData() async {
@@ -39,19 +42,32 @@ class _StaffHomeScreenState extends State<StaffHome> {
     });
 
     try {
-      // Load shift swap requests
-      await context.read<StaffProvider>().loadShiftSwapRequests();
+      // Load shift swap requests in the background
+      await Future.delayed(Duration.zero, () {
+        context.read<StaffProvider>().loadShiftSwapRequests();
+      });
+
+      if (!mounted) return;
       
       // Get pending requests count
       final provider = context.read<StaffProvider>();
-      _pendingRequestsCount = provider.shiftSwapRequests
+      final pendingCount = provider.shiftSwapRequests
           .where((r) => r.status == ShiftSwapStatus.pending)
           .length;
+
+      if (mounted) {
+        setState(() {
+          _pendingRequestsCount = pendingCount;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = 'Failed to load data: $e';
-      });
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _isLoading = false;
+        });
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -117,9 +133,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     Navigator.pop(context);
-                    context.push(
-                      '/staff/cancel-gig/${gig['id']}',
-                    );
+                    context.push(AppRoutes.cancelGig(gig['id'] as String));
                   },
                 ),
               );
@@ -170,7 +184,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.go(AppRoutes.home),
         ),
         title: Row(
           children: [
@@ -241,7 +255,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
                   // Timekeeping Button
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.push('/staff/timekeeping');
+                      context.push(AppRoutes.staffTimekeeping);
                     },
                     icon: const Icon(Icons.access_time),
                     label: const Text('Go to Timekeeping'),
@@ -422,7 +436,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    context.push('/staff/profile');
+                    context.push(AppRoutes.staffProfile);
                   },
                   icon: const Icon(Icons.person_outline),
                   label: const Text('View Profile'),
@@ -435,7 +449,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    context.push('/staff/settings');
+                    context.push(AppRoutes.staffSettings);
                   },
                   icon: const Icon(Icons.settings_outlined),
                   label: const Text('Settings'),
@@ -480,7 +494,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
             icon: Icons.check_circle_outline,
             color: Colors.green,
             onTap: () {
-              context.push('/staff/history');
+              context.push(AppRoutes.staffHistory);
             },
           ),
         ),
@@ -701,7 +715,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
               child: InkWell(
                 onTap: () {
                   // Navigate to service details
-                  context.push('/staff/service/${service['id']}');
+                  context.push('${AppRoutes.serviceDetails}/${service['id']}');
                 },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
@@ -799,7 +813,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
                           ElevatedButton(
                             onPressed: () {
                               // Accept service - go to confirmation page
-                              context.push('/staff/confirm-service/${service['id']}');
+                              context.push(AppRoutes.acceptGig(service['id'] as String));
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: context.watch<ThemeProvider>().primaryColor,
@@ -822,7 +836,7 @@ class _StaffHomeScreenState extends State<StaffHome> {
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: () {
-              context.push('/staff/services');
+              context.push(AppRoutes.staffServices);
             },
             icon: const Icon(Icons.view_list),
             label: const Text('View All Available Services'),
@@ -986,4 +1000,3 @@ class _StaffHomeScreenState extends State<StaffHome> {
     );
   }
 }
-

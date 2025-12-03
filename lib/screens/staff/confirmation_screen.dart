@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/theme_provider.dart';
@@ -431,7 +432,7 @@ class ConfirmationScreen extends StatelessWidget {
               Navigator.pop(context); // Close dialog
               Navigator.pop(context); // Go back to previous screen
               // Navigate back to staff home
-              context.push('/staff/home');
+              context.push(AppRoutes.staffHome);
             },
             child: const Text('Done'),
           ),

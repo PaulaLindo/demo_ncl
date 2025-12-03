@@ -1,13 +1,15 @@
 // lib/screens/admin/admin_active_gigs_screen.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-
-import '../../providers/admin_provider_web.dart';
+import 'package:provider/provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../providers/theme_provider.dart';
 import '../../theme/theme_manager.dart';
+import '../../theme/app_theme.dart';
 import '../../utils/color_utils.dart';
+import 'package:intl/intl.dart';
 
 class AdminActiveGigsScreen extends StatefulWidget {
   const AdminActiveGigsScreen({super.key});
@@ -102,7 +104,7 @@ class _AdminActiveGigsScreenState extends State<AdminActiveGigsScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/admin/home');
+            context.go(AppRoutes.adminHome);
           },
         ),
       ),

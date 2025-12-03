@@ -54,7 +54,7 @@ class CustomerServicesScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.85, // Increased height to prevent overflow
+                childAspectRatio: 0.75, // More compact cards (reduced from 0.85)
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
@@ -138,7 +138,7 @@ class CustomerServicesScreen extends StatelessWidget {
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(
-                      padding: const EdgeInsets.all(14), // More balanced padding
+                      padding: const EdgeInsets.all(12), // Reduced padding for tighter spacing
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start, // Left-align content
                         children: [
@@ -146,7 +146,7 @@ class CustomerServicesScreen extends StatelessWidget {
                           Text(
                             service['title'] as String,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16, // Slightly smaller for better fit
                               fontWeight: FontWeight.bold,
                               color: context.watch<ThemeProvider>().textColor,
                             ),
@@ -155,26 +155,26 @@ class CustomerServicesScreen extends StatelessWidget {
                             textAlign: TextAlign.left, // Left-align text
                           ),
                           
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 2), // Reduced spacing
                           
                           // Category
                           Text(
                             service['category'] as String,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12, // Smaller for compact layout
                               color: context.watch<ThemeProvider>().textColor.withOpacity(0.7),
                               fontWeight: FontWeight.w500,
                             ),
                             textAlign: TextAlign.left, // Left-align text
                           ),
                           
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 6), // Reduced spacing
                           
                           // Description
                           Text(
                             service['description'] as String,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12, // Smaller for compact layout
                               color: context.watch<ThemeProvider>().textColor.withOpacity(0.6),
                             ),
                             maxLines: 2,
@@ -182,7 +182,7 @@ class CustomerServicesScreen extends StatelessWidget {
                             textAlign: TextAlign.left, // Left-align text
                           ),
                           
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8), // Reduced spacing
                           
                           // Duration
                           Row(
@@ -190,13 +190,13 @@ class CustomerServicesScreen extends StatelessWidget {
                               Icon(
                                 Icons.access_time,
                                 color: context.watch<ThemeProvider>().primaryColor,
-                                size: 14,
+                                // Remove fixed size to let Flutter control
                               ),
-                              const SizedBox(width: 4),
+                              const SizedBox(width: 2), // Reduced spacing
                               Text(
                                 service['duration'] as String,
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12, // Smaller for compact layout
                                   color: context.watch<ThemeProvider>().primaryColor,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -204,7 +204,7 @@ class CustomerServicesScreen extends StatelessWidget {
                             ],
                           ),
                           
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 4), // Reduced spacing
                           
                           // Rating
                           Row(
@@ -212,29 +212,29 @@ class CustomerServicesScreen extends StatelessWidget {
                               Icon(
                                 Icons.star,
                                 color: context.watch<ThemeProvider>().primaryColor,
-                                size: 14,
+                                // Remove fixed size to let Flutter control
                               ),
                               const SizedBox(width: 2),
                               Text(
                                 '${service['rating']}',
                                 style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 13, // Smaller for compact layout
                                   fontWeight: FontWeight.bold,
                                   color: context.watch<ThemeProvider>().textColor,
                                 ),
                               ),
-                              const SizedBox(width: 4),
+                              const SizedBox(width: 2), // Reduced spacing
                               Text(
                                 '(${service['reviews']})',
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 11, // Smaller for compact layout
                                   color: context.watch<ThemeProvider>().textColor.withOpacity(0.6),
                                 ),
                               ),
                             ],
                           ),
                           
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6), // Reduced spacing
                           
                           // Spacer to push price to bottom
                           const Spacer(),
@@ -243,7 +243,7 @@ class CustomerServicesScreen extends StatelessWidget {
                           Text(
                             service['price'] as String,
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 14, // Smaller for compact layout
                               fontWeight: FontWeight.bold,
                               color: context.watch<ThemeProvider>().primaryColor,
                             ),
@@ -301,7 +301,7 @@ class CustomerServicesScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // TODO: Navigate to help or contact
+                      context.push(AppRoutes.customerContact);
                     },
                     icon: const Icon(Icons.chat),
                     label: const Text('Chat with Expert'),

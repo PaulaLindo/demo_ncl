@@ -1,7 +1,9 @@
 // lib/screens/admin/admin_home.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -24,18 +26,25 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
+    // Use addPostFrameCallback to ensure the widget is built before loading data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadInitialData();
+    });
   }
 
   Future<void> _loadInitialData() async {
     if (!mounted) return;
     
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
+    // Only set loading state if we're not already loading
+    if (!_isLoading) {
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+    }
 
     try {
+      // Use a local variable to avoid calling context.read in an async gap
       final adminProvider = context.read<AdminProviderWeb>();
       await adminProvider.loadAdminData();
     } catch (e) {
@@ -88,7 +97,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.go(AppRoutes.home),
         ),
         title: Row(
           children: [
@@ -234,7 +243,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             value: stats.totalUsers.toString(),
             icon: Icons.people,
             color: Theme.of(context).primaryColor,
-            onTap: () => context.push('/admin/total-users'),
+            onTap: () => context.push(AppRoutes.adminTotalUsers),
           ),
         ),
         const SizedBox(width: 12),
@@ -244,7 +253,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             value: stats.activeJobs.toString(),
             icon: Icons.work,
             color: Colors.green,
-            onTap: () => context.push('/admin/active-gigs'),
+            onTap: () => context.push(AppRoutes.adminActiveGigs),
           ),
         ),
         const SizedBox(width: 12),
@@ -254,7 +263,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             value: 'R125.4K',
             icon: Icons.payments,
             color: Colors.green,
-            onTap: () => context.push('/admin/payments'),
+            onTap: () => context.push(AppRoutes.adminPayments),
           ),
         ),
       ],
@@ -295,19 +304,37 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(8),
+                    constraints: const BoxConstraints(
+                      minWidth: 36,  // Minimum width for the icon container
+                      minHeight: 36, // Minimum height for the icon container
+                    ),
                     decoration: BoxDecoration(
                       color: color.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(icon, color: color, size: 20),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Icon(
+                        icon,
+                        color: color,
+                        size: 20,
+                      ),
+                    ),
                   ),
                   const Spacer(),
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: color,
+                   Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: color,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ],
@@ -319,6 +346,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   fontSize: 14,
                   color: Colors.grey[600],
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -334,7 +363,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           child: _buildQuickActionButton(
             icon: Icons.people,
             label: 'Users',
-            onTap: () => context.push('/admin/users'),
+            onTap: () => context.push(AppRoutes.adminUsers),
           ),
         ),
         const SizedBox(width: 12),
@@ -342,7 +371,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           child: _buildQuickActionButton(
             icon: Icons.schedule,
             label: 'Schedule',
-            onTap: () => context.push('/admin/schedule'),
+            onTap: () => context.push(AppRoutes.adminSchedule),
           ),
         ),
         const SizedBox(width: 12),
@@ -350,7 +379,15 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           child: _buildQuickActionButton(
             icon: Icons.assessment,
             label: 'Reports',
-            onTap: () => context.push('/admin/analytics'),
+            onTap: () => context.push(AppRoutes.adminReports),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _buildQuickActionButton(
+            icon: Icons.credit_card,
+            label: 'Temp Cards',
+            onTap: () => context.push(AppRoutes.adminTempCards),
           ),
         ),
       ],

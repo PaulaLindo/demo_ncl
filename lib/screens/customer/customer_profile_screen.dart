@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/theme_manager.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/color_utils.dart';
@@ -21,7 +22,7 @@ class CustomerProfileScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push('/customer/home');
+            context.push(AppRoutes.customerHome);
           },
         ),
         title: const Text('Profile'),
@@ -29,7 +30,7 @@ class CustomerProfileScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              context.push('/');
+              context.go(AppRoutes.home);
             },
             tooltip: 'Back to Login',
           ),

@@ -1789,7 +1789,6 @@ class _EnhancedMobileTimekeepingTabState extends State<EnhancedMobileTimekeeping
         builder: (context) => QRScannerDialog(
           title: 'Scan Job QR Code',
           subtitle: 'Scan the QR code at the job location',
-          allowManualInput: true,
           onQRCodeScanned: (code) => Navigator.of(context).pop(code),
         ),
       );

@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:demo_ncl/data/mocks/mocks.dart';
+import 'package:demo_ncl/models/gig_model.dart';
 
 // Import for web-specific functionality
 import 'dart:html' as html show window, sessionStorage;
@@ -25,6 +27,7 @@ import 'screens/staff/staff_profile_screen.dart';
 import 'screens/staff/staff_settings_screen.dart';
 import 'screens/staff/staff_services_screen.dart';
 import 'screens/staff/gig_details_screen.dart';
+import 'screens/staff/gig_cancel_screen.dart';
 import 'screens/staff/staff_history_screen.dart';
 import 'screens/staff/confirmation_screen.dart';
 import 'screens/staff/staff_gig_acceptance_screen.dart';
@@ -32,11 +35,12 @@ import 'screens/staff/staff_gig_acceptance_screen.dart';
 // Customer Screen
 import 'screens/customer/customer_home.dart';
 import 'screens/customer/customer_services_screen.dart';
-import 'screens/theme_settings_screen.dart';
 import 'screens/customer/customer_bookings_screen.dart';
 import 'screens/customer/booking_form_screen.dart';
 import 'screens/customer/customer_profile_screen.dart';
 import 'screens/customer/customer_settings_screen.dart';
+import 'screens/customer/contact_screen.dart';
+import 'screens/theme_settings_screen.dart';
 
 // Admin Screens
 import 'screens/admin/admin_home.dart';
@@ -52,6 +56,8 @@ import 'screens/admin/admin_active_gigs_screen.dart';
 import 'screens/admin/admin_upcoming_gigs_screen.dart';
 import 'screens/admin/admin_dashboard.dart';
 import 'screens/admin/admin_service_management.dart';
+import 'screens/admin/reports_page.dart';
+import 'screens/admin/temp_card_management.dart';
 
 // Customer Screens
 import 'screens/customer/payment_selection_screen.dart';
@@ -287,7 +293,23 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
+      path: '/customer/contact',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const ContactScreen(),
+      ),
+    ),
+    GoRoute(
       path: '/customer/profile',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const CustomerProfileScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/customer/settings',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
         state: state,
@@ -317,6 +339,46 @@ final GoRouter _router = GoRouter(
       ),
     ),
     GoRoute(
+      path: '/staff/timekeeping',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const StaffTimekeepingScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/staff/schedule',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const StaffScheduleScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/staff/profile',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const StaffProfileScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/staff/settings',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const StaffSettingsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: '/staff/services',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const StaffServicesScreen(),
+      ),
+    ),
+    GoRoute(
       path: '/staff/history',
       pageBuilder: (context, state) => _buildPageWithFadeTransition(
         context: context,
@@ -338,10 +400,11 @@ final GoRouter _router = GoRouter(
       path: '/staff/gig-details/:gigId',
       pageBuilder: (context, state) {
         final gigId = state.pathParameters['gigId'] ?? '';
+        final gig = GigMockData.getGigById(gigId);
         return _buildPageWithFadeTransition(
           context: context,
           state: state,
-          child: GigDetailsScreen(gigId: gigId),
+          child: GigDetailsScreen(gig: gig),
         );
       },
     ),
@@ -352,7 +415,18 @@ final GoRouter _router = GoRouter(
         return _buildPageWithFadeTransition(
           context: context,
           state: state,
-          child: GigAcceptanceScreen(),
+          child: GigAcceptanceScreen(gigId: gigId),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/staff/gig-cancel/:gigId',
+      pageBuilder: (context, state) {
+        final gigId = state.pathParameters['gigId'] ?? '';
+        return _buildPageWithFadeTransition(
+          context: context,
+          state: state,
+          child: GigCancelScreen(gigId: gigId),
         );
       },
     ),
@@ -462,16 +536,47 @@ final GoRouter _router = GoRouter(
         child: const AdminTotalUsersScreen(),
       ),
     ),
+    GoRoute(
+      path: '/admin/reports',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const ReportsPage(),
+      ),
+    ),
+    GoRoute(
+      path: '/admin/temp-cards',
+      pageBuilder: (context, state) => _buildPageWithFadeTransition(
+        context: context,
+        state: state,
+        child: const TempCardManagementPage(),
+      ),
+    ),
 
     // Service booking routes
     GoRoute(
-      path: '/booking/:serviceId',
+      path: '/customer/booking/:serviceId',
       pageBuilder: (context, state) {
         final serviceId = state.pathParameters['serviceId'] ?? '';
         return _buildPageWithFadeTransition(
           context: context,
           state: state,
           child: BookingFormScreen(serviceId: serviceId),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/customer/booking/payment/:bookingId',
+      pageBuilder: (context, state) {
+        final bookingId = state.pathParameters['bookingId'] ?? '';
+        return _buildPageWithFadeTransition(
+          context: context,
+          state: state,
+          child: PaymentSelectionScreen(
+            bookingId: bookingId,
+            amount: 0.0,
+            serviceTitle: '',
+          ),
         );
       },
     ),

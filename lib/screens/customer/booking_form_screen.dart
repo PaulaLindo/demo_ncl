@@ -1,13 +1,15 @@
 // lib/screens/customer/booking_form_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../models/booking_model.dart';
-
-import '../../providers/booking_provider.dart';
+import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
+import '../../providers/theme_provider.dart';
+import 'package:intl/intl.dart';
+import '../../models/booking_model.dart';
+import '../../providers/booking_provider.dart';
 
 import '../../theme/app_theme.dart';
 
@@ -163,7 +165,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
             
             // Navigate to payment screen
             print('Navigating to payment: /customer/payment/${currentBooking.id}?amount=${currentBooking.basePrice}&service=${currentBooking.serviceName}');
-            context.push('/customer/payment/${currentBooking.id}?amount=${currentBooking.basePrice}&service=${currentBooking.serviceName}');
+            context.push(AppRoutes.paymentForBooking(currentBooking.id));
           } else {
             print('Error: No bookings found after successful creation');
           }
@@ -663,79 +665,6 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         if (value != null) setState(() => _frequency = value);
       },
     );
-  }
-
-  Future<void> _handleSubmit() async {
-    if (_selectedDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.error_outline, color: Colors.white),
-              SizedBox(width: 12),
-              Text('Please select a date'),
-            ],
-          ),
-          backgroundColor: AppTheme.redStatus,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      return;
-    }
-
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isLoading = true);
-
-    final provider = Provider.of<BookingProvider>(context, listen: false);
-
-    try {
-      final success = await provider.createBooking(
-        serviceId: widget.serviceId,
-        bookingDate: _selectedDate!,
-        address: _addressController.text.trim(),
-        propertySize: _propertySize.name,
-        frequency: _frequency.name,
-        timePreference: _timePreference,
-        notes: _instructionsController.text.trim(),
-      );
-
-      if (success && mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Booking Confirmed!'),
-            content: const Text('Your booking has been successfully created.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  context.go('/customer/bookings');
-                },
-                child: const Text('View Bookings'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  context.go('/customer/home');
-                },
-                child: const Text('Home'),
-              ),
-            ],
-          ),
-        );
-      } else if (mounted) {
-        _showError('Failed to create booking. Please try again.');
-      }
-    } catch (e) {
-      if (mounted) {
-        _showError('An unexpected error occurred. Please try again.');
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
   }
 
   void _showError(String message) {

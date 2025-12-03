@@ -25,6 +25,7 @@ class AppRoutes {
   static const String customerProfile = '$customer/profile';
   static const String customerSettings = '$customer/settings';
   static const String customerServices = '$customer/services';
+  static const String customerContact = '$customer/contact';
   
   // Customer booking routes
   static const String booking = '$customer/booking';
@@ -43,9 +44,10 @@ class AppRoutes {
   static const String staffShiftSwapInbox = '$staff/shift-swap/inbox';
 
   // Gig management routes
-  static const String gigAcceptance = '$staff/gig/accept';
-  static const String gigDetails = '$staff/gig/details';
-  static const String gigReport = '$staff/gig/report';
+  static const String gigDetails = '$staff/gig-details';
+  static const String gigAcceptance = '$staff/gig-acceptance';
+  static const String gigCancel = '$staff/gig-cancel';
+  static const String gigReport = '$staff/gig-report';
 
   // Admin routes
   static const String adminHome = '$admin/home';
@@ -57,9 +59,12 @@ class AppRoutes {
   static const String adminUsers = '$admin/users';
   static const String adminServices = '$admin/services';
   static const String adminBookings = '$admin/bookings';
+  static const String adminPayments = '$admin/payments';
   static const String adminActiveGigs = '$admin/active-gigs';
   static const String adminStaffManagement = '$admin/staff';
+  static const String adminTotalUsers = '$admin/total-users';
   static const String adminServiceManagement = '$admin/service-management';
+  static const String adminTempCards = '$admin/temp-cards';
 
   // Utility routes
   static const String themeSettings = '/theme-settings';
@@ -82,21 +87,21 @@ class AppRoutes {
   static String confirmBooking(String serviceId) => '$bookingConfirmation/$serviceId';
   static String acceptGig(String gigId) => '$gigAcceptance/$gigId';
   static String reportGig(String gigId) => '$gigReport/$gigId';
+  static String cancelGig(String gigId) => '$gigCancel/$gigId';
 
   // Route validation
   static bool isValidRoute(String route) {
     final allRoutes = [
       // Static routes
       home, loginChooser, customerLogin, staffLogin, adminLogin,
-      customerRegistration, staffRegistration, customerHome, customerBookings,
-      customerProfile, customerSettings, customerServices, booking, bookingForm,
+      customerRegistration, staffRegistration, customerHome, customerBookings, customerProfile, customerSettings, customerServices, customerContact, booking, bookingForm,
       bookingConfirmation, paymentSelection, staffHome, staffProfile,
       staffSettings, staffSchedule, staffTimekeeping, staffHistory,
       staffServices, staffShiftSwapInbox, gigAcceptance, gigDetails, gigReport, adminHome,
       adminDashboard, adminProfile, adminSettings, adminSchedule,
       adminReports, adminUsers, adminServices, adminBookings, adminActiveGigs,
       adminStaffManagement, adminServiceManagement, themeSettings,
-      notifications, help, about, contact, privacy, terms,
+      notifications, help, about, contact, privacy, terms, adminTotalUsers, adminPayments,
     ];
 
     // Check exact matches
@@ -110,6 +115,7 @@ class AppRoutes {
       RegExp(r'^/staff/gig/details/[\w-]+$'),          // /staff/gig/details/gigId
       RegExp(r'^/staff/gig/accept/[\w-]+$'),           // /staff/gig/accept/gigId
       RegExp(r'^/staff/gig/report/[\w-]+$'),            // /staff/gig/report/gigId
+      RegExp(r'^/staff/gig/cancel/[\w-]+$'),            // /staff/gig/cancel/gigId
       RegExp(r'^/admin/users/[\w-]+$'),                 // /admin/users/userId
       RegExp(r'^/admin/services/[\w-]+$'),              // /admin/services/serviceId
       RegExp(r'^/customer/booking/payment/[\w-]+$'),    // /customer/booking/payment/bookingId
@@ -152,6 +158,8 @@ class AppRoutes {
       adminActiveGigs: 'Admin Active Gigs',
       adminStaffManagement: 'Admin Staff Management',
       adminServiceManagement: 'Admin Service Management',
+      adminPayments: 'Admin Payments',
+      adminTotalUsers: 'Admin Total Users',
       themeSettings: 'Theme Settings',
       notifications: 'Notifications',
       help: 'Help',

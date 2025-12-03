@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/theme_manager.dart';
 import '../../utils/color_utils.dart';
+import 'package:intl/intl.dart';
 
 class StaffHistoryScreen extends StatelessWidget {
   const StaffHistoryScreen({super.key});
@@ -96,7 +96,7 @@ class StaffHistoryScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push('/staff/home');
+            context.push(AppRoutes.staffHome);
           },
         ),
         title: const Text('History'),

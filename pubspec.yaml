@@ -83,9 +83,20 @@ dependencies:
   build_runner: ^2.4.0
   json_serializable: ^6.8.0
 
-  # Sync Fusion Calendar
-  syncfusion_flutter_calendar: ^24.1.41
+  # Patrol
   patrol: ^3.20.0
+
+  # Camera Permission
+  permission_handler: ^11.3.0
+
+  # F1 Chart
+  fl_chart: ^0.66.2 
+
+  # SyncFusion packages - must be the same version
+  syncfusion_flutter_core: ^20.4.54
+  syncfusion_flutter_charts: ^20.4.54
+  syncfusion_flutter_calendar: ^20.4.54
+  syncfusion_flutter_datepicker: ^20.4.54
 
 dev_dependencies:
   flutter_test:

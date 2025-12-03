@@ -1,12 +1,14 @@
 // lib/screens/customer/customer_settings_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/theme_manager.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/color_utils.dart';
+import 'package:flutter/foundation.dart';
 
 class CustomerSettingsScreen extends StatelessWidget {
   const CustomerSettingsScreen({super.key});
@@ -22,7 +24,7 @@ class CustomerSettingsScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push('/customer/home');
+            context.go(AppRoutes.customerHome);
           },
         ),
         title: const Text('Settings'),
@@ -437,7 +439,7 @@ class CustomerSettingsScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
               // Navigate back to login chooser
-              context.go('/');
+              context.go(AppRoutes.home);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

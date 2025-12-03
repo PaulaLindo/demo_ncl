@@ -1,8 +1,9 @@
 // lib/screens/staff/staff_schedule_screen.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/theme_manager.dart';
 import '../../theme/app_theme.dart';
 
@@ -20,7 +21,7 @@ class StaffScheduleScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push('/staff/home');
+            context.push(AppRoutes.staffHome);
           },
         ),
         title: const Text('Schedule'),

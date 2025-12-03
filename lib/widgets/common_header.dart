@@ -45,7 +45,7 @@ class DashboardHeader extends StatelessWidget {
               ),
               child: SvgPicture.asset(
                 'assets/images/comprehensive_home_services.svg',
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.contain, // Use contain to ensure full logo fits
                 // Fallback icon if SVG not found for prototype
                 placeholderBuilder: (_) => const Icon(Icons.home_repair_service, color: AppTheme.primaryPurple),
               ),
