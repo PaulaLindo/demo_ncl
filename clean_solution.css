@@ -1,0 +1,42 @@
+/* clean_solution.css - Minimal CSS that doesn't interfere with Flutter rendering */
+
+/* Only fix the basic layout without touching Flutter elements */
+html, body {
+    height: 100% !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    background: white !important;
+}
+
+/* Let Flutter handle its own rendering - only fix pointer events */
+flt-glass-pane {
+    pointer-events: none !important;
+    z-index: -1 !important;
+}
+
+flutter-view {
+    pointer-events: auto !important;
+    z-index: 1 !important;
+}
+
+/* Don't touch Flutter semantic elements - let them render naturally */
+/* Only ensure our overlay elements work */
+#flutter-fallback-overlay {
+    pointer-events: none !important;
+    z-index: 1000 !important;
+}
+
+#flutter-fallback-overlay > * {
+    pointer-events: auto !important;
+}
+
+/* Basic responsive fixes */
+@media (max-width: 768px) {
+    html, body {
+        font-size: 14px !important;
+    }
+}
